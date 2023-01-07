@@ -1274,25 +1274,7 @@ class Label:
             self.anchor = anchor
 
         if self.binding_rect == 0:
-            if self.anchor == "topleft":
-                self.text_rect.topleft = self.xy
-            elif self.anchor == "topright":
-                self.text_rect.topright = self.xy
-            elif self.anchor == "bottomleft":
-                self.text_rect.bottomleft = self.xy
-            elif self.anchor == "bottomright":
-                self.text_rect.bottomright = self.xy
-            elif self.anchor == "center":
-                self.text_rect.center = self.xy
-            elif self.anchor == "midtop":
-                self.text_rect.midtop = self.xy
-            elif self.anchor == "midright":
-                self.text_rect.midright = self.xy
-            elif self.anchor == "midbottom":
-                self.text_rect.midbottom = self.xy
-            elif self.anchor == "midleft":
-                self.text_rect.midleft = self.xy
-
+            self.text_rect.__setattr__(self.anchor, self.xy)
             text_rect_coords = getattr(self.text_rect, self.text_binding)
             self.background_rect.__setattr__(
                 self.text_binding,
@@ -1300,25 +1282,7 @@ class Label:
                  text_rect_coords[1] + self.text_offset[1]))
 
         elif self.binding_rect == 1:
-            if self.anchor == "topleft":
-                self.background_rect.topleft = self.xy
-            elif self.anchor == "topright":
-                self.background_rect.topright = self.xy
-            elif self.anchor == "bottomleft":
-                self.background_rect.bottomleft = self.xy
-            elif self.anchor == "bottomright":
-                self.background_rect.bottomright = self.xy
-            elif self.anchor == "center":
-                self.background_rect.center = self.xy
-            elif self.anchor == "midtop":
-                self.background_rect.midtop = self.xy
-            elif self.anchor == "midright":
-                self.background_rect.midright = self.xy
-            elif self.anchor == "midbottom":
-                self.background_rect.midbottom = self.xy
-            elif self.anchor == "midleft":
-                self.background_rect.midleft = self.xy
-
+            self.background_rect.__setattr__(self.anchor, self.xy)
             background_rect_coords = getattr(self.background_rect, self.text_binding)
             self.text_rect.__setattr__(
                 self.text_binding,
