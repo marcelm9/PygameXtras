@@ -1,4 +1,4 @@
-from Label import Label
+from Pygame_Engine.Label import Label
 
 class CustomTemplate:
     def __init__(self, surface, text="", size=12, anchor="center", textcolor=(255, 255, 255),

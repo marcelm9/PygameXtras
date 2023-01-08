@@ -1,5 +1,5 @@
 import pygame
-from Label import Label
+from Pygame_Engine.Label import Label
 
 class Button(Label):
     def __init__(self, surface, text, size, xy: tuple, anchor="center", **kwargs):
