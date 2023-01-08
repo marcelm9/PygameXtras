@@ -3,6 +3,7 @@ import ctypes
 import math
 import os
 
+
 def higher_resolution(boolean: bool = True):
     """ probably only works on windows os """
     ctypes.windll.shcore.SetProcessDpiAwareness(bool(boolean))
