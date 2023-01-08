@@ -1,6 +1,6 @@
 import pygame
-from Pygame_Engine.Button import Button
-from Pygame_Engine.Keyboard import Keyboard
+from Pygame_Engine.classes.Button import Button
+from Pygame_Engine.classes.Keyboard import Keyboard
 
 class Entry(Button):
     def __init__(self, surface, text, size, xy: tuple, anchor="center", **kwargs):

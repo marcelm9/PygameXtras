@@ -1,10 +1,10 @@
 import pygame
 import sys
-from Pygame_Engine.Label import Label
-from Pygame_Engine.Button import Button
-from Pygame_Engine.Functions import vect_sum
-from Pygame_Engine.Colors import Colors
-from Pygame_Engine.Paragraph import Paragraph
+from Pygame_Engine.classes.Label import Label
+from Pygame_Engine.classes.Button import Button
+from Pygame_Engine.classes.Functions import vect_sum
+from Pygame_Engine.classes.Colors import Colors
+from Pygame_Engine.classes.Paragraph import Paragraph
 
 class Messagebox:
     def __init__(

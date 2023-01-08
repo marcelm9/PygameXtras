@@ -1,7 +1,7 @@
 """ needs to be reworked """
 
 import pygame
-from Pygame_Engine.Functions import round_half_up
+from Pygame_Engine.classes.Functions import round_half_up
 
 class Bar:
     def __init__(self, surface, width_height: tuple, xy: tuple, anchor="center",

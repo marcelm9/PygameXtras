@@ -1,8 +1,8 @@
 import math
 import pygame
 import sys
-from Pygame_Engine.Label import Label
-from Pygame_Engine.Button import Button
+from Pygame_Engine.classes.Label import Label
+from Pygame_Engine.classes.Button import Button
 
 class Function:
     def __init__(self, min_: int = 0, max_: int = 1, function_variable: str = "x"):
@@ -237,9 +237,9 @@ class Function:
                  450 - min_height - dot[1] * (400 / (MAX - MIN))),
                 2)
 
-        incr_size_img = pygame.image.load(r"C:\Users\marce\Desktop\gamedev_stuff\buttons\increase_size.png")
+        incr_size_img = pygame.image.load(r"images\increase_size.png")
         incr_size_img.set_colorkey((255, 255, 255))
-        decr_size_img = pygame.image.load(r"C:\Users\marce\Desktop\gamedev_stuff\buttons\decrease_size.png")
+        decr_size_img = pygame.image.load(r"images\decrease_size.png")
         decr_size_img.set_colorkey((255, 255, 255))
 
         if show_every_value:
