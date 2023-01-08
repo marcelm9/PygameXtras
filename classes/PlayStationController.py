@@ -1,6 +1,6 @@
 import pygame
 import math
-from Pygame_Engine.classes.Functions import round_half_up
+from ..classes.Functions import round_half_up
 
 class PlayStationController:
     def __init__(self, joystick_num, threshold: float = 0.05):

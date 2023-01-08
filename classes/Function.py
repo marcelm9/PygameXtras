@@ -1,8 +1,8 @@
 import math
 import pygame
 import sys
-from Pygame_Engine.classes.Label import Label
-from Pygame_Engine.classes.Button import Button
+from ..classes.Label import Label
+from ..classes.Button import Button
 
 class Function:
     def __init__(self, min_: int = 0, max_: int = 1, function_variable: str = "x"):

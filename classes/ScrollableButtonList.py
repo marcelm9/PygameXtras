@@ -1,5 +1,5 @@
 import pygame
-from Pygame_Engine.classes.Button import Button
+from ..classes.Button import Button
 
 class ScrollableButtonList:
     def __init__(
