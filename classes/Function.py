@@ -1,6 +1,7 @@
 import math
 import pygame
 import sys
+import os
 from ..classes.Label import Label
 from ..classes.Button import Button
 
@@ -237,9 +238,11 @@ class Function:
                  450 - min_height - dot[1] * (400 / (MAX - MIN))),
                 2)
 
-        incr_size_img = pygame.image.load(r"images\increase_size.png")
+        # incr_size_img = pygame.image.load(r"images\increase_size.png")
+        incr_size_img = pygame.image.load(os.path.join(os.path.split(os.path.dirname(__file__))[0], "images", "increase_size.png"))
         incr_size_img.set_colorkey((255, 255, 255))
-        decr_size_img = pygame.image.load(r"images\decrease_size.png")
+        # decr_size_img = pygame.image.load(r"images\decrease_size.png")
+        decr_size_img = pygame.image.load(os.path.join(os.path.split(os.path.dirname(__file__))[0], "images", "decrease_size.png"))
         decr_size_img.set_colorkey((255, 255, 255))
 
         if show_every_value:

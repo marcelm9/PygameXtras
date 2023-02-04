@@ -11,12 +11,16 @@ class C:
         if operations like +=, -=, ... are used, the object will
         always stay a C-class!
         """
-        for value in values:
-            assert (isinstance(value, int) or isinstance(value, float)), \
-                f"values have to be int or float, received: '{value}' (type: {type(value)})"
         assert len(values) > 0, f"list of values can not be empty"
 
-        self.__value = list(values)
+        if len(values) == 1 and isinstance(values[0], (tuple, list)):
+            self.__value = list(values[0])
+        else:
+            for value in values:
+                assert (isinstance(value, (int, float))), \
+                    f"values have to be int or float, received: '{value}' (type: {type(value)})"
+            self.__value = list(values)
+            
         self.__more_operations = bool(mo)
 
     def __repr__(self):

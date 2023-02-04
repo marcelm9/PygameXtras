@@ -46,7 +46,8 @@ def create_animation(image_ids: list, frames_per_image: list):
     return seq
 
 
-def get_distance(xy1, xy2, digits_after_comma=None):
+def get_distance(xy1: tuple, xy2: tuple, digits_after_comma: int = None) -> float:
+    """ returns the distance between xy1 and xy2 """
     x1, y1 = xy1[0], xy1[1]
     x2, y2 = xy2[0], xy2[1]
     if digits_after_comma == None:
