@@ -6,6 +6,7 @@ from .classes.C import C
 from .classes.Colors import Colors
 from .classes.CustomTemplate import CustomTemplate
 from .classes.Entity import Entity
+from .classes.Entry import Entry
 from .classes.Function import Function
 from .classes.Functions import *
 from .classes.Keyboard import Keyboard
