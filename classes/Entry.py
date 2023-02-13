@@ -28,6 +28,9 @@ class Entry(Button):
                 IMPORTANT: this mechanic breaks if the style is set manually
                 after the first initialization of the widget
                 Type: bool
+            strict_input / si
+                only allow numeric ("int", "float") or alphabetic ("str") input
+                Type: str
         """
 
         # max_chars
@@ -50,11 +53,18 @@ class Entry(Button):
         # auto_style
         self.auto_style = kwargs.get("auto_style", None)
         if self.auto_style == None:
-            self.auto_style = kwargs.get("ast")
+            self.auto_style = kwargs.get("ast", None)
         if self.auto_style == None:
             self.auto_style = False
         # assertion
         assert type(self.auto_style) == bool, f"invalid argument for 'auto_style': {self.auto_style}"
+
+        # strict_input
+        self.strict_input = kwargs.get("strict_input", None)
+        if self.strict_input == None:
+            self.strict_input = kwargs.get("si", None)
+        # assertion
+        assert self.strict_input is None or self.strict_input in ["int", "float", "str"], f"invalid argument for 'strict_input': {self.strict_input}"
         
         
 
@@ -131,11 +141,42 @@ class Entry(Button):
                 raise Exception(f"unable to change highlight button with color '{self.highlight}'")
 
         if self.__state__:
+
+            # deleting chars
             for event in event_list:
                 if event.type == pygame.KEYDOWN and event.key == pygame.locals.K_BACKSPACE:
                     self.__value__ = self.__value__[:-1]
-            if self.max_chars == None or (self.max_chars != None and len(self.__value__) < self.max_chars):
-                self.__value__ += self.__keyboard__.get(event_list)
+
+            # adding chars
+            val = self.__keyboard__.get(event_list)
+
+            # checks for self.strict_input and sets val to "" if condition does not apply
+            if self.strict_input is not None and val != "":
+                new_val = self.__value__ + val
+
+                print(val)
+                if \
+                    (self.strict_input == "int"     and new_val.isnumeric()) or \
+                    (self.strict_input == "float"   and "".join(new_val.split(".", 1)).isnumeric()) or \
+                    (self.strict_input == "str"     and new_val.isalpha()):
+                    self.__value__ = new_val
+
+                # if self.strict_input == "int" and not val.isnumeric():
+                #     print("int")
+                #     val = ""
+                # if self.strict_input == "float" and not "".join(val.split(".", 1)).isnumeric():
+                #     print("float")
+                #     val = ""
+                # if self.strict_input == "str" and not val.isalpha():
+                #     print("str")
+                #     val = ""
+
+
+            # self.__value__ += val
+
+            # dealing with self.max_chars
+            if self.max_chars is not None:
+                self.__value__ = self.__value__[:self.max_chars]
 
             if self.__value__ != self.__old_value__:
                 self.update_text(self.__value__)
