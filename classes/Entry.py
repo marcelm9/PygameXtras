@@ -152,13 +152,20 @@ class Entry(Button):
 
             # checks for self.strict_input and sets val to "" if condition does not apply
             if self.strict_input is not None and val != "":
-                new_val = self.__value__ + val
+                new_val: str = self.__value__ + val
 
-                if \
-                    (self.strict_input == "int"     and new_val.isnumeric()) or \
-                    (self.strict_input == "float"   and "".join(new_val.split(".", 1)).isnumeric()) or \
-                    (self.strict_input == "str"     and new_val.isalpha()):
+                if new_val == "-":
                     self.__value__ = new_val
+                elif new_val.startswith("-"):
+                    if (self.strict_input == "int"     and new_val[1:].isnumeric()) or \
+                       (self.strict_input == "float"   and "".join(new_val[1:].split(".", 1)).isnumeric()) or \
+                       (self.strict_input == "str"     and new_val[1:].isalpha()):
+                        self.__value__ = new_val
+                else:
+                    if (self.strict_input == "int"     and new_val.isnumeric()) or \
+                       (self.strict_input == "float"   and "".join(new_val.split(".", 1)).isnumeric()) or \
+                       (self.strict_input == "str"     and new_val.isalpha()):
+                        self.__value__ = new_val
 
             # dealing with self.max_chars
             if self.max_chars is not None:
