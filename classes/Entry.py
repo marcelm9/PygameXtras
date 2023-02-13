@@ -172,8 +172,7 @@ class Entry(Button):
                 self.__value__ = self.__value__[:self.max_chars]
 
             if self.__value__ != self.__old_value__:
-                self.update_text(self.__value__)
-                self.__old_value__ = self.__value__
+                self.__refresh_text()
 
             if self.text_when_empty != None and len(self.__value__) == 0:
                 self.update_text(self.text_when_empty)
@@ -194,7 +193,14 @@ class Entry(Button):
         Returns the text.
         """
         return self.__value__
-    
+
+    def set(self, value):
+        """
+        Sets the value of the Entry.
+        """
+        self.__value__ = str(value)
+        self.__refresh_text()
+
     def set_forbidden_characters(self, characters: list):
         """
         Bans all given characters.
@@ -206,8 +212,7 @@ class Entry(Button):
         Clears the text.
         """
         self.__value__ = ""
-        self.__old_value__ = ""
-        self.update_text(self.__value__)
+        self.__refresh_text()
 
     def set_state(self, state: bool):
         """
@@ -227,3 +232,8 @@ class Entry(Button):
         Removes permanent state.
         """
         self.__permanent_state__ = None
+    
+    def __refresh_text(self):
+        self.update_text(self.__value__)
+        self.__old_value__ = self.__value__
+
