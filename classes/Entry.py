@@ -144,15 +144,16 @@ class Entry(Button):
 
             # deleting chars
             for event in event_list:
-                if event.type == pygame.KEYDOWN and event.key == pygame.locals.K_BACKSPACE:
+                # if event.type == pygame.KEYDOWN and event.key == pygame.locals.K_BACKSPACE:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_BACKSPACE:
                     self.__value__ = self.__value__[:-1]
 
             # adding chars
             val = self.__keyboard__.get(event_list)
+            new_val: str = self.__value__ + val
 
             # checks for self.strict_input and sets val to "" if condition does not apply
             if self.strict_input is not None and val != "":
-                new_val: str = self.__value__ + val
 
                 if new_val == "-":
                     self.__value__ = new_val
@@ -166,6 +167,9 @@ class Entry(Button):
                        (self.strict_input == "float"   and "".join(new_val.split(".", 1)).isnumeric()) or \
                        (self.strict_input == "str"     and new_val.isalpha()):
                         self.__value__ = new_val
+                        
+            else:
+                self.__value__ = new_val
 
             # dealing with self.max_chars
             if self.max_chars is not None:

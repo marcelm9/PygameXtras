@@ -1,5 +1,5 @@
 import pygame
-from ..classes.OneClickManager import OneClickManager
+from ..classes import OneClickManager
 
 class Label:
     def __init__(self, surface: pygame.Surface, text, size: int, xy: tuple, anchor="center", **kwargs):
@@ -746,3 +746,6 @@ class Label:
 
     def get_rect(self):
         return self.rect
+
+if __name__ == '__main__':
+    print("TEST")
