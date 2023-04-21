@@ -1,11 +1,30 @@
 import pygame
 import math
-from ..classes.Functions import round_half_up
+from enum import Enum
+# from ..classes.Functions import round_half_up
+
+class PS(Enum):
+    cross = 0
+    circle = 1
+    square = 2
+    triangle = 3
+    share = 4
+    ps = 5
+    options = 6
+    l1 = 9
+    l3 = 7
+    r1 = 10
+    r3 = 8
+    arrow_up = 11
+    arrow_down = 12
+    arrow_left = 13
+    arrow_right = 14
+    touch_pad = 15
 
 class PlayStationController:
     def __init__(self, joystick_num, threshold: float = 0.05):
         """
-        Makes handling of keypresses on a controller easier.
+        Makes handling of controller input easier.
         """
         self.joystick_num = joystick_num
         assert threshold >= 0, f"threshold must be at least 0 (currently {threshold})"
@@ -15,6 +34,27 @@ class PlayStationController:
         self.js = pygame.joystick.Joystick(joystick_num)
         self.js.init()
         self.pressed = {}
+
+        self.update()
+
+    def update(self):
+        keys = self.get_pressed()
+        self.cross = True if keys.get(PS.cross.value) else False
+        self.circle = True if keys.get(PS.circle.value) else False
+        self.square = True if keys.get(PS.square.value) else False
+        self.triangle = True if keys.get(PS.triangle.value) else False
+        self.share = True if keys.get(PS.share.value) else False
+        self.ps = True if keys.get(PS.ps.value) else False
+        self.options = True if keys.get(PS.options.value) else False
+        self.l1 = True if keys.get(PS.l1.value) else False
+        self.l3 = True if keys.get(PS.l3.value) else False
+        self.r1 = True if keys.get(PS.r1.value) else False
+        self.r3 = True if keys.get(PS.r3.value) else False
+        self.arrow_up = True if keys.get(PS.arrow_up.value) else False
+        self.arrow_down = True if keys.get(PS.arrow_down.value) else False
+        self.arrow_left = True if keys.get(PS.arrow_left.value) else False
+        self.arrow_right = True if keys.get(PS.arrow_right.value) else False
+        self.touch_pad = True if keys.get(PS.touch_pad.value) else False
 
     def get_pressed(self):
         """
