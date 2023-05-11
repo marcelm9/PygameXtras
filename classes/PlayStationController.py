@@ -1,7 +1,7 @@
 import pygame
 import math
 from enum import Enum
-# from ..classes.Functions import round_half_up
+from ..classes.Functions import round_half_up
 
 class PS(Enum):
     cross = 0

@@ -5,7 +5,13 @@ import os
 
 
 def higher_resolution(boolean: bool = True):
-    """ probably only works on windows os """
+    """ 
+    Most Windows PCs (automatically) use scaling to 150% which makes many applications appear
+    blurry. To avoid this effect, this function can be called to increase the resolution on
+    affected displays without having to manually change the scaling in the computers settings.
+
+    probably only works on windows os
+    """
     ctypes.windll.shcore.SetProcessDpiAwareness(bool(boolean))
 
 

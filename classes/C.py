@@ -41,50 +41,85 @@ class C:
                 self.__value[i] = math.floor(self.__value[i]*multiplier + 0.5) / multiplier
 
     def __add__(self, other):
-        if self.__more_operations:
-            return C(*[v + other for v in self.__value])
+        if isinstance(other, C):
+            assert len(self.__value) == len(other), f"C-objects must have same length ({len(self.__value)} != {len(other)})"
+            if self.__more_operations:
+                return C(*[v1+v2 for v1, v2 in zip(self.__value, other)])
+            else:
+                return [v1+v2 for v1, v2 in zip(self.__value, other)]
         else:
-            return [v + other for v in self.__value]
+            if self.__more_operations:
+                return C(*[v + other for v in self.__value])
+            else:
+                return [v + other for v in self.__value]
 
     def __iadd__(self, other):
         self.__value = [v + other for v in self.__value]
         return self
 
     def __sub__(self, other):
-        if self.__more_operations:
-            return C(*[v - other for v in self.__value])
+        if isinstance(other, C):
+            assert len(self.__value) == len(other), f"C-objects must have same length ({len(self.__value)} != {len(other)})"
+            if self.__more_operations:
+                return C(*[v1-v2 for v1, v2 in zip(self.__value, other)])
+            else:
+                return [v1-v2 for v1, v2 in zip(self.__value, other)]
         else:
-            return [v - other for v in self.__value]
+            if self.__more_operations:
+                return C(*[v - other for v in self.__value])
+            else:
+                return [v - other for v in self.__value]
 
     def __isub__(self, other):
         self.__value = [v - other for v in self.__value]
         return self
 
     def __mul__(self, other):
-        if self.__more_operations:
-            return C(*[v * other for v in self.__value])
+        if isinstance(other, C):
+            assert len(self.__value) == len(other), f"C-objects must have same length ({len(self.__value)} != {len(other)})"
+            if self.__more_operations:
+                return C(*[v1*v2 for v1, v2 in zip(self.__value, other)])
+            else:
+                return [v1*v2 for v1, v2 in zip(self.__value, other)]
         else:
-            return [v * other for v in self.__value]
+            if self.__more_operations:
+                return C(*[v * other for v in self.__value])
+            else:
+                return [v * other for v in self.__value]
 
     def __imul__(self, other):
         self.__value = [v * other for v in self.__value]
         return self
 
     def __truediv__(self, other):
-        if self.__more_operations:
-            return C(*[v / other for v in self.__value])
+        if isinstance(other, C):
+            assert len(self.__value) == len(other), f"C-objects must have same length ({len(self.__value)} != {len(other)})"
+            if self.__more_operations:
+                return C(*[v1/v2 for v1, v2 in zip(self.__value, other)])
+            else:
+                return [v1/v2 for v1, v2 in zip(self.__value, other)]
         else:
-            return [v / other for v in self.__value]
+            if self.__more_operations:
+                return C(*[v / other for v in self.__value])
+            else:
+                return [v / other for v in self.__value]
 
     def __itruediv__(self, other):
         self.__value = [v / other for v in self.__value]
         return self
 
     def __floordiv__(self, other):
-        if self.__more_operations:
-            return C(*[v // other for v in self.__value])
+        if isinstance(other, C):
+            assert len(self.__value) == len(other), f"C-objects must have same length ({len(self.__value)} != {len(other)})"
+            if self.__more_operations:
+                return C(*[v1//v2 for v1, v2 in zip(self.__value, other)])
+            else:
+                return [v1//v2 for v1, v2 in zip(self.__value, other)]
         else:
-            return [v // other for v in self.__value]
+            if self.__more_operations:
+                return C(*[v // other for v in self.__value])
+            else:
+                return [v // other for v in self.__value]
 
     def __ifloordiv__(self, other):
         self.__value = [v // other for v in self.__value]
