@@ -558,30 +558,6 @@ class Label:
             self.text_rect = a.get_rect()
             pygame.image.save(a, r"C:\Users\marce\AppData\Local\Programs\Python\Python39\Lib\site-packages\my_lib_folder\text_surface_subsurf.png")
 
-        # data # should actually be accessed through 'self.rect.' but I
-        # will leave it as it is to not break any programs
-        self.topleft = self.background_rect.topleft
-        self.topright = self.background_rect.topright
-        self.bottomleft = self.background_rect.bottomleft
-        self.bottomright = self.background_rect.bottomright
-        self.center = self.background_rect.center
-        self.midtop = self.background_rect.midtop
-        self.midright = self.background_rect.midright
-        self.midbottom = self.background_rect.midbottom
-        self.midleft = self.background_rect.midleft
-        self.left = self.background_rect.left
-        self.right = self.background_rect.right
-        self.top = self.background_rect.top
-        self.bottom = self.background_rect.bottom
-
-        self.rect = self.background_rect
-
-        # for buttons:
-        self.x_range = (self.background_rect.x,
-                        self.background_rect.x + self.background_rect.width)
-        self.y_range = (self.background_rect.y,
-                        self.background_rect.y + self.background_rect.height)
-
     def draw(self):
         """
         Draws the widget to the screen.
@@ -733,6 +709,30 @@ class Label:
                 self.text_binding,
                 (background_rect_coords[0] + self.text_offset[0],
                  background_rect_coords[1] + self.text_offset[1]))
+
+        # data # should actually be accessed through 'self.rect.' but I
+        # will leave it as it is to not break any programs
+        self.topleft = self.background_rect.topleft
+        self.topright = self.background_rect.topright
+        self.bottomleft = self.background_rect.bottomleft
+        self.bottomright = self.background_rect.bottomright
+        self.center = self.background_rect.center
+        self.midtop = self.background_rect.midtop
+        self.midright = self.background_rect.midright
+        self.midbottom = self.background_rect.midbottom
+        self.midleft = self.background_rect.midleft
+        self.left = self.background_rect.left
+        self.right = self.background_rect.right
+        self.top = self.background_rect.top
+        self.bottom = self.background_rect.bottom
+
+        self.rect = self.background_rect
+
+        # for buttons:
+        self.x_range = (self.background_rect.x,
+                        self.background_rect.x + self.background_rect.width)
+        self.y_range = (self.background_rect.y,
+                        self.background_rect.y + self.background_rect.height)
     
     def set_style(self, bold: bool = None, italic: bool = None, underline: bool = None):
         old_bold = self.bold
