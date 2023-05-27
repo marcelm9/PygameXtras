@@ -85,7 +85,7 @@ class Entry(Button):
         self.bold_init = self.bold
         self.italic_init = self.italic
 
-    def update(self, event_list, button: int = 1, offset: tuple = (0, 0), do_highlight: bool = True) -> bool:
+    def update(self, event_list, button: int = 1, offset: tuple = (0, 0)) -> bool:
         """
         Checks if entry has been clicked on and activates widget if so.
         Should be used with a regular event_list.
@@ -93,22 +93,37 @@ class Entry(Button):
         Also updates the text, if input is detected.
         """
         assert type(button) == int, f"invalid argument for 'button': {button}"
+        assert 1 <= button <= 5, f"invalid argument for 'button': {button}"
+        assert type(offset) in [tuple, list], f"invalid argument for 'offset': {offset}"
+        assert len(offset) == 2, f"invalid argument for 'offset: {offset}"
 
+        # stops if one_click_manager tells that a click has taken place elsewhere
+        if self.one_click_manager != None and self.one_click_manager.get_clicked() == True:
+            self.__is_touching__ = False
+            return False
+        
+        # managing the actual clicks
         for event in event_list:
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = list(event.pos)
-                pos[0] += offset[0]
-                pos[1] += offset[1]
+                if self.active_area != None and not self.active_area.collidepoint(pos):
+                    continue
+                pos[0] -= offset[0]
+                pos[1] -= offset[1]
                 if button == None:
                     if self.x_range[0] < pos[0] < self.x_range[1] and self.y_range[0] < pos[1] < self.y_range[1]:
-                        self.__state__ = True
+                        if self.one_click_manager != None:
+                            self.one_click_manager.set_clicked()
+                        self.__state__ =  True
                     else:
                         self.__state__ = False
 
                 elif 0 < button < 4:
                     if button == event.button:
                         if self.x_range[0] < pos[0] < self.x_range[1] and self.y_range[0] < pos[1] < self.y_range[1]:
-                            self.__state__ = True
+                            if self.one_click_manager != None:
+                                self.one_click_manager.set_clicked()
+                            self.__state__ =  True
                         else:
                             self.__state__ = False
 
@@ -122,23 +137,20 @@ class Entry(Button):
             self.__state__ = self.__force__
             self.__force__ = None
 
-        if do_highlight and self.highlight != None:
-            try:
-                pos = list(pygame.mouse.get_pos())
-                if self.active_area != None and not self.active_area.collidepoint(pos):
-                    if self.backgroundcolor != self.backgroundcolor_init:
-                        self.backgroundcolor = self.backgroundcolor_init
-                pos[0] += offset[0]
-                pos[1] += offset[1]
-                if self.x_range[0] < pos[0] < self.x_range[1] and self.y_range[0] < pos[1] < self.y_range[1]:
-                    # ? not needed here i think
-                    if self.backgroundcolor != self.highlight:
-                        self.backgroundcolor = self.highlight
-                else:
-                    if self.backgroundcolor != self.backgroundcolor_init:
-                        self.backgroundcolor = self.backgroundcolor_init
-            except:
-                raise Exception(f"unable to change highlight button with color '{self.highlight}'")
+        # managing the hovering (highlight)
+        pos = list(pygame.mouse.get_pos())
+        if self.active_area != None and not self.active_area.collidepoint(pos):
+            self.__is_touching__ = False
+            self.__state__ = False
+        pos[0] -= offset[0]
+        pos[1] -= offset[1]
+        if self.x_range[0] < pos[0] < self.x_range[1] and self.y_range[0] < pos[1] < self.y_range[1]:
+            if self.highlight != None:
+                self.__is_touching__ = True
+            if self.one_click_manager != None:
+                self.one_click_manager.set_hovering()
+        else:
+            self.__is_touching__ = False
 
         if self.__state__:
 
@@ -228,8 +240,7 @@ class Entry(Button):
         """
         Sets activity state permanently. Remove with self.remove_permanent_state().
         """
-        assert type(state) == bool, f"invalid argument for 'state': {state}"
-        self.__permanent_state__ = state
+        self.__permanent_state__ = bool(state)
 
     def remove_permanent_state(self):
         """

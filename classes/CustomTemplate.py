@@ -1,46 +1,68 @@
 from ..classes.Label import Label
+from ..classes.Button import Button
+from ..classes.Entry import Entry
+
 
 class CustomTemplate:
-    def __init__(self, surface, text="", size=12, anchor="center", textcolor=(255, 255, 255),
-                 backgroundcolor=None, antialias=True, font="", x_axis_addition=0, y_axis_addition=0,
-                 borderwidth=0, bordercolor=(0, 0, 0),
-                 force_width=None, force_height=None, force_dim: tuple = None, binding_rect=0, borderradius=0):
-        self.surface = surface
-        self.text = text
-        self.size = size
-        self.anchor = anchor
-        self.textcolor = textcolor
-        self.backgroundcolor = backgroundcolor
-        self.antialias = antialias
-        self.font = font
-        self.x_axis_addition = x_axis_addition
-        self.y_axis_addition = y_axis_addition
-        self.borderwidth = borderwidth
-        self.bordercolor = bordercolor
-        self.force_width = force_width
-        self.force_height = force_height
-        self.force_dim = force_dim
-        self.binding_rect = binding_rect
-        self.borderradius = borderradius
+    def __init__(self, **kwargs):
+        self.__kwargs = kwargs
 
-    def label(self, xy, **kwargs):
+    def get(self, key):
+        return self.__kwargs.get(key)
+
+    def label(self, **kwargs):
+        local_kwargs = self.__kwargs.copy()
+        for k, v in kwargs.items():
+            local_kwargs[k] = v
+
+        assert "surface" in local_kwargs.keys(), "<surface> has to be set"
+        assert "text" in local_kwargs.keys(), "<text> has to be set"
+        assert "size" in local_kwargs.keys(), "<size> has to be set"
+        assert "xy" in local_kwargs.keys(), "<xy> has to be set"
+        assert "anchor" in local_kwargs.keys(), "<anchor> has to be set"
+
         return Label(
-            self.surface,
-            kwargs.get('text', self.text),
-            kwargs.get('size', self.size),
-            xy,
-            kwargs.get('anchor', self.anchor),
-            kwargs.get('textcolor', self.textcolor),
-            kwargs.get('backgroundcolor', self.backgroundcolor),
-            kwargs.get('antialias', self.antialias),
-            kwargs.get('font', self.font),
-            kwargs.get('x_axis_addition', self.x_axis_addition),
-            kwargs.get('y_axis_addition', self.y_axis_addition),
-            kwargs.get('borderwidth', self.borderwidth),
-            kwargs.get('bordercolor', self.bordercolor),
-            kwargs.get('force_width', self.force_width),
-            kwargs.get('force_height', self.force_height),
-            kwargs.get('force_dim', self.force_dim),
-            kwargs.get('binding_rect', self.binding_rect),
-            kwargs.get('borderradius', self.borderradius)
-        )
+            local_kwargs.pop("surface"),
+            local_kwargs.pop("text"),
+            local_kwargs.pop("size"),
+            local_kwargs.pop("xy"),
+            local_kwargs.pop("anchor"),
+            **local_kwargs)
+    
+    def button(self, **kwargs):
+        local_kwargs = self.__kwargs.copy()
+        for k, v in kwargs.items():
+            local_kwargs[k] = v
+
+        assert "surface" in local_kwargs.keys(), "<surface> has to be set"
+        assert "text" in local_kwargs.keys(), "<text> has to be set"
+        assert "size" in local_kwargs.keys(), "<size> has to be set"
+        assert "xy" in local_kwargs.keys(), "<xy> has to be set"
+        assert "anchor" in local_kwargs.keys(), "<anchor> has to be set"
+
+        return Button(
+            local_kwargs.pop("surface"),
+            local_kwargs.pop("text"),
+            local_kwargs.pop("size"),
+            local_kwargs.pop("xy"),
+            local_kwargs.pop("anchor"),
+            **local_kwargs)
+    
+    def entry(self, **kwargs):
+        local_kwargs = self.__kwargs.copy()
+        for k, v in kwargs.items():
+            local_kwargs[k] = v
+
+        assert "surface" in local_kwargs.keys(), "<surface> has to be set"
+        assert "text" in local_kwargs.keys(), "<text> has to be set"
+        assert "size" in local_kwargs.keys(), "<size> has to be set"
+        assert "xy" in local_kwargs.keys(), "<xy> has to be set"
+        assert "anchor" in local_kwargs.keys(), "<anchor> has to be set"
+
+        return Entry(
+            local_kwargs.pop("surface"),
+            local_kwargs.pop("text"),
+            local_kwargs.pop("size"),
+            local_kwargs.pop("xy"),
+            local_kwargs.pop("anchor"),
+            **local_kwargs)

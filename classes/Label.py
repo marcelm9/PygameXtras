@@ -734,14 +734,17 @@ class Label:
                 (background_rect_coords[0] + self.text_offset[0],
                  background_rect_coords[1] + self.text_offset[1]))
     
-    def set_style(self, bold: bool = None, italic: bool = None):
+    def set_style(self, bold: bool = None, italic: bool = None, underline: bool = None):
         old_bold = self.bold
         if bold != None:
             self.bold = bool(bold)
         old_italic = self.italic
         if italic != None:
             self.italic = bool(italic)
-        if old_bold != self.bold or old_italic != self.italic:
+        old_underline = self.underline
+        if underline != None:
+            self.underline = bool(underline)
+        if old_bold != self.bold or old_italic != self.italic or old_underline != self.underline:
             self.__create__()
 
     def get_rect(self):
