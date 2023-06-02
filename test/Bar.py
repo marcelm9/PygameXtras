@@ -1,5 +1,45 @@
 from Pygame_Engine.classes.Bar import Bar
 
+class NewBar:
+    def __init__(self, surface, size: tuple, xy: tuple, anchor: str = "center", **kwargs):
+        """
+        Creates a bar.
+
+        Instructions:
+            - To create a bar, create an instance of this class before
+            the mainloop of the game
+            - To make the bar appear, call the method 'self.draw()' in
+            every loop of the game.
+
+        Example (simplified):
+            bar = Bar(screen, (100, 25), (100, 100))
+            while True:
+                bar.update(player_health, player_max_health)
+                bar.draw()
+
+        Arguments:
+            surface
+                the surface the object will be drawn onto
+                Type: pygame.Surface
+            size
+                width and height of the bar
+                Type: tuple, list
+            xy
+                position of the anchor
+                Type: tuple, list
+            anchor
+                the anchor of the object:   topleft,    midtop,    topright,
+                                            midleft,    center,    midright,
+                                            bottomleft, midbottom, bottomright
+            backgroundcolor
+            fillcolor
+            bordercolor
+            borderwidth
+            borderradius (?)
+            
+        """
+
+
 import pygame
 import sys
 

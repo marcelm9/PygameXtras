@@ -1,4 +1,4 @@
-from classes.Functions import ask_directory, higher_resolution
+from ..classes.Functions import ask_directory, higher_resolution
 import sys
 import os
 import shutil

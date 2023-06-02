@@ -20,7 +20,7 @@ class Label:
         Arguments:
             surface
                 the surface the object will be drawn onto
-                Type: pygame.Surface, pygame.display.set_mode
+                Type: pygame.Surface
             text
                 the text displayed on the label / button
                 Type: Any
