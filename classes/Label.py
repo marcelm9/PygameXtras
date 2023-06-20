@@ -686,7 +686,7 @@ class Label:
         Changes the widgets position. Call this
         method before drawing to the screen.
         """
-        assert type(xy) in [tuple, int], f"invalid argument for 'xy': {xy}"
+        assert isinstance(xy, (tuple, list)), f"invalid argument for 'xy': {xy}"
         assert len(xy) == 2, f"invalid argument for 'xy': {xy}"
         self.xy = xy
         assert anchor in ["topleft", "topright", "bottomleft", "bottomright",
