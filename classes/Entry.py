@@ -223,6 +223,10 @@ class Entry(Button):
         """
         self.__keyboard__.set_forbidden_characters(characters)
 
+    def set_forbidden_characters_for_filename(self):
+        forbidden_chars_in_filenames = "<>:\"/\\|?* \n\t\r,.;"
+        self.set_forbidden_characters(list(forbidden_chars_in_filenames))
+
     def clear(self):
         """
         Clears the text.
