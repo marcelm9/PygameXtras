@@ -15,6 +15,7 @@ from ..classes.Messagebox import Messagebox
 from ..classes.OneClickManager import OneClickManager
 from ..classes.Paragraph import Paragraph
 from ..classes.PlayStationController import PlayStationController
+from ..classes.PopupMessage import PopupMessage
 from ..classes.ScrollableButtonList import ScrollableButtonList
 from ..classes.Spritesheet import Spritesheet
 from ..classes.Table import Table
