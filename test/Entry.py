@@ -4,11 +4,11 @@ import pygame
 import sys
 
 pygame.init()
-screen = pygame.display.set_mode((600,400), display=1)
+screen = pygame.display.set_mode((600,400), display=0)
 fpsclock = pygame.time.Clock()
 fps = 60
 
-e = Entry(screen, "", 32, (screen.get_width()//2, screen.get_height()//2), bw=1, fd=(400,60))
+e = Entry(screen, "", 32, (screen.get_width()//2, screen.get_height()//2), bw=1, fd=(400,60), twe="empty", ast=1)
 
 run = True
 while run:

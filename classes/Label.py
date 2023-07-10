@@ -29,7 +29,11 @@ class Label:
                 Type: int
             xy
                 refers to the position of the anchor
-                Type: tuple, list
+                Type:
+                    tuple[int, int]
+                    tuple[tuple[int, int], tuple[int, int]] -> performs sum of vectors (v1[0] + v2[0], v1[1] + v2[1])
+                    list[...]
+                    list[list[...]]
             anchor
                 the anchor of the object:   topleft,    midtop,    topright,
                                             midleft,    center,    midright,
@@ -149,11 +153,29 @@ class Label:
 
         self.surface = surface
         self.text = text
+
         assert type(size) in [int, float], f"invalid argument for 'size': {size}"
         self.size = int(size)
+
         assert type(xy) in [tuple, list], f"invalid argument for 'xy': {xy}"
         assert len(xy) == 2, f"invalid argument for 'xy': {xy}"
-        self.xy = int(xy[0]), int(xy[1])
+        if isinstance(xy[0], (int, float)) and isinstance(xy[1], (int, float)):
+            self.xy = int(xy[0]), int(xy[1])
+        elif isinstance(xy[0], (tuple, list)) and isinstance(xy[1], (tuple, list)):
+            t1 = xy[0]
+            t2 = xy[1]
+            assert all([
+                len(t1) == 2,
+                len(t2) == 2,
+                isinstance(t1[0], int),
+                isinstance(t1[1], int),
+                isinstance(t2[0], int),
+                isinstance(t2[1], int)
+            ]), f"invalid argument for 'xy': {xy}"
+            self.xy = (t1[0] + t2[0], t1[1] + t2[1])
+        else:
+            raise AssertionError(f"invalid argument for 'xy': {xy}")
+
         assert anchor in "topleft,midtop,topright,midleft,center,midright,bottomleft,midbottom,bottomright".split(
             ","), f"invalid argument for 'anchor': {anchor}"
         self.anchor = anchor
@@ -165,7 +187,7 @@ class Label:
         if self.textcolor == None:
             self.textcolor = kw.get(self.ABBREVIATIONS["textcolor"], None)
         if self.textcolor == None:
-            self.textcolor = (0,0,0) # old: (255, 255, 255)
+            self.textcolor = (0,0,0)
         # assertion
         if self.textcolor != None:
             assert type(self.textcolor) in [

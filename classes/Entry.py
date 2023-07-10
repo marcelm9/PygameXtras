@@ -29,7 +29,7 @@ class Entry(Button):
                 after the first initialization of the widget
                 Type: bool
             strict_input / si
-                only allow numeric ("int", "float") or alphabetic ("str") input
+                only allow numeric ("int", "float", 0 - +inf by using "int+" / "float+") or alphabetic ("str") input
                 Type: str
         """
 
@@ -57,14 +57,14 @@ class Entry(Button):
         if self.auto_style == None:
             self.auto_style = False
         # assertion
-        assert type(self.auto_style) == bool, f"invalid argument for 'auto_style': {self.auto_style}"
+        self.auto_style = bool(self.auto_style)
 
         # strict_input
         self.strict_input = kwargs.get("strict_input", None)
         if self.strict_input == None:
             self.strict_input = kwargs.get("si", None)
         # assertion
-        assert self.strict_input is None or self.strict_input in ["int", "float", "str"], f"invalid argument for 'strict_input': {self.strict_input}"
+        assert self.strict_input is None or self.strict_input in ["int", "float", "int+", "float+", "str"], f"invalid argument for 'strict_input': {self.strict_input}"
         
         
 
@@ -84,6 +84,8 @@ class Entry(Button):
 
         self.bold_init = self.bold
         self.italic_init = self.italic
+
+        self.__manage_twe()
 
     def update(self, event_list, button: int = 1, offset: tuple = (0, 0)) -> bool:
         """
@@ -168,7 +170,8 @@ class Entry(Button):
             if self.strict_input is not None and val != "":
 
                 if new_val == "-":
-                    self.__value__ = new_val
+                    if not (self.strict_input == "int+" or self.strict_input == "float+"):
+                        self.__value__ = new_val
                 elif new_val.startswith("-"):
                     if (self.strict_input == "int"     and new_val[1:].isnumeric()) or \
                        (self.strict_input == "float"   and "".join(new_val[1:].split(".", 1)).isnumeric()) or \
@@ -177,7 +180,9 @@ class Entry(Button):
                 else:
                     if (self.strict_input == "int"     and new_val.isnumeric()) or \
                        (self.strict_input == "float"   and "".join(new_val.split(".", 1)).isnumeric()) or \
-                       (self.strict_input == "str"     and new_val.isalpha()):
+                       (self.strict_input == "str"     and new_val.isalpha()) or \
+                       (self.strict_input == "int+"    and new_val.isnumeric()) or \
+                       (self.strict_input == "float+"  and "".join(new_val.split(".", 1)).isnumeric()):
                         self.__value__ = new_val
                         
             else:
@@ -190,13 +195,7 @@ class Entry(Button):
             if self.__value__ != self.__old_value__:
                 self.__refresh_text()
 
-            if self.text_when_empty != None and len(self.__value__) == 0:
-                self.update_text(self.text_when_empty)
-                if self.auto_style:
-                    self.set_style(italic=True)
-            else:
-                if self.auto_style:
-                    self.set_style(self.bold_init, self.italic_init)
+            self.__manage_twe()
 
     def get_state(self):
         """
@@ -256,3 +255,11 @@ class Entry(Button):
         self.update_text(self.__value__)
         self.__old_value__ = self.__value__
 
+    def __manage_twe(self):
+        if self.text_when_empty != None and len(self.__value__) == 0:
+            self.update_text(self.text_when_empty)
+            if self.auto_style:
+                self.set_style(italic=True)
+        else:
+            if self.auto_style:
+                self.set_style(self.bold_init, self.italic_init)
