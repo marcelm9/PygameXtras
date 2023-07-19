@@ -145,18 +145,45 @@ class Label:
             "bold": "bo",
             "italic": "it",
             "underline": "ul",
-            "one_click_manager": "ocm"
+            "one_click_manager": "ocm",
+            "template": "t"
         }
+
+        # inserting template (if exists)
+        template = kwargs.get("template", None)
+        if template is None:
+            template = kwargs.get(self.ABBREVIATIONS["template"], None)
+        if template is not None:
+            assert isinstance(template, dict), f"invalid argument for 'template': {template}"
+            for k in template.keys():
+                if not k in kwargs.keys():
+                    kwargs[k] = template[k]
+                    print(f"inserting: '{k}:{template[k]}'")
+
+                else:
+                    print(f"NOT inserting: '{k}:{template[k]}'")
+                
+
 
         self.__is_touching__ = False # if cursor is touching the rect, only for buttons
         self.__has_hl_image__ = False
 
         self.surface = surface
+        if "surface" in kwargs.keys():
+            self.surface = kwargs["surface"]
+
         self.text = text
+        if "text" in kwargs.keys():
+            self.text = kwargs["text"]
 
+        self.size = size
+        if "size" in kwargs.keys():
+            self.size = kwargs["size"]
         assert type(size) in [int, float], f"invalid argument for 'size': {size}"
-        self.size = int(size)
+        self.size = int(self.size)
 
+        if "xy" in kwargs.keys():
+            xy = kwargs["xy"]
         assert type(xy) in [tuple, list], f"invalid argument for 'xy': {xy}"
         assert len(xy) == 2, f"invalid argument for 'xy': {xy}"
         if isinstance(xy[0], (int, float)) and isinstance(xy[1], (int, float)):
@@ -176,9 +203,11 @@ class Label:
         else:
             raise AssertionError(f"invalid argument for 'xy': {xy}")
 
-        assert anchor in "topleft,midtop,topright,midleft,center,midright,bottomleft,midbottom,bottomright".split(
-            ","), f"invalid argument for 'anchor': {anchor}"
         self.anchor = anchor
+        if "anchor" in kwargs.keys():
+            self.anchor = kwargs["anchor"]
+        assert self.anchor in "topleft,midtop,topright,midleft,center,midright,bottomleft,midbottom,bottomright".split(
+            ","), f"invalid argument for 'anchor': {self.anchor}"
 
         kw = kwargs
 
