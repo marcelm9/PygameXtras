@@ -158,32 +158,17 @@ class Label:
             for k in template.keys():
                 if not k in kwargs.keys():
                     kwargs[k] = template[k]
-                    print(f"inserting: '{k}:{template[k]}'")
-
-                else:
-                    print(f"NOT inserting: '{k}:{template[k]}'")
-                
-
 
         self.__is_touching__ = False # if cursor is touching the rect, only for buttons
         self.__has_hl_image__ = False
 
         self.surface = surface
-        if "surface" in kwargs.keys():
-            self.surface = kwargs["surface"]
-
-        self.text = text
-        if "text" in kwargs.keys():
-            self.text = kwargs["text"]
+        self.text = str(text)
 
         self.size = size
-        if "size" in kwargs.keys():
-            self.size = kwargs["size"]
         assert type(size) in [int, float], f"invalid argument for 'size': {size}"
         self.size = int(self.size)
 
-        if "xy" in kwargs.keys():
-            xy = kwargs["xy"]
         assert type(xy) in [tuple, list], f"invalid argument for 'xy': {xy}"
         assert len(xy) == 2, f"invalid argument for 'xy': {xy}"
         if isinstance(xy[0], (int, float)) and isinstance(xy[1], (int, float)):
@@ -554,60 +539,9 @@ class Label:
 
         # putting everything in correct position
         self.update_pos(self.xy, self.anchor)
-        
-        if self.stay_within_surface:
-            """
-            idea: just draw the whole thing (text, background, border) onto an extra
-            surface and then take only the background_rect from that surface
-            """
-            # a = pygame.Surface((min(self.background_rect.width, self.text_rect.width),
-            #                    min(self.background_rect.height, self.text_rect.height))) # ?
-            # a = pygame.Surface((self.text_rect.width, self.text_rect.height))
-            # def next_col(col):
-            #     if col[0] < 255:
-            #         return [col[0]+1, col[1], col[2]]
-            #     elif col[1] < 255:
-            #         return [col[0], col[1]+1, col[2]]
-            #     elif col[2] < 255:
-            #         return [col[0], col[1], col[2]+1]
-            #     else:
-            #         raise Exception("should not be possible...")
-            # col = [0,0,0]
-            # while self.textcolor == tuple(col) or self.backgroundcolor == tuple(col) or self.bordercolor == tuple(col):
-            #     col = next_col(col)
-            # print(col)
-            # a.fill(col)
-            # a.set_colorkey(col)
-            # r = (self.background_rect.left - self.text_rect.left, self.background_rect.top - self.text_rect.top, self.background_rect.width, self.background_rect.height)
 
-            # subsurf = self.text_surface.subsurface(r)
-
-            # pygame.draw.rect(a, (0,0,255), r, 1)
-            # a.blit(subsurf, (0,0))
-            # self.text_surface = a
-            # self.text_rect = self.text_surface.get_rect() # ?
-
-            # x / w #
-            if self.text_rect.width > self.background_rect.width:
-                x = self.background_rect.left - self.text_rect.left
-                w = self.background_rect.width
-            else:
-                x = 0
-                w = self.text_rect.width
-            # y / h #
-            if self.text_rect.height > self.background_rect.height:
-                y = self.background_rect.top - self.text_rect.top
-                h = self.background_rect.height
-            else:
-                y = 0
-                h = self.text_rect.height
-
-            print(x,y,w,h)
-            pygame.image.save(self.text_surface, r"C:\Users\marce\AppData\Local\Programs\Python\Python39\Lib\site-packages\my_lib_folder\text_surface.png")
-            a = self.text_surface.subsurface((x,y,w,h))
-            self.text_surface = a
-            self.text_rect = a.get_rect()
-            pygame.image.save(a, r"C:\Users\marce\AppData\Local\Programs\Python\Python39\Lib\site-packages\my_lib_folder\text_surface_subsurf.png")
+    def __show_error(self, variable_name, variable_value):
+        raise AssertionError(f"invalid argument for '{variable_name}': {variable_value} ({type(variable_value)})")
 
     def draw(self):
         """

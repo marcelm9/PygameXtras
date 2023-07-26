@@ -33,7 +33,7 @@ def rect(r, color, width=0):
 
 center = (250, 250)
 
-l = Label(screen, "Test Label", 50, center, xad=10, yad=8, bw=1, t={"xy": (100,100), "anchor": "topleft"})
+l = Label(screen, "Test Label", 50, center, xad=10, yad=8, bw=1, t={"anchor": "topleft"})
 
 while True:
     events = pygame.event.get()
