@@ -128,7 +128,6 @@ class Entry(Button):
             return False
         
         # managing the actual clicks
-        cursor_todo = None # for the movement of the cursor
         for event in event_list:
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = list(event.pos)
@@ -155,11 +154,6 @@ class Entry(Button):
 
                 else:
                     raise ValueError(f"invalid argument for 'button': {button}")
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_LEFT:
-                    cursor_todo = "increase"
-                elif event.key == pygame.K_RIGHT:
-                    cursor_todo = "decrease"
         if self.__permanent_state__ != None:
             self.__state__ = self.__permanent_state__
 
@@ -186,10 +180,26 @@ class Entry(Button):
 
             # deleting chars
             for event in event_list:
-                # if event.type == pygame.KEYDOWN and event.key == pygame.locals.K_BACKSPACE:
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_BACKSPACE:
                     if self.min_chars == None or len(self.__value__) - 1 >= self.min_chars:
-                        self.__value__ = self.__value__[:-1]
+                        if self.show_cursor:
+                            if self.__cursor_pos != len(self.__value__):
+                                val_list = list(self.__value__)
+                                del val_list[len(self.__value__)-1-self.__cursor_pos]
+                                self.__value__ = "".join(val_list)
+                        else:
+                            self.__value__ = self.__value__[:-1]
+
+                # managing cursor
+                if self.show_cursor and event.type == pygame.KEYUP:
+                    if event.key == pygame.K_LEFT:
+                        self.__cursor_pos += 1
+                    elif event.key == pygame.K_RIGHT:
+                        self.__cursor_pos -= 1
+                    elif event.key == 1073741898: # key "pos1"
+                        self.__cursor_pos = len(self.__value__)
+                    elif event.key == 1073741901: # key "ende"
+                        self.__cursor_pos = 0
 
             # adding chars
             val = self.__keyboard__.get(event_list)
@@ -219,20 +229,17 @@ class Entry(Button):
             else:
                 self.__value__ = new_val
 
-            # managing the cursor
-            if cursor_todo == "increase":
-                self.__cursor_pos = max(0, min(self.__cursor_pos + 1, len(self.__value__)))
-            elif cursor_todo == "decrease":
-                self.__cursor_pos = max(0, min(self.__cursor_pos - 1, len(self.__value__)))
-            print(f"cursor_pos: {self.__cursor_pos}")
+
 
             # dealing with self.max_chars
             if self.max_chars is not None:
                 self.__value__ = self.__value__[:self.max_chars]
 
             if self.__value__ != self.__old_value__ or self.__cursor_pos != self.__old_cursor_pos:
+                if self.show_cursor:
+                    self.__clamp_cursor()
+                    self.__old_cursor_pos = self.__cursor_pos
                 self.__refresh_text()
-                self.__old_cursor_pos = self.__cursor_pos
 
             self.__manage_twe()
 
@@ -307,3 +314,9 @@ class Entry(Button):
         else:
             if self.auto_style:
                 self.set_style(self.bold_init, self.italic_init)
+
+    def __clamp_cursor(self):
+        print(f"before clamping: {self.__cursor_pos}")
+        self.__cursor_pos = max(0, min(self.__cursor_pos, len(self.__value__)))
+        print(f"after clamping: {self.__cursor_pos}")
+
