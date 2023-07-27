@@ -92,6 +92,7 @@ class Entry(Button):
         
 
         self.__state__ = False
+        self.__old_state__ = False
         self.__force__ = False # used to set state even before the update method
         self.__permanent_state__ = None
         self.__value__ = str(text)
@@ -235,12 +236,14 @@ class Entry(Button):
             if self.max_chars is not None:
                 self.__value__ = self.__value__[:self.max_chars]
 
-            if self.__value__ != self.__old_value__ or self.__cursor_pos != self.__old_cursor_pos:
-                if self.show_cursor:
-                    self.__clamp_cursor()
-                    self.__old_cursor_pos = self.__cursor_pos
-                self.__refresh_text()
+        if self.__value__ != self.__old_value__ or self.__cursor_pos != self.__old_cursor_pos or self.__old_state__ != self.__state__:
+            if self.show_cursor:
+                self.__clamp_cursor()
+                self.__old_cursor_pos = self.__cursor_pos
+            self.__old_state__ = self.__state__
+            self.__refresh_text()
 
+            # maybe the following line has to be unindented once, I am not sure
             self.__manage_twe()
 
     def get_state(self):
@@ -298,7 +301,7 @@ class Entry(Button):
         self.__permanent_state__ = None
     
     def __refresh_text(self):
-        if self.show_cursor:
+        if self.show_cursor and self.__state__:
             chars = list(self.__value__)
             chars.insert(len(self.__value__) - self.__cursor_pos, "|")
             self.update_text("".join(chars))
@@ -316,7 +319,4 @@ class Entry(Button):
                 self.set_style(self.bold_init, self.italic_init)
 
     def __clamp_cursor(self):
-        print(f"before clamping: {self.__cursor_pos}")
         self.__cursor_pos = max(0, min(self.__cursor_pos, len(self.__value__)))
-        print(f"after clamping: {self.__cursor_pos}")
-
