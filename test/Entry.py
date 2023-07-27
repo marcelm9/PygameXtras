@@ -8,7 +8,9 @@ screen = pygame.display.set_mode((600,400), display=0)
 fpsclock = pygame.time.Clock()
 fps = 60
 
-e = Entry(screen, "", 32, (screen.get_width()//2, screen.get_height()//2), bw=1, fd=(400,60), twe="empty", ast=1)
+e = Entry(screen, "", 32, (screen.get_width()//2, screen.get_height()//2), bw=1, fd=(400,60), twe="empty", ast=1, sc=1)
+
+old_e = ""
 
 run = True
 while run:
@@ -26,6 +28,10 @@ while run:
         e.update_colors(bordercolor=(0,255,0))
     else:
         e.update_colors(bordercolor=(0,0,0))
+
+    if e.get() != old_e:
+        print("Changed to: " + e.get())
+        old_e = e.get()
     
     screen.fill((64,64,128))
     e.draw()

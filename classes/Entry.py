@@ -31,6 +31,10 @@ class Entry(Button):
             strict_input / si
                 only allow numeric ("int", "float", 0 - +inf by using "int+" / "float+") or alphabetic ("str") input
                 Type: str
+            show_cursor
+                show a moveable (left and right) cursor, that makes it possible
+                to edit text in the middle without deleting everything to its right
+                Type: bool
         """
 
         # max_chars
@@ -74,6 +78,16 @@ class Entry(Button):
             self.strict_input = kwargs.get("si", None)
         # assertion
         assert self.strict_input is None or self.strict_input in ["int", "float", "int+", "float+", "str"], f"invalid argument for 'strict_input': {self.strict_input}"
+
+        # show_cursor
+        self.show_cursor = kwargs.get("show_cursor", None)
+        if self.show_cursor == None:
+            self.show_cursor = kwargs.get("sc", True)
+        # assertion
+        self.show_cursor = bool(self.show_cursor)
+        self.__cursor_pos = 0 # 0 means "at the end", while 2 means "2 characters from the end", ...
+        self.__old_cursor_pos = 0
+        
         
         
 
@@ -114,6 +128,7 @@ class Entry(Button):
             return False
         
         # managing the actual clicks
+        cursor_todo = None # for the movement of the cursor
         for event in event_list:
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = list(event.pos)
@@ -140,7 +155,11 @@ class Entry(Button):
 
                 else:
                     raise ValueError(f"invalid argument for 'button': {button}")
-
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT:
+                    cursor_todo = "increase"
+                elif event.key == pygame.K_RIGHT:
+                    cursor_todo = "decrease"
         if self.__permanent_state__ != None:
             self.__state__ = self.__permanent_state__
 
@@ -174,7 +193,9 @@ class Entry(Button):
 
             # adding chars
             val = self.__keyboard__.get(event_list)
-            new_val: str = self.__value__ + val
+            new_val_list: list = list(self.__value__)
+            new_val_list.insert(len(self.__value__) - self.__cursor_pos, val)
+            new_val: str = "".join(new_val_list)
 
             # checks for self.strict_input and sets val to "" if condition does not apply
             if self.strict_input is not None and val != "":
@@ -198,12 +219,20 @@ class Entry(Button):
             else:
                 self.__value__ = new_val
 
+            # managing the cursor
+            if cursor_todo == "increase":
+                self.__cursor_pos = max(0, min(self.__cursor_pos + 1, len(self.__value__)))
+            elif cursor_todo == "decrease":
+                self.__cursor_pos = max(0, min(self.__cursor_pos - 1, len(self.__value__)))
+            print(f"cursor_pos: {self.__cursor_pos}")
+
             # dealing with self.max_chars
             if self.max_chars is not None:
                 self.__value__ = self.__value__[:self.max_chars]
 
-            if self.__value__ != self.__old_value__:
+            if self.__value__ != self.__old_value__ or self.__cursor_pos != self.__old_cursor_pos:
                 self.__refresh_text()
+                self.__old_cursor_pos = self.__cursor_pos
 
             self.__manage_twe()
 
@@ -262,7 +291,12 @@ class Entry(Button):
         self.__permanent_state__ = None
     
     def __refresh_text(self):
-        self.update_text(self.__value__)
+        if self.show_cursor:
+            chars = list(self.__value__)
+            chars.insert(len(self.__value__) - self.__cursor_pos, "|")
+            self.update_text("".join(chars))
+        else:
+            self.update_text(self.__value__)
         self.__old_value__ = self.__value__
 
     def __manage_twe(self):
