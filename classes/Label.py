@@ -802,5 +802,5 @@ class Label:
         if old_bold != self.bold or old_italic != self.italic or old_underline != self.underline:
             self.__create__()
 
-    def get_rect(self):
+    def get_rect(self) -> pygame.Rect:
         return self.rect

@@ -573,7 +573,7 @@ class Entity(pygame.sprite.Sprite):
                 self.rect.bottomright[1] * factor, decimals)
 
     def set_pos(self, xy, reference_point="center"):
-        """ uses pixel \n <xy> can be either a tuple or an integer, depending on <reference_point> """
+        """ uses pixel \n 'xy' can be either a tuple or an integer, depending on 'reference_point' """
         assert type(xy) in [tuple, list, int, pygame.Vector2]
         assert type(reference_point) == str
         if reference_point in ["topleft", "topright", "center", "bottomleft", "bottomright"]:

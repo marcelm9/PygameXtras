@@ -238,7 +238,10 @@ class Entry(Button):
 
         if self.__value__ != self.__old_value__ or self.__cursor_pos != self.__old_cursor_pos or self.__old_state__ != self.__state__:
             if self.show_cursor:
-                self.__clamp_cursor()
+                if self.__old_state__ != self.__state__:
+                    self.__cursor_pos = 0
+                else:
+                    self.__clamp_cursor()
                 self.__old_cursor_pos = self.__cursor_pos
             self.__old_state__ = self.__state__
             self.__refresh_text()
