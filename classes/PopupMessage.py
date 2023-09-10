@@ -14,6 +14,7 @@ class PopupMessage(Label):
         
         # active_xy #
         self.__active_xy = active_xy
+        # assertion #
         assert isinstance(self.__active_xy, (tuple, list)), f"invalid argument for 'active_xy': {self.__active_xy}"
         assert len(self.__active_xy) == 2, f"invalid argument for 'active_xy': {self.__active_xy}"
 
@@ -27,8 +28,6 @@ class PopupMessage(Label):
         self.__f.add_const(0)
         self.__f.set_outer_values(0,0)
 
-        self.__vect = pygame.Vector2(self.__active_xy[0] - self.__passive_xy[0], self.__active_xy[1] - self.__passive_xy[1])
-        self.__length = self.__vect.length()
         self.__dx, self.__dy = self.__active_xy[0] - self.__passive_xy[0], self.__active_xy[1] - self.__passive_xy[1]
 
     def update(self):
@@ -46,3 +45,19 @@ class PopupMessage(Label):
 
         self.update_text(str(text))
         self.time = time.time()
+
+    def update_passive_xy(self, passive_xy):
+        # passive_xy #
+        self.__passive_xy = passive_xy
+        # assertion #
+        assert isinstance(self.__passive_xy, (tuple, list)), f"invalid argument for 'passive_xy': {self.__passive_xy}"
+        assert len(self.__passive_xy) == 2, f"invalid argument for 'passive_xy': {self.__passive_xy}"
+        self.__dx, self.__dy = self.__active_xy[0] - self.__passive_xy[0], self.__active_xy[1] - self.__passive_xy[1]
+
+    def update_active_xy(self, active_xy):
+        # active_xy #
+        self.__active_xy = active_xy
+        # assertion #
+        assert isinstance(self.__active_xy, (tuple, list)), f"invalid argument for 'active_xy': {self.__active_xy}"
+        assert len(self.__active_xy) == 2, f"invalid argument for 'active_xy': {self.__active_xy}"
+        self.__dx, self.__dy = self.__active_xy[0] - self.__passive_xy[0], self.__active_xy[1] - self.__passive_xy[1]

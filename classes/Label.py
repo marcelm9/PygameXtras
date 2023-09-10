@@ -118,6 +118,9 @@ class Label:
                 (button only)
                 assures that overlaying buttons can not be clicked at the same time
                 Type: Pygame_Engine.OneClickManager
+            padding
+                decreases the size of the widget without affecting the position
+                Type: int
 
         All custom arguments can also be used in their short form (eg. "aa" instead of "antialias").
         To see what all the short forms look like, inspect the self.ABBREVIATIONS attribute.
@@ -147,8 +150,10 @@ class Label:
             "italic": "it",
             "underline": "ul",
             "one_click_manager": "ocm",
-            "template": "t"
+            "template": "t",
+            "padding": "p"
         }
+        assert len(set(self.ABBREVIATIONS.values())) == len(list(self.ABBREVIATIONS.values())), "it seems like two arguments share the same abbreviation"
 
         self.__errors = []
 
@@ -431,6 +436,7 @@ class Label:
         if self.active_area != None:
             self.__test_type("active_area", self.active_area, (tuple, list, pygame.Rect))
             self.__test_len("active_area", self.active_area, "=", 4)
+            self.active_area = pygame.Rect(self.active_area)
 
         # bold
         self.bold = kw.get("bold", None)
@@ -460,12 +466,23 @@ class Label:
         self.underline = bool(self.underline)
 
         # one_click_manager
-        self.one_click_manager = kwargs.get("one_click_manager", None)
+        self.one_click_manager = kw.get("one_click_manager", None)
         if self.one_click_manager == None:
             self.one_click_manager = kw.get(self.ABBREVIATIONS["one_click_manager"], None)
         # assertion
         if self.one_click_manager != None:
             self.__test_type("one_click_manager", self.one_click_manager, OneClickManager)
+
+        # padding
+        self.padding = kw.get("padding", None)
+        if self.padding == None:
+            self.padding = kw.get(self.ABBREVIATIONS["padding"], None)
+        if self.padding == None:
+            self.padding = 0
+        # assertion
+        if self.padding != None:
+            self.__test_type("padding", self.padding, int)
+            self.__test_value("padding", self.padding, ">=", 0)
 
         self.__create__()
 

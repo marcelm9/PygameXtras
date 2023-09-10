@@ -33,7 +33,17 @@ def rect(r, color, width=0):
 
 center = (250, 250)
 
-l = Label(screen, "Test Label", 50, center, xad=10, yad=43, bw=5, anchor="topleft", tc=(80,2,30))
+pos1 = (50, 50)
+pos2 = (450, 50)
+pos3 = center
+pos4 = (50, 450)
+pos5 = (450, 450)
+
+l1 = Label(screen, "Test Label 1", 50, pos1, bw=1, fd=(120, 60), p=5)
+l2 = Label(screen, "Test Label 2", 50, pos2, bw=1, fd=(120, 60), p=5)
+l3 = Label(screen, "Test Label 3", 50, pos3, bw=1, fd=(120, 60), p=5)
+l4 = Label(screen, "Test Label 4", 50, pos4, bw=1, fd=(120, 60), p=5)
+l5 = Label(screen, "Test Label 5", 50, pos5, bw=1, fd=(120, 60), p=5)
 
 while True:
     events = pygame.event.get()
@@ -46,8 +56,11 @@ while True:
             sys.exit()
 
     screen.fill((100,100,200))
-    l.draw()
-    circle((100,100), c1['red'])
+    for l in [l1,l2,l3,l4,l5]:
+        l.draw()
+    r = pygame.Rect(0,0,300,160)
+    r.center = center
+    rect(r, "red", 1)
 
     pygame.display.flip()
     fpsclock.tick(fps)
