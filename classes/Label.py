@@ -74,9 +74,6 @@ class Label:
             force_dim
                 forces width and height of the background
                 Type: tuple, list
-            binding_rect
-                whether the text_rect or the background_rect should be used with <xy> and <anchor>
-                Type: [0, 1]
             borderradius
                 used to round the corners of the background_rect; use int for all corners or other types for individual corners
                 Type: int, tuple, list
@@ -138,7 +135,6 @@ class Label:
             "force_width": "fw",
             "force_height": "fh",
             "force_dim": "fd",
-            "binding_rect": "bR",
             "borderradius": "br",
             "text_offset": "to",
             "image": "img",
@@ -322,15 +318,6 @@ class Label:
             if force_dim[1] != None:
                 self.force_height = force_dim[1]
 
-        # binding_rect
-        self.binding_rect = kw.get("binding_rect", None)
-        if self.binding_rect == None:
-            self.binding_rect = kw.get(self.ABBREVIATIONS["binding_rect"], None)
-        if self.binding_rect == None:
-            self.binding_rect = 1 # old: 0
-        # assertion
-        self.__test_match("binding_rect", self.binding_rect, (0, 1))
-
         # borderradius
         self.borderradius = kw.get("borderradius", None)
         if self.borderradius == None:
@@ -498,22 +485,22 @@ class Label:
             str(self.text), self.antialias, self.textcolor)
         self.text_rect = self.text_surface.get_rect()
 
-        # sx sy w h
-        # x_axis: sx, w
-        # y_axis: sy, h
+        # x y w h
+        # x_axis: x, w
+        # y_axis: y, h
 
         if self.x_axis_addition == 0:
-            sx = self.text_rect.x
+            x = self.text_rect.x
             w = self.text_rect.width
         elif self.x_axis_addition > 0:
-            sx = self.text_rect.x - self.x_axis_addition
+            x = self.text_rect.x - self.x_axis_addition
             w = self.text_rect.width + self.x_axis_addition * 2
 
         if self.y_axis_addition == 0:
-            sy = self.text_rect.y
+            y = self.text_rect.y
             h = self.text_rect.height
         elif self.y_axis_addition > 0:
-            sy = self.text_rect.y - self.y_axis_addition
+            y = self.text_rect.y - self.y_axis_addition
             h = self.text_rect.height + self.y_axis_addition * 2
 
         if self.force_width == None:
@@ -527,7 +514,10 @@ class Label:
             h = self.force_height
 
         # creating the background rect
-        self.background_rect = pygame.Rect(sx, sy, w, h)
+        self.background_rect = pygame.Rect(x+self.padding, y+self.padding, w-2*self.padding, h-2*self.padding)
+
+        # creating positioning rect
+        self.positioning_rect = pygame.Rect(x, y, w, h)
 
         # putting everything in correct position
         self.update_pos(self.xy, self.anchor)
@@ -763,42 +753,36 @@ class Label:
         if not anchor in ["topleft", "topright", "bottomleft", "bottomright",
                                    "center", "midtop", "midright", "midbottom", "midleft", None]:
             self.__collect_error("anchor", anchor)
+        self.__show_errors()
         if anchor is not None:
             self.anchor = anchor
 
-        if self.binding_rect == 0:
-            self.text_rect.__setattr__(self.anchor, self.xy)
-            text_rect_coords = getattr(self.text_rect, self.text_binding)
-            self.background_rect.__setattr__(
-                self.text_binding,
-                (text_rect_coords[0] + self.text_offset[0],
-                 text_rect_coords[1] + self.text_offset[1]))
-
-        elif self.binding_rect == 1:
-            self.background_rect.__setattr__(self.anchor, self.xy)
-            background_rect_coords = getattr(self.background_rect, self.text_binding)
-            self.text_rect.__setattr__(
-                self.text_binding,
-                (background_rect_coords[0] + self.text_offset[0],
-                 background_rect_coords[1] + self.text_offset[1]))
+        self.positioning_rect.__setattr__(self.anchor, self.xy)
+        self.background_rect.__setattr__("center", self.positioning_rect.center)
+        background_rect_coords = getattr(self.background_rect, self.text_binding)
+        self.text_rect.__setattr__(
+            self.text_binding, (
+                background_rect_coords[0] + self.text_offset[0],
+                background_rect_coords[1] + self.text_offset[1]
+                ))
 
         # data # should actually be accessed through 'self.rect.' but I
         # will leave it as it is to not break any programs
-        self.topleft = self.background_rect.topleft
-        self.topright = self.background_rect.topright
-        self.bottomleft = self.background_rect.bottomleft
-        self.bottomright = self.background_rect.bottomright
-        self.center = self.background_rect.center
-        self.midtop = self.background_rect.midtop
-        self.midright = self.background_rect.midright
-        self.midbottom = self.background_rect.midbottom
-        self.midleft = self.background_rect.midleft
-        self.left = self.background_rect.left
-        self.right = self.background_rect.right
-        self.top = self.background_rect.top
-        self.bottom = self.background_rect.bottom
+        self.topleft = self.positioning_rect.topleft
+        self.topright = self.positioning_rect.topright
+        self.bottomleft = self.positioning_rect.bottomleft
+        self.bottomright = self.positioning_rect.bottomright
+        self.center = self.positioning_rect.center
+        self.midtop = self.positioning_rect.midtop
+        self.midright = self.positioning_rect.midright
+        self.midbottom = self.positioning_rect.midbottom
+        self.midleft = self.positioning_rect.midleft
+        self.left = self.positioning_rect.left
+        self.right = self.positioning_rect.right
+        self.top = self.positioning_rect.top
+        self.bottom = self.positioning_rect.bottom
 
-        self.rect = self.background_rect
+        self.rect = self.positioning_rect
 
         # for buttons:
         self.x_range = (self.background_rect.x,

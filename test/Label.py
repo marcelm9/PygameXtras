@@ -39,11 +39,11 @@ pos3 = center
 pos4 = (50, 450)
 pos5 = (450, 450)
 
-l1 = Label(screen, "Test Label 1", 50, pos1, bw=1, fd=(120, 60), p=5)
-l2 = Label(screen, "Test Label 2", 50, pos2, bw=1, fd=(120, 60), p=5)
-l3 = Label(screen, "Test Label 3", 50, pos3, bw=1, fd=(120, 60), p=5)
-l4 = Label(screen, "Test Label 4", 50, pos4, bw=1, fd=(120, 60), p=5)
-l5 = Label(screen, "Test Label 5", 50, pos5, bw=1, fd=(120, 60), p=5)
+# l1 = Label(screen, "Test Label 1", 25, pos1, "topleft", bw=1, fd=(120, 60), p=5)
+# l2 = Label(screen, "Test Label 2", 25, pos2, "topright", bw=1, fd=(120, 60), p=5)
+l3 = Label(screen, "Test Label 3", 25, pos3, "center", bw=1, fd=(300, 160), p=5, bgc=(200,80,80))
+# l4 = Label(screen, "Test Label 4", 25, pos4, "bottomleft", bw=1, fd=(120, 60), p=5)
+# l5 = Label(screen, "Test Label 5", 25, pos5, "bottomright", bw=1, fd=(120, 60), p=5)
 
 while True:
     events = pygame.event.get()
@@ -56,8 +56,9 @@ while True:
             sys.exit()
 
     screen.fill((100,100,200))
-    for l in [l1,l2,l3,l4,l5]:
-        l.draw()
+    # for l in [l1,l2,l3,l4,l5]:
+        # l.draw()
+    l3.draw()
     r = pygame.Rect(0,0,300,160)
     r.center = center
     rect(r, "red", 1)
