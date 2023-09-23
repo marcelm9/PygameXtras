@@ -2,8 +2,8 @@ import math
 import pygame
 import sys
 import os
-from ..classes.Label import Label
-from ..classes.Button import Button
+from .Label import Label
+from .Button import Button
 
 class Function:
     def __init__(self, min_: int = 0, max_: int = 1, function_variable: str = "x"):

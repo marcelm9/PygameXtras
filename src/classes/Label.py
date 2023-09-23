@@ -1,7 +1,6 @@
-import sys
 import math
 import pygame
-from ..classes.OneClickManager import OneClickManager
+from .OneClickManager import OneClickManager
 
 class Label:
     def __init__(self, surface: pygame.Surface, text, size: int, xy: tuple, anchor="center", **kwargs):

@@ -1,5 +1,5 @@
-from Pygame_Engine.classes.CustomTemplate import CustomTemplate
-from Pygame_Engine.classes.Colors import Colors
+from src.classes.CustomTemplate import CustomTemplate
+from src.classes.Colors import Colors
 
 import pygame
 import sys

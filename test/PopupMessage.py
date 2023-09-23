@@ -1,10 +1,8 @@
-from Pygame_Engine.classes.PopupMessage import PopupMessage
+from src.classes.PopupMessage import PopupMessage
 
 import pygame
 import sys
-import Pygame_Engine as pe
 
-c = pe.Colors()
 c1 = {
     'black': (0,0,0),
     'white': (255,255,255),
@@ -52,11 +50,11 @@ while True:
     
     msg.update()
 
-    screen.fill(c.blue_violet)
+    screen.fill((20,20,200))
 
-    line((75, 250), (425, 250), c.black, 3)
-    line((210, 200), (290, 200), c.black, 3)
-    line((210, 300), (290, 300), c.black, 3)
+    line((75, 250), (425, 250), (0,0,0), 3)
+    line((210, 200), (290, 200), (0,0,0), 3)
+    line((210, 300), (290, 300), (0,0,0), 3)
 
     msg.draw()
 

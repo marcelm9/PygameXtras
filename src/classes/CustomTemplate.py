@@ -1,6 +1,6 @@
-from ..classes.Label import Label
-from ..classes.Button import Button
-from ..classes.Entry import Entry
+from .Label import Label
+from .Button import Button
+from .Entry import Entry
 
 
 class CustomTemplate:

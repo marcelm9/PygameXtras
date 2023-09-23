@@ -1,4 +1,4 @@
-from Pygame_Engine.classes.Label import Label
+from src.classes.Label import Label
 
 import pygame
 import sys

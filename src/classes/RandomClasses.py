@@ -1,10 +1,10 @@
 import pygame
 import os
 import sys
-from ..classes.Functions import vect_sum
-from ..classes.Label import Label
-from ..classes.Button import Button
-from ..classes.Messagebox import Messagebox
+from .Functions import vect_sum
+from .Label import Label
+from .Button import Button
+from .Messagebox import Messagebox
 
 
 class ImageFrame:

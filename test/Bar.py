@@ -1,8 +1,7 @@
-from Pygame_Engine.classes.Bar import Bar
+from src.classes.Bar import Bar
 
 import pygame
 import sys
-import Pygame_Engine as pe
 
 c1 = {
     'black': (0,0,0),

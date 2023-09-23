@@ -1,5 +1,5 @@
 import pygame
-from ..classes.Label import Label
+from .Label import Label
 
 class Paragraph:
     def __init__(self, surface, text, size, xy: tuple, anchor="center", **kwargs):

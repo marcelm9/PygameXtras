@@ -1,4 +1,4 @@
-from Pygame_Engine.classes.Entry import Entry
+from src.classes.Entry import Entry
 
 import pygame
 import sys

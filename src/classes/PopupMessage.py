@@ -1,7 +1,7 @@
 import pygame
 import time
-from ..classes.Label import Label
-from ..classes.Function import Function
+from .Label import Label
+from .Function import Function
 
 class PopupMessage(Label):
     def __init__(self, passive_xy, active_xy, surface: pygame.Surface, size: int, anchor="center", **kwargs):
