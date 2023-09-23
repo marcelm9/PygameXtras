@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "pygame-engine"
+version = "0.1.0"
+description = ""
+authors = ["Golfmensch99 <83513089+Golfmensch99@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{ include = "Pygame_Engine", from = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pygame = "^2.5.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
