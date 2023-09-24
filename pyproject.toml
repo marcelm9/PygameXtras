@@ -5,7 +5,7 @@ description = ""
 authors = ["Golfmensch99 <marcel.menzel09@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [{ include = "Pygame_Engine", from = "src" }]
+packages = [{ include = "Pygame_Engine", from = "main" }]
 repository = "https://github.com/Golfmensch99/Pygame_Engine.git"
 
 [tool.poetry.dependencies]
