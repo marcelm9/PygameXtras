@@ -2,10 +2,11 @@
 name = "pygame-engine"
 version = "0.1.0"
 description = ""
-authors = ["Golfmensch99 <83513089+Golfmensch99@users.noreply.github.com>"]
+authors = ["Golfmensch99 <marcel.menzel09@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 packages = [{ include = "Pygame_Engine", from = "src" }]
+repository = "https://github.com/Golfmensch99/Pygame_Engine.git"
 
 [tool.poetry.dependencies]
 python = "^3.11"
