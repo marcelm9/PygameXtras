@@ -13,6 +13,7 @@ from .Label import Label
 from .Messagebox import Messagebox
 from .OneClickManager import OneClickManager
 from .Paragraph import Paragraph
+from .PerformanceGraph import PerformanceGraph
 from .PlayStationController import PlayStationController
 from .PopupMessage import PopupMessage
 from .ScrollableButtonList import ScrollableButtonList
