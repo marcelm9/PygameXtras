@@ -2,6 +2,9 @@ import pygame
 
 class Keyboard:
     def __init__(self):
+        """
+        Makes it easier to take user input (via the keyboard)
+        """
         self.keys = {
             pygame.K_a: "a",
             pygame.K_b: "b",

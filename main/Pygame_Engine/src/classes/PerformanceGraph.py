@@ -1,6 +1,5 @@
 import pygame
 import sys
-import math
 
 class PerformanceGraph:
     def __init__(self, desired_fps: int, fps_list: list[float]):
@@ -39,6 +38,3 @@ class PerformanceGraph:
                         run = False
 
             fpsclock.tick(fps)
-
-
-# pg = PerformanceGraph(60, [60 + math.sin(i)*5 for i in range(60)])
