@@ -113,7 +113,7 @@ class Label:
             one_click_manager
                 (button only)
                 assures that overlaying buttons can not be clicked at the same time
-                Type: Pygame_Engine.OneClickManager
+                Type: PygameXtras.OneClickManager
             padding (NOT IMPLEMENTED YET)
                 decreases the size of the widget without affecting the position
                 Type: int

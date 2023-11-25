@@ -14,7 +14,7 @@ class Entity(pygame.sprite.Sprite):
 
         self.__action__ will be priorized over self.__looping_action_   #! (is it?)
 
-        use Pygame_Engine.Spritesheet for images (in self.add_action(...))
+        use PygameXtras.Spritesheet for images (in self.add_action(...))
         """
         super().__init__()
 
