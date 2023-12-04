@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "PygameXtras"
-version = "1.1.0"
+version = "1.1.1"
 description = ""
 authors = ["marcelm9 <marcel.menzel09@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 packages = [{ include = "PygameXtras", from = "main" }]
-repository = "https://github.com/Golfmensch99/PygameXtras.git"
+repository = "https://github.com/marcelm9/PygameXtras.git"
 
 [tool.poetry.dependencies]
 python = "^3.11"
