@@ -1,3 +1,6 @@
+## 1.1.2 (28.12.2023)
+- added description to pyproject file
+
 ## 1.1.1 (04.12.2023)
 - small corrections for initial release
 
