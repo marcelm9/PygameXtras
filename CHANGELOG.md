@@ -1,3 +1,6 @@
+## 1.1.3 (14.02.2024)
+- switched from pygame to pygame-ce
+
 ## 1.1.2 (28.12.2023)
 - added description to pyproject file
 
