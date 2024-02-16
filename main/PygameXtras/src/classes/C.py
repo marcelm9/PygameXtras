@@ -141,5 +141,8 @@ class C:
     def __len__(self):
         return len(self.__value)
 
+    def __getitem__(self, key):
+        return self.__value[key]
+
     def value(self):
         return self.__value

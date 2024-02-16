@@ -1,3 +1,6 @@
+## 1.1.4 (16.02.2024)
+- added __getitem__ to C class
+
 ## 1.1.3 (14.02.2024)
 - switched from pygame to pygame-ce
 
