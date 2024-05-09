@@ -1,4 +1,5 @@
 import pygame
+pygame.init()
 
 from .psvg_util import *
 
