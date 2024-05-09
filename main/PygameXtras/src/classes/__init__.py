@@ -1,4 +1,3 @@
-from .RandomClasses import *
 from .Bar import Bar
 from .Button import Button
 from .C import C
@@ -15,7 +14,9 @@ from .OneClickManager import OneClickManager
 from .Paragraph import Paragraph
 from .PerformanceGraph import PerformanceGraph
 from .PlayStationController import PlayStationController
+from .PlayStationVectorGraphics.psvg import PSVG
 from .PopupMessage import PopupMessage
+from .RandomClasses import *
 from .ScrollableButtonList import ScrollableButtonList
 from .Spritesheet import Spritesheet
 from .Table import Table

@@ -1,3 +1,6 @@
+## 1.1.5 (10.5.2024)
+- added PlayStationVectorGraphics
+
 ## 1.1.4 (16.02.2024)
 - added __getitem__ to C class
 
