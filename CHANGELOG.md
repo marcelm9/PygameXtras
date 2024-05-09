@@ -1,3 +1,6 @@
+## 1.1.6 (10.5.2024)
+- PlayStationVectorGraphics bug fixes and tests
+
 ## 1.1.5 (10.5.2024)
 - added PlayStationVectorGraphics
 
