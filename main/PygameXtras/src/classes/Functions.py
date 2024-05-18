@@ -1,7 +1,8 @@
-import pygame
 import ctypes
 import math
 import os
+
+import pygame
 
 
 def higher_resolution(boolean: bool = True):
@@ -58,6 +59,10 @@ def get_distance(xy1: tuple, xy2: tuple, digits_after_comma: int = None) -> floa
         return math.sqrt(((x2-x1)**2)+((y2-y1)**2))
     else:
         return round_half_up(math.sqrt(((x2-x1)**2)+((y2-y1)**2)), digits_after_comma)
+
+
+def get_distance_squared(xy1: tuple, xy2: tuple):
+    return (xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2
 
 
 def get_angle_between_points(xy1, xy2):

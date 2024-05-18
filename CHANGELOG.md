@@ -1,3 +1,6 @@
+## 1.1.8 (19.5.2024)
+- added get_distance_squared
+
 ## 1.1.7 (19.5.2024)
 - added Collisions
 
