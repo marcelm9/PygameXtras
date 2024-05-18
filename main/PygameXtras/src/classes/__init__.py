@@ -1,6 +1,7 @@
 from .Bar import Bar
 from .Button import Button
 from .C import C
+from .Collisions import Collisions
 from .Colors import Colors
 from .CustomTemplate import CustomTemplate
 from .Entity import Entity

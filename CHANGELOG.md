@@ -1,3 +1,6 @@
+## 1.1.7 (19.5.2024)
+- added Collisions
+
 ## 1.1.6 (10.5.2024)
 - PlayStationVectorGraphics bug fixes and tests
 
