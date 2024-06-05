@@ -1,3 +1,7 @@
+## 1.1.9 (5.6.2024)
+- improved fonts by storing some fonts in a folder and only searching for sysfonts if necessary
+- added font_file to Label to import custom fonts
+
 ## 1.1.8 (19.5.2024)
 - added get_distance_squared
 

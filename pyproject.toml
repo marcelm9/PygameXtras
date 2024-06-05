@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "PygameXtras"
-version = "1.1.8"
+version = "1.1.9"
 description = "Labels, Buttons and much more for pygame"
 authors = ["marcelm9 <marcel.menzel09@gmail.com>"]
 license = "MIT"
