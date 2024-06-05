@@ -96,9 +96,6 @@ class Paragraph:
                 makes the self.update method only work if the mouse click / hovering is also within the specified rect; useful if
                 buttons are moveable but should not be clickable if they are outside a certain area
                 Type: tuple, list, pygame.Rect
-            stay_within_surface # TODO
-                makes the text unable to cross the border of the background_rect
-                Type: bool
 
         All custom arguments can also be used in their short form (eg. "aa" instead of "antialias").
         To see what all the short forms look like, inspect the self.ABBREVIATIONS attribute.
@@ -124,7 +121,6 @@ class Paragraph:
             "text_binding": "tb",
             "highlight": "hl",
             "active_area": "aA",
-            "stay_within_surface": "sws"
         }
 
         self.surface = surface
@@ -369,14 +365,6 @@ class Paragraph:
                 pass
             else:
                 raise Exception(f"invalid argument for 'active_area': {self.active_area}")
-
-        # stay_within_surface
-        self.stay_within_surface = kw.get("stay_within_surface", False)
-        if self.stay_within_surface == False:
-            self.stay_within_surface = kw.get(self.ABBREVIATIONS["stay_within_surface"], False)
-        # assertion
-        assert type(
-            self.stay_within_surface) == bool, f"invalid argument for 'stay_within_surface': {self.stay_within_surface}"
 
         self.kwargs = kwargs
         self.__create__()

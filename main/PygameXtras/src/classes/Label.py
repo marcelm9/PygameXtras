@@ -1,9 +1,22 @@
 import math
+import os
+
 import pygame
+
 from .OneClickManager import OneClickManager
 
+
 class Label:
-    def __init__(self, surface: pygame.Surface, text, size: int, xy: tuple, anchor="center", **kwargs):
+    labels = []
+    def __init__(
+        self,
+        surface: pygame.Surface,
+        text,
+        size: int,
+        xy: tuple,
+        anchor="center",
+        **kwargs,
+    ):
         """
         Creates a label.
 
@@ -50,7 +63,9 @@ class Label:
                 whether antialias (blurring to make text seem more realistic) should be used
                 Type: bool
             font
-                the font used when displaying the text; to get all fonts available, use "pygame.font.get_fonts()"
+                The font used for the text. Tries to match a font of PygameXtras first, then checks sysfonts.
+                To get a list of all available PygameXtras fonts, run 'PygameXtras.list_fonts()'. To get a list
+                of all sysfonts, run 'pygame.font.get_fonts()'.
                 Type: str
             x_axis_addition
                 adds the given amount of pixels to the left and right (-> x axis) of the text
@@ -98,9 +113,6 @@ class Label:
                 makes the self.update method only work if the mouse click / hovering is also within the specified rect; useful if
                 buttons are moveable but should not be clickable if they are outside a certain area
                 Type: tuple, list, pygame.Rect
-            stay_within_surface # TODO (not implemented yet)
-                makes the text unable to cross the border of the background_rect
-                Type: bool
             bold
                 makes the text appear bold (faked)
                 Type: bool
@@ -108,7 +120,7 @@ class Label:
                 makes the text appear italic (faked)
                 Type: bool
             underline
-                underlines the text                
+                underlines the text
                 Type: bool
             one_click_manager
                 (button only)
@@ -117,6 +129,9 @@ class Label:
             padding (NOT IMPLEMENTED YET)
                 decreases the size of the widget without affecting the position
                 Type: int
+            font_file
+                use font from a file (path expected)
+                Type: str
 
         All custom arguments can also be used in their short form (eg. "aa" instead of "antialias").
         To see what all the short forms look like, inspect the self.ABBREVIATIONS attribute.
@@ -146,11 +161,12 @@ class Label:
             "underline": "ul",
             "one_click_manager": "ocm",
             "template": "t",
-            "padding": "p"
+            "padding": "p",
+            "font_file": "ff",
         }
-        assert len(set(self.ABBREVIATIONS.values())) == len(list(self.ABBREVIATIONS.values())), "it seems like two arguments share the same abbreviation"
-
-        self.__errors = []
+        assert len(set(self.ABBREVIATIONS.values())) == len(
+            list(self.ABBREVIATIONS.values())
+        ), "it seems like two arguments share the same abbreviation"
 
         # inserting template (if exists)
         template = kwargs.get("template", None)
@@ -162,7 +178,7 @@ class Label:
                 if not k in kwargs.keys():
                     kwargs[k] = template[k]
 
-        self.__is_touching__ = False # if cursor is touching the rect, only for buttons
+        self.__is_touching__ = False  # if cursor is touching the rect, only for buttons
         self.__has_hl_image__ = False
 
         self.surface = surface
@@ -195,7 +211,13 @@ class Label:
         self.anchor = anchor
         if "anchor" in kwargs.keys():
             self.anchor = kwargs["anchor"]
-        self.__test_match("anchor", self.anchor, "topleft,midtop,topright,midleft,center,midright,bottomleft,midbottom,bottomright".split(","))
+        self.__test_match(
+            "anchor",
+            self.anchor,
+            "topleft,midtop,topright,midleft,center,midright,bottomleft,midbottom,bottomright".split(
+                ","
+            ),
+        )
 
         kw = kwargs
 
@@ -204,7 +226,7 @@ class Label:
         if self.textcolor == None:
             self.textcolor = kw.get(self.ABBREVIATIONS["textcolor"], None)
         if self.textcolor == None:
-            self.textcolor = (0,0,0)
+            self.textcolor = (0, 0, 0)
         # assertion
         if self.textcolor != None:
             self.__test_type("textcolor", self.textcolor, (tuple, list))
@@ -241,6 +263,14 @@ class Label:
         # assertion
         if self.font != None:
             self.__test_type("font", self.font, str)
+
+        # font_file
+        self.font_file = kw.get("font_file", None)
+        if self.font_file == None:
+            self.font_file = kw.get(self.ABBREVIATIONS["font_file"], None)
+        # assertion
+        if self.font_file != None:
+            self.__test_type("font_file", self.font_file, str)
 
         # x_axis_addition
         self.x_axis_addition = kw.get("x_axis_addition", None)
@@ -326,7 +356,11 @@ class Label:
         # assertion
         elif type(self.borderradius) == int:
             self.borderradius = (
-                self.borderradius, self.borderradius, self.borderradius, self.borderradius)
+                self.borderradius,
+                self.borderradius,
+                self.borderradius,
+                self.borderradius,
+            )
         elif type(self.borderradius) in [tuple, list]:
             self.__test_len("borderradius", self.borderradius, "=", 4)
         else:
@@ -354,7 +388,9 @@ class Label:
                 self.force_width = self.image.get_width()
             if self.force_height == None:
                 self.force_height = self.image.get_height()
-            self.image = pygame.transform.scale(self.image, (self.force_width, self.force_height))
+            self.image = pygame.transform.scale(
+                self.image, (self.force_width, self.force_height)
+            )
 
         # info
         self.info = kw.get("info", None)
@@ -370,7 +406,13 @@ class Label:
             self.text_binding = "center"
         # assertion
         if self.text_binding != None:
-            self.__test_match("text_binding", self.text_binding, "topleft,midtop,topright,midleft,center,midright,bottomleft,midbottom,bottomright".split(","))
+            self.__test_match(
+                "text_binding",
+                self.text_binding,
+                "topleft,midtop,topright,midleft,center,midright,bottomleft,midbottom,bottomright".split(
+                    ","
+                ),
+            )
 
         # highlight
         self.highlight = kw.get("highlight", None)
@@ -379,13 +421,15 @@ class Label:
         # assertion
         if self.highlight != None:
             if type(self.highlight) in [tuple, list] and len(self.highlight) == 3:
-                pass # ok
+                pass  # ok
             elif self.highlight == False:
-                self.highlight = None # ok
+                self.highlight = None  # ok
             elif self.highlight == True:
                 if self.image == None:
                     if not self.backgroundcolor != None:
-                        self.__collect_error_directly(f"'backgroundcolor' (currently: {self.backgroundcolor}) must be defined when using 'highlight' (currently: {self.highlight})")
+                        self.__collect_error_directly(
+                            f"'backgroundcolor' (currently: {self.backgroundcolor}) must be defined when using 'highlight' (currently: {self.highlight})"
+                        )
             else:
                 self.__collect_error("highlight", self.highlight)
 
@@ -394,7 +438,7 @@ class Label:
                     self.highlight = (
                         min(self.backgroundcolor[0] + 50, 255),
                         min(self.backgroundcolor[1] + 50, 255),
-                        min(self.backgroundcolor[2] + 50, 255)
+                        min(self.backgroundcolor[2] + 50, 255),
                     )
             else:
                 self.__has_hl_image__ = True
@@ -405,14 +449,18 @@ class Label:
                 else:
                     self.hl_image = pygame.Surface(self.image.get_size())
                     self.hl_image.fill(self.backgroundcolor)
-                    self.hl_image.blit(self.image, (0,0))
+                    self.hl_image.blit(self.image, (0, 0))
                 # applying the brightening effect / coloring
                 if self.highlight == True:
-                    self.hl_image.fill((50,50,50), special_flags=pygame.BLEND_RGB_ADD)
+                    self.hl_image.fill((50, 50, 50), special_flags=pygame.BLEND_RGB_ADD)
                 else:
-                    self.hl_image.fill(self.highlight, special_flags=pygame.BLEND_RGB_MULT)
+                    self.hl_image.fill(
+                        self.highlight, special_flags=pygame.BLEND_RGB_MULT
+                    )
                 # scaling to fit the size
-                self.hl_image = pygame.transform.scale(self.hl_image, (self.force_width, self.force_height))
+                self.hl_image = pygame.transform.scale(
+                    self.hl_image, (self.force_width, self.force_height)
+                )
 
         # active_area
         self.active_area = kw.get("active_area", None)
@@ -420,7 +468,9 @@ class Label:
             self.active_area = kw.get(self.ABBREVIATIONS["active_area"], None)
         # assertion
         if self.active_area != None:
-            self.__test_type("active_area", self.active_area, (tuple, list, pygame.Rect))
+            self.__test_type(
+                "active_area", self.active_area, (tuple, list, pygame.Rect)
+            )
             self.__test_len("active_area", self.active_area, "=", 4)
             self.active_area = pygame.Rect(self.active_area)
 
@@ -454,10 +504,14 @@ class Label:
         # one_click_manager
         self.one_click_manager = kw.get("one_click_manager", None)
         if self.one_click_manager == None:
-            self.one_click_manager = kw.get(self.ABBREVIATIONS["one_click_manager"], None)
+            self.one_click_manager = kw.get(
+                self.ABBREVIATIONS["one_click_manager"], None
+            )
         # assertion
         if self.one_click_manager != None:
-            self.__test_type("one_click_manager", self.one_click_manager, OneClickManager)
+            self.__test_type(
+                "one_click_manager", self.one_click_manager, OneClickManager
+            )
 
         # padding
         self.padding = kw.get("padding", None)
@@ -470,18 +524,17 @@ class Label:
             self.__test_type("padding", self.padding, int)
             self.__test_value("padding", self.padding, ">=", 0)
 
+        self.__load_font_path()
         self.__create__()
 
     def __create__(self):
-        self.__show_errors()
 
-        font = pygame.font.Font(
-            pygame.font.match_font(self.font), self.size)
+        print(f"{self.font_path = }")
+        font = pygame.font.Font(self.font_path, self.size)
         font.set_bold(self.bold)
         font.set_italic(self.italic)
         font.set_underline(self.underline)
-        self.text_surface = font.render(
-            str(self.text), self.antialias, self.textcolor)
+        self.text_surface = font.render(str(self.text), self.antialias, self.textcolor)
         self.text_rect = self.text_surface.get_rect()
 
         # x y w h
@@ -513,7 +566,12 @@ class Label:
             h = self.force_height
 
         # creating the background rect
-        self.background_rect = pygame.Rect(x+self.padding, y+self.padding, w-2*self.padding, h-2*self.padding)
+        self.background_rect = pygame.Rect(
+            x + self.padding,
+            y + self.padding,
+            w - 2 * self.padding,
+            h - 2 * self.padding,
+        )
 
         # creating positioning rect
         self.positioning_rect = pygame.Rect(x, y, w, h)
@@ -521,102 +579,71 @@ class Label:
         # putting everything in correct position
         self.update_pos(self.xy, self.anchor)
 
-    def __test_type(self, variable_name, variable_value, applicable_types: tuple):
-        try:
-            if not isinstance(variable_value, applicable_types):
-                self.__collect_error(variable_name, variable_value)
-        except:
-            self.__collect_generic_error(variable_name, variable_value)
+    def __load_font_path(self):
+        if self.font_file is None:
+            fonts = [
+                f.removesuffix(".ttf")
+                for f in os.listdir(
+                    os.path.join(os.path.dirname(__file__), "..", "fonts")
+                )
+            ]
+            if self.font.lower() in fonts:
+                self.font_path = os.path.join(
+                    os.path.dirname(__file__), "..", "fonts", self.font.lower() + ".ttf"
+                )
+            else:
+                self.font_path = pygame.font.match_font(self.font)
+        else:
+            self.font_path = self.font_file
+
+    def __test_type(self, variable_name, variable_value, applicable_types):
+        if not isinstance(variable_value, applicable_types):
+            raise ValueError(
+                f"invalid argument for '{variable_name}': {variable_value}"
+            )
 
     def __test_len(self, variable_name, variable_value, _type: str, value):
         assert _type in ">,<,=,>=,<=".split(",")
-        try:
-            if _type == "<" and not len(variable_value) < value or \
-               _type == "<=" and not len(variable_value) <= value or \
-               _type == ">" and not len(variable_value) > value or \
-               _type == ">=" and not len(variable_value) >= value or \
-               _type == "=" and not len(variable_value) == value:
-                self.__collect_error(variable_name, variable_value)
-        except:
-            self.__collect_generic_error(variable_name, variable_value)
+        if (
+            _type == "<"
+            and not len(variable_value) < value
+            or _type == "<="
+            and not len(variable_value) <= value
+            or _type == ">"
+            and not len(variable_value) > value
+            or _type == ">="
+            and not len(variable_value) >= value
+            or _type == "="
+            and not len(variable_value) == value
+        ):
+            raise ValueError(
+                f"invalid argument for '{variable_name}': {variable_value}"
+            )
 
     def __test_value(self, variable_name, variable_value, _type: str, value):
         assert _type in ">,<,=,>=,<=".split(",")
-        try:
-            if _type == "<" and not variable_value < value or \
-               _type == "<=" and not variable_value <= value or \
-               _type == ">" and not variable_value > value or \
-               _type == ">=" and not variable_value >= value or \
-               _type == "=" and not variable_value == value:
-                self.__collect_error(variable_name, variable_value)
-        except:
-            self.__collect_generic_error(variable_name, variable_value)
+        if (
+            _type == "<"
+            and not variable_value < value
+            or _type == "<="
+            and not variable_value <= value
+            or _type == ">"
+            and not variable_value > value
+            or _type == ">="
+            and not variable_value >= value
+            or _type == "="
+            and not variable_value == value
+        ):
+            raise ValueError(
+                f"invalid argument for '{variable_name}': {variable_value}"
+            )
 
     def __test_match(self, variable_name, variable_value, applicable_values: tuple):
         assert isinstance(applicable_values, (tuple, list))
         if not variable_value in applicable_values:
-            self.__collect_error(variable_name, variable_value)
-
-    def __format_error(self, variable_name, variable_value):
-        return f"invalid argument for '{variable_name}': {variable_value} ({type(variable_value)})"
-    
-    def __format_generic_error(self, variable_name, variable_value):
-        return f"generic error for '{variable_name}': {variable_value} ({type(variable_value)})"
-
-    def __collect_error(self, variable_name, variable_value):
-        error = self.__format_error(variable_name, variable_value)
-        if error not in self.__errors:
-            self.__errors.append(
-                error
+            raise ValueError(
+                f"invalid argument for '{variable_name}': {variable_value}"
             )
-
-    def __collect_generic_error(self, variable_name, variable_value):
-        error = self.__format_generic_error(variable_name, variable_value)
-        if error not in self.__errors:
-            self.__errors.append(
-                error
-            )
-
-    def __collect_error_directly(self, error):
-        self.__errors.append(
-            error
-        )
-
-    def __show_errors(self):
-        if len(self.__errors) == 0:
-            return
-        
-        longest_line = 0
-        for line in self.__errors:
-            longest_line = max(len(line), longest_line)
-
-        char = "#"
-        side = [3, 2] # [char, " "]
-
-        def print_solid_line():
-            print(char * (longest_line + side[0] * 2 + side[1] * 2))
-
-        def print_empty_line():
-            print(char * side[0] + " " * (longest_line + side[1] * 2) + char * side[0])
-
-        def print_text_line(text):
-            print(char * side[0] + " " * side[1] + text + " " * (longest_line - len(text)) + " " * side[1] + char * side[0])
-
-        def print_text_line_centered(text):
-            print(char * side[0] + " " * side[1] + " " * math.floor((longest_line - len(text)) / 2) + text + " " * math.ceil((longest_line - len(text)) / 2) + " " * side[1] + char * side[0])
-
-
-        print_solid_line()
-        print_empty_line()
-        print_text_line_centered("INVALID ARGUMENT INPUT FOR WIDGET")
-        print_text_line_centered("(TEXT: " + self.text + ")")
-        print_empty_line()
-        for error in self.__errors:
-            print_text_line(error)
-        print_empty_line()
-        print_solid_line()
-
-        raise Exception("An error occurred. See terminal output for more details.")
 
     def draw(self):
         """
@@ -626,18 +653,26 @@ class Label:
         if self.backgroundcolor != None:
             if self.__is_touching__ and self.image == None:
                 pygame.draw.rect(
-                    self.surface, self.highlight, self.background_rect, 0,
+                    self.surface,
+                    self.highlight,
+                    self.background_rect,
+                    0,
                     border_top_left_radius=self.borderradius[0],
                     border_top_right_radius=self.borderradius[1],
                     border_bottom_right_radius=self.borderradius[2],
-                    border_bottom_left_radius=self.borderradius[3])
+                    border_bottom_left_radius=self.borderradius[3],
+                )
             else:
                 pygame.draw.rect(
-                    self.surface, self.backgroundcolor, self.background_rect, 0,
+                    self.surface,
+                    self.backgroundcolor,
+                    self.background_rect,
+                    0,
                     border_top_left_radius=self.borderradius[0],
                     border_top_right_radius=self.borderradius[1],
                     border_bottom_right_radius=self.borderradius[2],
-                    border_bottom_left_radius=self.borderradius[3])
+                    border_bottom_left_radius=self.borderradius[3],
+                )
         if self.image != None:
             if self.__has_hl_image__ and self.__is_touching__:
                 self.surface.blit(self.hl_image, self.background_rect)
@@ -646,48 +681,65 @@ class Label:
 
         if self.borderwidth > 0:
             pygame.draw.rect(
-                self.surface, self.bordercolor, self.background_rect, self.borderwidth,
+                self.surface,
+                self.bordercolor,
+                self.background_rect,
+                self.borderwidth,
                 border_top_left_radius=self.borderradius[0],
                 border_top_right_radius=self.borderradius[1],
                 border_bottom_right_radius=self.borderradius[2],
-                border_bottom_left_radius=self.borderradius[3])
+                border_bottom_left_radius=self.borderradius[3],
+            )
         self.surface.blit(self.text_surface, self.text_rect)
 
     def draw_to(self, surface: pygame.Surface):
         """
         Draws the widget to a different surface than initially specified.
         """
-        assert type(surface) == pygame.Surface, self.__format_error("surface", surface)
+        assert (
+            type(surface) == pygame.Surface
+        ), f"invalid argument for 'surface': {surface}"
 
         if self.backgroundcolor != None:
             if self.__is_touching__ and self.image == None:
                 pygame.draw.rect(
-                    surface, self.highlight, self.background_rect, 0,
+                    surface,
+                    self.highlight,
+                    self.background_rect,
+                    0,
                     border_top_left_radius=self.borderradius[0],
                     border_top_right_radius=self.borderradius[1],
                     border_bottom_right_radius=self.borderradius[2],
-                    border_bottom_left_radius=self.borderradius[3])
+                    border_bottom_left_radius=self.borderradius[3],
+                )
             else:
                 pygame.draw.rect(
-                    surface, self.backgroundcolor, self.background_rect, 0,
+                    surface,
+                    self.backgroundcolor,
+                    self.background_rect,
+                    0,
                     border_top_left_radius=self.borderradius[0],
                     border_top_right_radius=self.borderradius[1],
                     border_bottom_right_radius=self.borderradius[2],
-                    border_bottom_left_radius=self.borderradius[3])
+                    border_bottom_left_radius=self.borderradius[3],
+                )
         if self.image != None:
             if self.__has_hl_image__ and self.__is_touching__:
                 surface.blit(self.hl_image, self.background_rect)
             else:
                 surface.blit(self.image, self.background_rect)
 
-
         if self.borderwidth > 0:
             pygame.draw.rect(
-                surface, self.bordercolor, self.background_rect, self.borderwidth,
+                surface,
+                self.bordercolor,
+                self.background_rect,
+                self.borderwidth,
                 border_top_left_radius=self.borderradius[0],
                 border_top_right_radius=self.borderradius[1],
                 border_bottom_right_radius=self.borderradius[2],
-                border_bottom_left_radius=self.borderradius[3])
+                border_bottom_left_radius=self.borderradius[3],
+            )
         surface.blit(self.text_surface, self.text_rect)
 
     def update_text(self, text):
@@ -707,29 +759,33 @@ class Label:
         This method can be called every loop without worrying about performance problems.
         """
         if textcolor != None and textcolor != self.textcolor:
-            if not type(textcolor) in [
-                tuple, list]: self.__collect_error("textcolor", textcolor)
-            if not len(textcolor) == 3: self.__collect_error("textcolor", textcolor)
+            if not type(textcolor) in [tuple, list]:
+                raise ValueError(
+                    f"invalid argument for 'textcolor': {textcolor}"
+                )
+            if not len(textcolor) == 3:
+                raise ValueError(f"invalid argument for 'textcolor': {textcolor}")
             self.textcolor = textcolor
             self.__create__()
         if backgroundcolor != None and backgroundcolor != self.backgroundcolor:
-            if not type(backgroundcolor) in [
-                tuple, list]: self.__collect_error("backgroundcolor", backgroundcolor)
-            if not len(
-                backgroundcolor) == 3: self.__collect_error("backgroundcolor", backgroundcolor)
+            if not type(backgroundcolor) in [tuple, list]:
+                raise ValueError(f"invalid argument for 'backgroundcolor': {backgroundcolor}")
+            if not len(backgroundcolor) == 3:
+                raise ValueError(f"invalid argument for 'backgroundcolor': {backgroundcolor}")
             self.backgroundcolor = backgroundcolor
             self.backgroundcolor_init = backgroundcolor
             val = 50
             self.highlight = (
                 min(self.backgroundcolor[0] + val, 255),
                 min(self.backgroundcolor[1] + val, 255),
-                min(self.backgroundcolor[2] + val, 255)
+                min(self.backgroundcolor[2] + val, 255),
             )
             self.__create__()
         if bordercolor != None and bordercolor != self.bordercolor:
-            if not type(bordercolor) in [
-                tuple, list]: self.__collect_error("bordercolor", bordercolor)
-            if not len(bordercolor) == 3: self.__collect_error("bordercolor", bordercolor)
+            if not type(bordercolor) in [tuple, list]:
+                raise ValueError(f"invalid argument for 'bordercolor': {bordercolor}")
+            if not len(bordercolor) == 3:
+                raise ValueError(f"invalid argument for 'bordercolor': {bordercolor}")
             self.bordercolor = bordercolor
 
     def update_borderwidth(self, borderwidth: int):
@@ -737,8 +793,10 @@ class Label:
         Updates the borderwidth of the widget. Call
         this method before drawing to the screen.
         """
-        if not type(borderwidth) == int: self.__collect_error("borderwidth", borderwidth)
-        if not borderwidth >= 0: self.__collect_error("borderwidth", borderwidth)
+        if not type(borderwidth) == int:
+            raise ValueError(f"invalid argument for 'borderwidth': {borderwidth}")
+        if not borderwidth >= 0:
+            raise ValueError(f"invalid argument for 'borderwidth': {borderwidth}")
         self.borderwidth = borderwidth
 
     def update_pos(self, xy, anchor=None):
@@ -746,13 +804,24 @@ class Label:
         Changes the widgets position. Call this
         method before drawing to the screen.
         """
-        if not isinstance(xy, (tuple, list)): self.__collect_error("xy", xy)
-        if not len(xy) == 2: self.__collect_error("xy", xy)
+        if not isinstance(xy, (tuple, list)):
+            raise ValueError(f"invalid argument for 'xy': {xy}")
+        if not len(xy) == 2:
+            raise ValueError(f"invalid argument for 'xy': {xy}")
         self.xy = xy
-        if not anchor in ["topleft", "topright", "bottomleft", "bottomright",
-                                   "center", "midtop", "midright", "midbottom", "midleft", None]:
-            self.__collect_error("anchor", anchor)
-        self.__show_errors()
+        if not anchor in [
+            "topleft",
+            "topright",
+            "bottomleft",
+            "bottomright",
+            "center",
+            "midtop",
+            "midright",
+            "midbottom",
+            "midleft",
+            None,
+        ]:
+            raise ValueError(f"invalid argument for 'anchor': {anchor}")
         if anchor is not None:
             self.anchor = anchor
 
@@ -760,10 +829,12 @@ class Label:
         self.background_rect.__setattr__("center", self.positioning_rect.center)
         background_rect_coords = getattr(self.background_rect, self.text_binding)
         self.text_rect.__setattr__(
-            self.text_binding, (
+            self.text_binding,
+            (
                 background_rect_coords[0] + self.text_offset[0],
-                background_rect_coords[1] + self.text_offset[1]
-                ))
+                background_rect_coords[1] + self.text_offset[1],
+            ),
+        )
 
         # data # should actually be accessed through 'self.rect.' but I
         # will leave it as it is to not break any programs
@@ -784,11 +855,15 @@ class Label:
         self.rect = self.positioning_rect
 
         # for buttons:
-        self.x_range = (self.background_rect.x,
-                        self.background_rect.x + self.background_rect.width)
-        self.y_range = (self.background_rect.y,
-                        self.background_rect.y + self.background_rect.height)
-    
+        self.x_range = (
+            self.background_rect.x,
+            self.background_rect.x + self.background_rect.width,
+        )
+        self.y_range = (
+            self.background_rect.y,
+            self.background_rect.y + self.background_rect.height,
+        )
+
     def set_style(self, bold: bool = None, italic: bool = None, underline: bool = None):
         old_bold = self.bold
         if bold != None:
@@ -799,7 +874,11 @@ class Label:
         old_underline = self.underline
         if underline != None:
             self.underline = bool(underline)
-        if old_bold != self.bold or old_italic != self.italic or old_underline != self.underline:
+        if (
+            old_bold != self.bold
+            or old_italic != self.italic
+            or old_underline != self.underline
+        ):
             self.__create__()
 
     def get_rect(self) -> pygame.Rect:
