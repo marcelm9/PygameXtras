@@ -1,3 +1,6 @@
+## 1.1.10 (15.6.2024)
+- removed forgotten print statement
+
 ## 1.1.9 (5.6.2024)
 - improved fonts by storing some fonts in a folder and only searching for sysfonts if necessary
 - added font_file to Label to import custom fonts

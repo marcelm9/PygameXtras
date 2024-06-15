@@ -529,7 +529,6 @@ class Label:
 
     def __create__(self):
 
-        print(f"{self.font_path = }")
         font = pygame.font.Font(self.font_path, self.size)
         font.set_bold(self.bold)
         font.set_italic(self.italic)
