@@ -11,7 +11,8 @@ def higher_resolution(boolean: bool = True):
     blurry. To avoid this effect, this function can be called to increase the resolution on
     affected displays without having to manually change the scaling in the computers settings.
     """
-    ctypes.windll.shcore.SetProcessDpiAwareness(bool(boolean))
+    if os.name == "nt":
+        ctypes.windll.shcore.SetProcessDpiAwareness(bool(boolean))
 
 
 def scale_image(image, factor):

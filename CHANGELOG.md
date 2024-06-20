@@ -1,3 +1,6 @@
+## 1.1.11 (20.6.2024)
+- made function `higher_resolution()` safe to call on any OS
+
 ## 1.1.10 (15.6.2024)
 - removed forgotten print statement
 
