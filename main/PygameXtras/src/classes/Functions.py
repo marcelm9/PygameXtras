@@ -260,3 +260,11 @@ def get_fonts():
         f.removesuffix(".ttf")
         for f in os.listdir(os.path.join(os.path.dirname(__file__), "..", "fonts"))
     ]
+
+
+def hide_mouse():
+    if not pygame.get_init():
+        pygame.init()
+    pygame.mouse.set_cursor(
+        (8, 8), (0, 0), (0, 0, 0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0, 0, 0)
+    )

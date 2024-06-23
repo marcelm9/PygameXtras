@@ -1,3 +1,6 @@
+## 1.1.12 (23.6.2024)
+- added function `hide_mouse()`
+
 ## 1.1.11 (20.6.2024)
 - made function `higher_resolution()` safe to call on any OS
 
