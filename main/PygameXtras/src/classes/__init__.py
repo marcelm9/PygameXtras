@@ -14,7 +14,7 @@ from .Messagebox import Messagebox
 from .OneClickManager import OneClickManager
 from .Paragraph import Paragraph
 from .PerformanceGraph import PerformanceGraph
-from .PlayStationController import PlayStationController
+from .PSController import PSController
 from .PlayStationVectorGraphics.psvg import PSVG
 from .PopupMessage import PopupMessage
 from .RandomClasses import *

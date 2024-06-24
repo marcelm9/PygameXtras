@@ -1,3 +1,6 @@
+## 1.2.0 (24.6.2024)
+- reworked class `PlayStationController` to `PSController`, which now also works on linux
+
 ## 1.1.12 (23.6.2024)
 - added function `hide_mouse()`
 
