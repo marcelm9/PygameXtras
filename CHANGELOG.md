@@ -1,3 +1,6 @@
+## 1.2.4 (12.8.2024)
+- fixed README formatting
+
 ## 1.2.3 (12.8.2024)
 - added information on arguments for widgets to README
 - turned Label.padding into Label.margin

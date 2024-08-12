@@ -109,12 +109,12 @@ Labels (any classes inheriting from Label) can be styled using keyword arguments
 
 ### Positional arguments for Labels
 name | type | info | default
--|-|-|-|-
-surface|pygame.Surface, None|the surface which the Label should be drawn to| -
-text|Any|the text displayed on the Label| -
-size|PositiveFloat|the size of the displayed text| -
-xy|Coordinate|the pixel coordinates of the Label| -
-anchor|str|the point within the Label which should be bound to the `xy` coordinate, similar to `pygame.Rect`s positioning system| `"center"`
+-|-|-|-
+surface|pygame.Surface, None|the surface which the Label should be drawn to|-
+text|Any|the text displayed on the Label|-
+size|PositiveFloat|the size of the displayed text|-
+xy|Coordinate|the pixel coordinates of the Label|-
+anchor|str|the point within the Label which should be bound to the `xy` coordinate, similar to `pygame.Rect`s positioning system|`"center"`
 
 ### Keyword arguments for Labels
 The last column, "LBE", shows for which widget (L = Label, B = Button, E = Entry) which keyword is relevant.
