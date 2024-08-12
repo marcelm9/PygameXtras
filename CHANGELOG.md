@@ -1,3 +1,7 @@
+## 1.2.2 (12.8.2024)
+- removed unnecessary functions
+- made parsers accessible
+
 ## 1.2.1 (12.8.2024)
 - added Bar.draw_to method
 - improved error checking in Label
