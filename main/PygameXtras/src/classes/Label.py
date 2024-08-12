@@ -1,20 +1,25 @@
-import math
 import os
 
 import pygame
 
+from ..parsers.color import Color
+from ..parsers.coordinate import Coordinate
+from ..parsers.positive_float import PositiveFloat
+from ..parsers.positive_int import PositiveInt
+from ..parsers.size2 import Size2
+from ..parsers.size4 import Size4
 from .OneClickManager import OneClickManager
 
 
 class Label:
-    labels = []
+
     def __init__(
         self,
-        surface: pygame.Surface,
-        text,
+        surface: pygame.Surface | None,
+        text: str,
         size: int,
         xy: tuple,
-        anchor="center",
+        anchor: str = "center",
         **kwargs,
     ):
         """
@@ -164,9 +169,6 @@ class Label:
             "padding": "p",
             "font_file": "ff",
         }
-        assert len(set(self.ABBREVIATIONS.values())) == len(
-            list(self.ABBREVIATIONS.values())
-        ), "it seems like two arguments share the same abbreviation"
 
         # inserting template (if exists)
         template = kwargs.get("template", None)
@@ -182,42 +184,33 @@ class Label:
         self.__has_hl_image__ = False
 
         self.surface = surface
+        if self.surface != None:
+            assert isinstance(
+                self.surface, pygame.Surface
+            ), f"invalid argument for 'surface': {self.surface}"
+
         self.text = str(text)
 
-        self.size = size
-        self.__test_type("size", size, (int, float))
-        self.size = int(self.size)
+        self.size = PositiveFloat.parse(size)
+        self.size = round(self.size)
 
-        self.__test_type("xy", xy, (tuple, list))
-        self.__test_len("xy", xy, "=", 2)
-        try:
-            if isinstance(xy[0], (int, float)) and isinstance(xy[1], (int, float)):
-                self.xy = int(xy[0]), int(xy[1])
-            elif isinstance(xy[0], (tuple, list)) and isinstance(xy[1], (tuple, list)):
-                t1 = xy[0]
-                t2 = xy[1]
-                self.__test_len("xy", t1, "=", 2)
-                self.__test_len("xy", t1, "=", 2)
-                self.__test_type("xy", t1[0], (int, float))
-                self.__test_type("xy", t1[1], (int, float))
-                self.__test_type("xy", t2[0], (int, float))
-                self.__test_type("xy", t2[1], (int, float))
-                self.xy = (int(t1[0] + t2[0]), int(t1[1] + t2[1]))
-            else:
-                self.__collect_error("xy", self.xy)
-        except:
-            self.__collect_error("xy", self.xy)
+        self.xy = Coordinate.parse(xy)
 
         self.anchor = anchor
         if "anchor" in kwargs.keys():
             self.anchor = kwargs["anchor"]
-        self.__test_match(
-            "anchor",
-            self.anchor,
-            "topleft,midtop,topright,midleft,center,midright,bottomleft,midbottom,bottomright".split(
-                ","
-            ),
-        )
+
+        assert self.anchor in (
+            "topleft",
+            "midtop",
+            "topright",
+            "midleft",
+            "center",
+            "midright",
+            "bottomleft",
+            "midbottom",
+            "bottomright",
+        ), f"invalid argument for 'anchor': {self.anchor}"
 
         kw = kwargs
 
@@ -229,8 +222,7 @@ class Label:
             self.textcolor = (0, 0, 0)
         # assertion
         if self.textcolor != None:
-            self.__test_type("textcolor", self.textcolor, (tuple, list))
-            self.__test_len("textcolor", self.textcolor, "=", 3)
+            self.textcolor = Color.parse(self.textcolor)
 
         # backgroundcolor
         self.backgroundcolor = kw.get("backgroundcolor", None)
@@ -238,8 +230,7 @@ class Label:
             self.backgroundcolor = kw.get(self.ABBREVIATIONS["backgroundcolor"], None)
         # assertion
         if self.backgroundcolor != None:
-            self.__test_type("backgroundcolor", self.backgroundcolor, (tuple, list))
-            self.__test_len("backgroundcolor", self.backgroundcolor, "=", 3)
+            self.backgroundcolor = Color.parse(self.backgroundcolor)
 
         # backgroundcolor backup
         self.backgroundcolor_init = self.backgroundcolor
@@ -259,10 +250,12 @@ class Label:
         if self.font == None:
             self.font = kw.get(self.ABBREVIATIONS["font"], None)
         if self.font == None:
-            self.font = ""
+            self.font = "verdana"
         # assertion
         if self.font != None:
-            self.__test_type("font", self.font, str)
+            assert isinstance(
+                self.font, str
+            ), f"invalid argument for 'font': {self.font}"
 
         # font_file
         self.font_file = kw.get("font_file", None)
@@ -270,7 +263,9 @@ class Label:
             self.font_file = kw.get(self.ABBREVIATIONS["font_file"], None)
         # assertion
         if self.font_file != None:
-            self.__test_type("font_file", self.font_file, str)
+            assert isinstance(
+                self.font_file, str
+            ), f"invalid argument for 'font_file': {self.font_file}"
 
         # x_axis_addition
         self.x_axis_addition = kw.get("x_axis_addition", None)
@@ -280,8 +275,7 @@ class Label:
             self.x_axis_addition = 0
         # assertion
         if self.x_axis_addition != None:
-            self.__test_type("x_axis_addition", self.x_axis_addition, int)
-            self.__test_value("x_axis_addition", self.x_axis_addition, ">=", 0)
+            self.x_axis_addition = PositiveInt.parse(self.x_axis_addition)
 
         # y_axis_addition
         self.y_axis_addition = kw.get("y_axis_addition", None)
@@ -291,8 +285,7 @@ class Label:
             self.y_axis_addition = 0
         # assertion
         if self.y_axis_addition != None:
-            self.__test_type("y_axis_addition", self.y_axis_addition, int)
-            self.__test_value("y_axis_addition", self.y_axis_addition, ">=", 0)
+            self.y_axis_addition = PositiveInt.parse(self.y_axis_addition)
 
         # borderwidth
         self.borderwidth = kw.get("borderwidth", None)
@@ -302,8 +295,7 @@ class Label:
             self.borderwidth = 0
         # assertion
         if self.borderwidth != None:
-            self.__test_type("borderwidth", self.borderwidth, int)
-            self.__test_value("borderwidth", self.borderwidth, ">=", 0)
+            self.borderwidth = PositiveInt.parse(self.borderwidth)
 
         # bordercolor
         self.bordercolor = kw.get("bordercolor", None)
@@ -313,8 +305,7 @@ class Label:
             self.bordercolor = (0, 0, 0)
         # assertion
         if self.bordercolor != None:
-            self.__test_type("bordercolor", self.bordercolor, (tuple, list))
-            self.__test_len("bordercolor", self.bordercolor, "=", 3)
+            self.bordercolor = Color.parse(self.bordercolor)
 
         # force_width
         self.force_width = kw.get("force_width", None)
@@ -322,8 +313,7 @@ class Label:
             self.force_width = kw.get(self.ABBREVIATIONS["force_width"], None)
         # assertion
         if self.force_width != None:
-            self.__test_type("force_width", self.force_width, int)
-            self.__test_value("force_width", self.force_width, ">", 0)
+            self.force_width = PositiveInt.parse(self.force_width)
 
         # force_height
         self.force_height = kw.get("force_height", None)
@@ -331,8 +321,7 @@ class Label:
             self.force_height = kw.get(self.ABBREVIATIONS["force_height"], None)
         # assertion
         if self.force_height != None:
-            self.__test_type("force_height", self.force_height, int)
-            self.__test_value("force_height", self.force_height, ">", 0)
+            self.force_height = PositiveInt.parse(self.force_height)
 
         # force_dim
         force_dim = kw.get("force_dim", None)
@@ -340,12 +329,9 @@ class Label:
             force_dim = kw.get(self.ABBREVIATIONS["force_dim"], None)
         # assertion
         if force_dim != None:
-            self.__test_type("force_dim", force_dim, (tuple, list))
-            self.__test_len("force_dim", force_dim, "=", 2)
-            if force_dim[0] != None:
-                self.force_width = force_dim[0]
-            if force_dim[1] != None:
-                self.force_height = force_dim[1]
+            self.force_dim = Size2.parse(force_dim)
+            self.force_width = force_dim[0]
+            self.force_height = force_dim[1]
 
         # borderradius
         self.borderradius = kw.get("borderradius", None)
@@ -354,17 +340,20 @@ class Label:
         if self.borderradius == None:
             self.borderradius = (1, 1, 1, 1)
         # assertion
-        elif type(self.borderradius) == int:
+        elif isinstance(self.borderradius, int):
+            self.borderradius = PositiveInt.parse(self.borderradius)
             self.borderradius = (
                 self.borderradius,
                 self.borderradius,
                 self.borderradius,
                 self.borderradius,
             )
-        elif type(self.borderradius) in [tuple, list]:
-            self.__test_len("borderradius", self.borderradius, "=", 4)
+        elif isinstance(self.borderradius, (tuple, list)):
+            self.borderradius = Size4.parse(self.borderradius)
         else:
-            self.__collect_error("borderradius", self.borderradius)
+            raise AssertionError(
+                f"invalid argument for 'borderradius': {self.borderradius}"
+            )
 
         # text_offset
         self.text_offset = kw.get("text_offset", None)
@@ -374,8 +363,7 @@ class Label:
             self.text_offset = (0, 0)
         # assertion
         if self.text_offset != None:
-            self.__test_type("text_offset", self.text_offset, (tuple, list))
-            self.__test_len("text_offset", self.text_offset, "=", 2)
+            self.text_offset = Size2.parse(self.text_offset)
 
         # image
         self.image = kw.get("image", None)
@@ -383,7 +371,9 @@ class Label:
             self.image = kw.get(self.ABBREVIATIONS["image"], None)
         # assertion
         if self.image != None:
-            self.__test_type("image", self.image, pygame.Surface)
+            assert isinstance(
+                self.image, pygame.Surface
+            ), f"invalid argument for 'image': {self.image}"
             if self.force_width == None:
                 self.force_width = self.image.get_width()
             if self.force_height == None:
@@ -406,13 +396,17 @@ class Label:
             self.text_binding = "center"
         # assertion
         if self.text_binding != None:
-            self.__test_match(
-                "text_binding",
-                self.text_binding,
-                "topleft,midtop,topright,midleft,center,midright,bottomleft,midbottom,bottomright".split(
-                    ","
-                ),
-            )
+            assert self.text_binding in [
+                "topleft",
+                "midtop",
+                "topright",
+                "midleft",
+                "center",
+                "midright",
+                "bottomleft",
+                "midbottom",
+                "bottomright",
+            ]
 
         # highlight
         self.highlight = kw.get("highlight", None)
@@ -420,18 +414,19 @@ class Label:
             self.highlight = kw.get(self.ABBREVIATIONS["highlight"], None)
         # assertion
         if self.highlight != None:
-            if type(self.highlight) in [tuple, list] and len(self.highlight) == 3:
+            if type(self.highlight) in [tuple, list]:
                 pass  # ok
             elif self.highlight == False:
                 self.highlight = None  # ok
             elif self.highlight == True:
                 if self.image == None:
-                    if not self.backgroundcolor != None:
-                        self.__collect_error_directly(
-                            f"'backgroundcolor' (currently: {self.backgroundcolor}) must be defined when using 'highlight' (currently: {self.highlight})"
-                        )
+                    assert (
+                        self.backgroundcolor != None
+                    ), f"'backgroundcolor' (currently: {self.backgroundcolor}) must be defined when using 'highlight' (currently: {self.highlight})"
             else:
-                self.__collect_error("highlight", self.highlight)
+                raise AssertionError(
+                    f"invalid argument for 'highlight': {self.highlight}"
+                )
 
             if self.image == None:
                 if self.highlight == True:
@@ -468,11 +463,15 @@ class Label:
             self.active_area = kw.get(self.ABBREVIATIONS["active_area"], None)
         # assertion
         if self.active_area != None:
-            self.__test_type(
-                "active_area", self.active_area, (tuple, list, pygame.Rect)
-            )
-            self.__test_len("active_area", self.active_area, "=", 4)
-            self.active_area = pygame.Rect(self.active_area)
+            if isinstance(self.active_area, (tuple, list)):
+                self.active_area = Size4.parse(self.active_area)
+                self.active_area = pygame.Rect(self.active_area)
+            elif isinstance(self.active_area, pygame.Rect):
+                pass
+            else:
+                raise AssertionError(
+                    f"invalid argument for 'active_area': {self.active_area}"
+                )
 
         # bold
         self.bold = kw.get("bold", None)
@@ -509,9 +508,9 @@ class Label:
             )
         # assertion
         if self.one_click_manager != None:
-            self.__test_type(
-                "one_click_manager", self.one_click_manager, OneClickManager
-            )
+            assert isinstance(
+                self.one_click_manager, OneClickManager
+            ), f"invalid argument for 'one_click_manager': {self.one_click_manager}"
 
         # padding
         self.padding = kw.get("padding", None)
@@ -521,8 +520,7 @@ class Label:
             self.padding = 0
         # assertion
         if self.padding != None:
-            self.__test_type("padding", self.padding, int)
-            self.__test_value("padding", self.padding, ">=", 0)
+            self.padding = PositiveInt.parse(self.padding)
 
         self.__load_font_path()
         self.__create__()
@@ -594,55 +592,6 @@ class Label:
                 self.font_path = pygame.font.match_font(self.font)
         else:
             self.font_path = self.font_file
-
-    def __test_type(self, variable_name, variable_value, applicable_types):
-        if not isinstance(variable_value, applicable_types):
-            raise ValueError(
-                f"invalid argument for '{variable_name}': {variable_value}"
-            )
-
-    def __test_len(self, variable_name, variable_value, _type: str, value):
-        assert _type in ">,<,=,>=,<=".split(",")
-        if (
-            _type == "<"
-            and not len(variable_value) < value
-            or _type == "<="
-            and not len(variable_value) <= value
-            or _type == ">"
-            and not len(variable_value) > value
-            or _type == ">="
-            and not len(variable_value) >= value
-            or _type == "="
-            and not len(variable_value) == value
-        ):
-            raise ValueError(
-                f"invalid argument for '{variable_name}': {variable_value}"
-            )
-
-    def __test_value(self, variable_name, variable_value, _type: str, value):
-        assert _type in ">,<,=,>=,<=".split(",")
-        if (
-            _type == "<"
-            and not variable_value < value
-            or _type == "<="
-            and not variable_value <= value
-            or _type == ">"
-            and not variable_value > value
-            or _type == ">="
-            and not variable_value >= value
-            or _type == "="
-            and not variable_value == value
-        ):
-            raise ValueError(
-                f"invalid argument for '{variable_name}': {variable_value}"
-            )
-
-    def __test_match(self, variable_name, variable_value, applicable_values: tuple):
-        assert isinstance(applicable_values, (tuple, list))
-        if not variable_value in applicable_values:
-            raise ValueError(
-                f"invalid argument for '{variable_name}': {variable_value}"
-            )
 
     def draw(self):
         """
@@ -758,21 +707,12 @@ class Label:
         This method can be called every loop without worrying about performance problems.
         """
         if textcolor != None and textcolor != self.textcolor:
-            if not type(textcolor) in [tuple, list]:
-                raise ValueError(
-                    f"invalid argument for 'textcolor': {textcolor}"
-                )
-            if not len(textcolor) == 3:
-                raise ValueError(f"invalid argument for 'textcolor': {textcolor}")
-            self.textcolor = textcolor
+            self.textcolor = Color.parse(textcolor)
             self.__create__()
         if backgroundcolor != None and backgroundcolor != self.backgroundcolor:
-            if not type(backgroundcolor) in [tuple, list]:
-                raise ValueError(f"invalid argument for 'backgroundcolor': {backgroundcolor}")
-            if not len(backgroundcolor) == 3:
-                raise ValueError(f"invalid argument for 'backgroundcolor': {backgroundcolor}")
-            self.backgroundcolor = backgroundcolor
-            self.backgroundcolor_init = backgroundcolor
+            c = Color.parse(backgroundcolor)
+            self.backgroundcolor = c
+            self.backgroundcolor_init = c
             val = 50
             self.highlight = (
                 min(self.backgroundcolor[0] + val, 255),
@@ -781,22 +721,14 @@ class Label:
             )
             self.__create__()
         if bordercolor != None and bordercolor != self.bordercolor:
-            if not type(bordercolor) in [tuple, list]:
-                raise ValueError(f"invalid argument for 'bordercolor': {bordercolor}")
-            if not len(bordercolor) == 3:
-                raise ValueError(f"invalid argument for 'bordercolor': {bordercolor}")
-            self.bordercolor = bordercolor
+            self.bordercolor = Color.parse(bordercolor)
 
     def update_borderwidth(self, borderwidth: int):
         """
         Updates the borderwidth of the widget. Call
         this method before drawing to the screen.
         """
-        if not type(borderwidth) == int:
-            raise ValueError(f"invalid argument for 'borderwidth': {borderwidth}")
-        if not borderwidth >= 0:
-            raise ValueError(f"invalid argument for 'borderwidth': {borderwidth}")
-        self.borderwidth = borderwidth
+        self.borderwidth = PositiveInt.parse(borderwidth)
 
     def update_pos(self, xy, anchor=None):
         """

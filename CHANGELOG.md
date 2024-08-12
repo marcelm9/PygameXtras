@@ -1,3 +1,7 @@
+## 1.2.1 (12.8.2024)
+- added Bar.draw_to method
+- improved error checking in Label
+
 ## 1.2.0 (24.6.2024)
 - reworked class `PlayStationController` to `PSController`, which now also works on linux
 

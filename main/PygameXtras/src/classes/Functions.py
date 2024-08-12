@@ -56,20 +56,12 @@ def create_animation(image_ids: list, frames_per_image: list):
     return seq
 
 
-def get_distance(xy1: tuple, xy2: tuple, digits_after_comma: int = None) -> float:
-    """returns the distance between xy1 and xy2"""
-    x1, y1 = xy1[0], xy1[1]
-    x2, y2 = xy2[0], xy2[1]
-    if digits_after_comma == None:
-        return math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2))
-    else:
-        return round_half_up(
-            math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2)), digits_after_comma
-        )
-
-
-def get_distance_squared(xy1: tuple, xy2: tuple):
+def get_distance_squared(xy1: tuple, xy2: tuple) -> float:
     return (xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2
+
+
+def get_distance(xy1: tuple, xy2: tuple) -> float:
+    return math.sqrt(get_distance_squared(xy1, xy2))
 
 
 def get_angle_between_points(xy1, xy2):
@@ -268,3 +260,27 @@ def hide_mouse():
     pygame.mouse.set_cursor(
         (8, 8), (0, 0), (0, 0, 0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0, 0, 0)
     )
+
+
+def check(func):
+    """decorator to validate a function against its type hints"""
+
+    def wrapper(*args, **kwargs):
+        annotations = func.__annotations__
+        for arg_name, arg_value in zip(func.__code__.co_varnames, args):
+            if arg_name in annotations and not isinstance(
+                arg_value, annotations[arg_name]
+            ):
+                raise TypeError(
+                    f"Argument '{arg_name}' (value={arg_value}, type={type(arg_value)}) is not consistent with type(s) '{annotations[arg_name]}'"
+                )
+        for arg_name, arg_value in kwargs.items():
+            if arg_name in annotations and not isinstance(
+                arg_value, annotations[arg_name]
+            ):
+                raise TypeError(
+                    f"Argument '{arg_name}' (value={arg_value}, type={type(arg_value)}) is not consistent with type(s) '{annotations[arg_name]}'"
+                )
+        return func(*args, **kwargs)
+
+    return wrapper
