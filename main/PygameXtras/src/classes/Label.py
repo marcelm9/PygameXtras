@@ -131,7 +131,7 @@ class Label:
                 (button only)
                 assures that overlaying buttons can not be clicked at the same time
                 Type: PygameXtras.OneClickManager
-            padding (NOT IMPLEMENTED YET)
+            margin
                 decreases the size of the widget without affecting the position
                 Type: int
             font_file
@@ -166,7 +166,7 @@ class Label:
             "underline": "ul",
             "one_click_manager": "ocm",
             "template": "t",
-            "padding": "p",
+            "margin": "m",
             "font_file": "ff",
         }
 
@@ -175,7 +175,7 @@ class Label:
         if template is None:
             template = kwargs.get(self.ABBREVIATIONS["template"], None)
         if template is not None:
-            self.__test_type("template", template, dict)
+            assert isinstance(template, dict), f"invalid argument for 'template': {template}"
             for k in template.keys():
                 if not k in kwargs.keys():
                     kwargs[k] = template[k]
@@ -512,15 +512,15 @@ class Label:
                 self.one_click_manager, OneClickManager
             ), f"invalid argument for 'one_click_manager': {self.one_click_manager}"
 
-        # padding
-        self.padding = kw.get("padding", None)
-        if self.padding == None:
-            self.padding = kw.get(self.ABBREVIATIONS["padding"], None)
-        if self.padding == None:
-            self.padding = 0
+        # margin
+        self.margin = kw.get("margin", None)
+        if self.margin == None:
+            self.margin = kw.get(self.ABBREVIATIONS["margin"], None)
+        if self.margin == None:
+            self.margin = 0
         # assertion
-        if self.padding != None:
-            self.padding = PositiveInt.parse(self.padding)
+        if self.margin != None:
+            self.margin = PositiveInt.parse(self.margin)
 
         self.__load_font_path()
         self.__create__()
@@ -564,10 +564,10 @@ class Label:
 
         # creating the background rect
         self.background_rect = pygame.Rect(
-            x + self.padding,
-            y + self.padding,
-            w - 2 * self.padding,
-            h - 2 * self.padding,
+            x + self.margin,
+            y + self.margin,
+            w - 2 * self.margin,
+            h - 2 * self.margin,
         )
 
         # creating positioning rect
@@ -597,6 +597,8 @@ class Label:
         """
         Draws the widget to the screen.
         """
+        if self.surface is None:
+            raise Exception(f"no surface given to draw to")
 
         if self.backgroundcolor != None:
             if self.__is_touching__ and self.image == None:

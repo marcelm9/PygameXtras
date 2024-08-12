@@ -1,3 +1,7 @@
+## 1.2.3 (12.8.2024)
+- added information on arguments for widgets to README
+- turned Label.padding into Label.margin
+
 ## 1.2.2 (12.8.2024)
 - removed unnecessary functions
 - made parsers accessible

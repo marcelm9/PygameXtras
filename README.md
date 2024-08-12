@@ -1,7 +1,7 @@
 # PygameXtras
 PygameXtras is a library designed to make programming with pygame easier. It supplies classes that aim at reducing the time and effort that go into everyday tasks like displaying text, creating buttons, managing entry forms, etc.
 
-### example
+## Example
 ```python
 import pygame
 import PygameXtras as px
@@ -103,3 +103,46 @@ while True:
     pygame.display.flip()
     clock.tick(120)
 ```
+
+## Label arguments
+Labels (any classes inheriting from Label) can be styled using keyword arguments. The tables given below list all positional and keyword arguments and their specific uses. Please note: The types `Color`, `Coordinate`, `PositiveInt`, `PositiveFloat`, `Size2` and `Size4` refer to any values which are successfully digested by their respective parser (found in `PygameXtras.parsers`).
+
+### Positional arguments for Labels
+name | type | info | default
+-|-|-|-|-
+surface|pygame.Surface, None|the surface which the Label should be drawn to| -
+text|Any|the text displayed on the Label| -
+size|PositiveFloat|the size of the displayed text| -
+xy|Coordinate|the pixel coordinates of the Label| -
+anchor|str|the point within the Label which should be bound to the `xy` coordinate, similar to `pygame.Rect`s positioning system| `"center"`
+
+### Keyword arguments for Labels
+The last column, "LBE", shows for which widget (L = Label, B = Button, E = Entry) which keyword is relevant.
+
+long | short | type | info | default | LBE
+-|-|-|-|-|-
+textcolor|tc|Color|sets the textcolor|`(0,0,0)`|LBE
+backgroundcolor|bgc|Color|sets the backgroundcolor, transparent if set to `None`|`None`|LBE
+antialias|aa|bool|whether antialiasing should be used|`True`|LBE
+font|f|str|font style (to see all built-in fonts, run `PygameXtras.get_fonts()`)|`verdana`|LBE
+x_axis_addition|xad|PositiveInt|adds pixels to the background of the label along the x axis|`0`|LBE
+y_axis_addition|yad|PositiveInt|adds pixels to the background of the label along the y axis|`0`|LBE
+borderwidth|bw|PositiveInt|sets the borderwidth|`0`|LBE
+bordercolor|bc|Color|sets the bordercolor|`(0,0,0)`|LBE
+force_width|fw|PositiveInt|sets the width of the Label to the given size|`None`|LBE
+force_height|fh|PositiveInt|sets the height of the Label to the given size|`None`|LBE
+force_dim|fd|Size2|sets the width and the height of the Label to the given size|`None`|LBE
+borderradius|br|PositiveInt, Size4|sets the borderradius|`1`|LBE
+text_offset|to|Coordinate|offsets the text within the Label by the given amount|`(0,0)`|LBE
+image|img|pygame.Surface|sets the background of the Label to be the image given|`None`|LBE
+info|info|Any|can be used to attach any information to the Label|`None`|LBE
+text_binding|tb|str|binds the text to a location within the Label (similar to `anchor`)|`center`|LBE
+highlight|hl|bool, Color|highlights the Button if the cursor touches it|`None`|BE
+active_area|aA|Size4|limits the Button functionality to an absolute area (any clicks on the button while it is outside of the given area are not registered)|`None`|BE
+bold|bo|bool|sets text styling to bold|`False`|LBE
+italic|it|bool|sets text styling to italic|`False`|LBE
+underline|ul|bool|sets text styling to underline|`False`|LBE
+one_click_manager|ocm|OneClickManager|suppresses clicks if a different Button has already been clicked|`None`|BE
+template|t|dict|injects style keywords from the given template|`None`|LBE
+margin|m|PositiveInt, Size4|adds a margin that decreases the size of the Label without affecting its position |`None`|LBE
+font_file|ff|str|sets the font of the Label to the given font|`None`|LBE
