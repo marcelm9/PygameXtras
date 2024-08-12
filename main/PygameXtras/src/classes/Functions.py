@@ -4,6 +4,8 @@ import os
 
 import pygame
 
+from ..parsers.color import Color
+
 
 def higher_resolution(boolean: bool = True):
     """
@@ -22,20 +24,6 @@ def scale_image(image, factor):
     return pygame.transform.scale(
         image, (int(image.get_width() * factor), int(image.get_height() * factor))
     )
-
-
-def rotate_in_place(rect, image, degrees):
-    """
-    ONLY WORKS WITH SPRITES
-
-    Usage:
-    self.rect, self.image = rotate_in_place(self.rect, self.image)
-    """
-    old_rect_center = rect.center
-    new_image = pygame.transform.rotate(image, degrees)
-    new_rect = new_image.get_rect()
-    new_rect.center = old_rect_center
-    return new_rect, new_image
 
 
 def create_animation(image_ids: list, frames_per_image: list):
@@ -123,46 +111,6 @@ def inv(a: tuple):
     return invert(a)
 
 
-def load_image(
-    path, size: tuple[int, int] = None, colorkey: tuple[int, int, int] = None
-):
-    """example for <path>: data/images/image1"""
-    assert type(path) == str, f"invalid argument for 'path': {path}"
-    if "/" in path:
-        splitted = path.split("/")
-        path = os.path.join(*splitted)
-
-    try:
-        img = pygame.image.load(path)
-    except:
-        raise Exception("image '" + str(path) + "' not found")
-
-    if size != None:
-        # assertions
-        assert type(size) in [tuple, list], f"invalid argument for 'size': {size}"
-        assert len(size) == 2, f"invalid argument for 'size': {size}"
-        for item in size:
-            assert type(item) == int, f"invalid argument for 'size': {size}"
-            assert item > 0, f"invalid argument for 'size': {size}"
-
-        img = pygame.transform.scale(img, size)
-
-    if colorkey != None:
-        # assertions
-        assert type(colorkey) in [
-            tuple,
-            list,
-        ], f"invalid argument for 'colorkey': {colorkey}"
-        assert len(colorkey) == 3, f"invalid argument for 'colorkey': {colorkey}"
-        for item in colorkey:
-            assert type(item) == int, f"invalid argument for 'colorkey': {colorkey}"
-            assert 0 <= item <= 255, f"invalid argument for 'colorkey': {colorkey}"
-
-        img.set_colorkey(colorkey)
-
-    return img
-
-
 def draw_rect_alpha(
     surface,
     color,
@@ -177,7 +125,7 @@ def draw_rect_alpha(
     shape_surf = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)
     pygame.draw.rect(
         shape_surf,
-        color,
+        Color.parse(color),
         shape_surf.get_rect(),
         width,
         border_radius,
@@ -204,7 +152,7 @@ def draw_circle_alpha(
     shape_surf = pygame.Surface(target_rect.size, pygame.SRCALPHA)
     pygame.draw.circle(
         shape_surf,
-        color,
+        Color.parse(color),
         (radius, radius),
         radius,
         width,
@@ -221,7 +169,9 @@ def draw_polygon_alpha(surface, color, points):
     min_x, min_y, max_x, max_y = min(lx), min(ly), max(lx), max(ly)
     target_rect = pygame.Rect(min_x, min_y, max_x - min_x, max_y - min_y)
     shape_surf = pygame.Surface(target_rect.size, pygame.SRCALPHA)
-    pygame.draw.polygon(shape_surf, color, [(x - min_x, y - min_y) for x, y in points])
+    pygame.draw.polygon(
+        shape_surf, Color.parse(color), [(x - min_x, y - min_y) for x, y in points]
+    )
     surface.blit(shape_surf, target_rect)
 
 

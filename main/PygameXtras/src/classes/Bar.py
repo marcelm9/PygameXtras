@@ -1,11 +1,14 @@
 import pygame
 
+from ..parsers.color import Color
+from ..parsers.coordinate import Coordinate
 from ..parsers.positive_int import PositiveInt
 
-from ..parsers.color import Color
 
 class Bar:
-    def __init__(self, surface, width_height: tuple, xy: tuple, anchor="center", **kwargs):
+    def __init__(
+        self, surface, width_height: tuple, xy: tuple, anchor="center", **kwargs
+    ):
         """
         Creates a bar.
 
@@ -73,81 +76,100 @@ class Bar:
             "borderwidth": "bw",
             "borderradius": "br",
             "info": "info",
-            "fill_start": "fs"
+            "fill_start": "fs",
         }
 
         self.__surface = surface
         self.__width_height = width_height
         self.__xy = xy
         self.__anchor = anchor
-    
+
         # backgroundcolor #
-        self.__backgroundcolor = kwargs.get('backgroundcolor', (0, 0, 0))
+        self.__backgroundcolor = kwargs.get("backgroundcolor", (0, 0, 0))
         if self.__backgroundcolor == (0, 0, 0):
-            self.__backgroundcolor = kwargs.get(ABBREVIATIONS['backgroundcolor'], (0, 0, 0))
+            self.__backgroundcolor = kwargs.get(
+                ABBREVIATIONS["backgroundcolor"], (0, 0, 0)
+            )
         # assertion #
         if self.__backgroundcolor != (0, 0, 0):
             self.__backgroundcolor = Color.parse(self.__backgroundcolor)
-        
+
         # fillcolor #
-        self.__fillcolor = kwargs.get('fillcolor', (255, 255, 255))
+        self.__fillcolor = kwargs.get("fillcolor", (255, 255, 255))
         if self.__fillcolor == (255, 255, 255):
-            self.__fillcolor = kwargs.get(ABBREVIATIONS['fillcolor'], (255, 255, 255))
+            self.__fillcolor = kwargs.get(ABBREVIATIONS["fillcolor"], (255, 255, 255))
         # assertion #
         if self.__fillcolor != (255, 255, 255):
             self.__fillcolor = Color.parse(self.__fillcolor)
-        
+
         # bordercolor #
-        self.__bordercolor = kwargs.get('bordercolor', (0, 0, 0))
+        self.__bordercolor = kwargs.get("bordercolor", (0, 0, 0))
         if self.__bordercolor == (0, 0, 0):
-            self.__bordercolor = kwargs.get(ABBREVIATIONS['bordercolor'], (0, 0, 0))
+            self.__bordercolor = kwargs.get(ABBREVIATIONS["bordercolor"], (0, 0, 0))
         # assertion #
         if self.__bordercolor != (0, 0, 0):
             self.__bordercolor = Color.parse(self.__bordercolor)
-        
+
         # borderwidth #
-        self.__borderwidth = kwargs.get('borderwidth', 0)
+        self.__borderwidth = kwargs.get("borderwidth", 0)
         if self.__borderwidth == 0:
-            self.__borderwidth = kwargs.get(ABBREVIATIONS['borderwidth'], 0)
+            self.__borderwidth = kwargs.get(ABBREVIATIONS["borderwidth"], 0)
         # assertion #
         if self.__borderwidth != 0:
             self.__borderwidth = PositiveInt.parse(self.__borderwidth)
-        
+
         # borderradius #
-        self.__borderradius = kwargs.get('borderradius', 1)
+        self.__borderradius = kwargs.get("borderradius", 1)
         if self.__borderradius == 1:
-            self.__borderradius = kwargs.get(ABBREVIATIONS['borderradius'], 1)
+            self.__borderradius = kwargs.get(ABBREVIATIONS["borderradius"], 1)
         # assertion #
         if self.__borderradius != 1:
             self.__borderradius = PositiveInt.parse(self.__borderradius)
-        
+
         # info #
-        self.__info = kwargs.get('info', None)
+        self.__info = kwargs.get("info", None)
         if self.__info == None:
-            self.__info = kwargs.get(ABBREVIATIONS['info'], None)
+            self.__info = kwargs.get(ABBREVIATIONS["info"], None)
         # assertion #
-        
+
         # fill_start #
-        self.__fill_start = kwargs.get('fill_start', 'left')
-        if self.__fill_start == 'left':
-            self.__fill_start = kwargs.get(ABBREVIATIONS['fill_start'], 'left')
+        self.__fill_start = kwargs.get("fill_start", "left")
+        if self.__fill_start == "left":
+            self.__fill_start = kwargs.get(ABBREVIATIONS["fill_start"], "left")
         # assertion #
-        if self.__fill_start != 'left':
-            assert self.__fill_start in ('top', 'right', 'bottom', 'left'), f"invalid argument for 'fill_start': {self.__fill_start}"
+        if self.__fill_start != "left":
+            assert self.__fill_start in (
+                "top",
+                "right",
+                "bottom",
+                "left",
+            ), f"invalid argument for 'fill_start': {self.__fill_start}"
 
-
-        assert self.__width_height[0] - 2 * self.__borderwidth > 0, "widget width is too small"
-        assert self.__width_height[1] - 2 * self.__borderwidth > 0, "widget height is too small"
+        assert (
+            self.__width_height[0] - 2 * self.__borderwidth > 0
+        ), "widget width is too small"
+        assert (
+            self.__width_height[1] - 2 * self.__borderwidth > 0
+        ), "widget height is too small"
 
         self.__create()
 
     def __create(self):
         # background
-        self.__r_background = pygame.Rect(0,0, self.__width_height[0], self.__width_height[1])
+        self.__r_background = pygame.Rect(
+            0, 0, self.__width_height[0], self.__width_height[1]
+        )
         # foreground (for calculations)
-        self.__r_foreground = pygame.Rect(0,0, self.__width_height[0] - 2 * self.__borderwidth, self.__width_height[1] - 2 * self.__borderwidth)
+        self.__r_foreground = pygame.Rect(
+            0,
+            0,
+            self.__width_height[0] - 2 * self.__borderwidth,
+            self.__width_height[1] - 2 * self.__borderwidth,
+        )
         # filling
-        self.__r_filling = pygame.Rect(0,0, self.__r_foreground.width, self.__r_foreground.height)
+        self.__r_filling = pygame.Rect(
+            0, 0, self.__r_foreground.width, self.__r_foreground.height
+        )
 
         self.update_pos(self.__xy, self.__anchor)
 
@@ -156,11 +178,19 @@ class Bar:
         Changes the widgets position. Call this
         method before drawing to the screen.
         """
-        assert isinstance(xy, (tuple, list)), f"invalid argument for 'xy': {xy}"
-        assert len(xy) == 2, f"invalid argument for 'xy': {xy}"
-        self.__xy = xy
-        assert anchor in ["topleft", "topright", "bottomleft", "bottomright",
-                                   "center", "midtop", "midright", "midbottom", "midleft", None]
+        self.__xy = Coordinate.parse(xy)
+        assert anchor in (
+            "topleft",
+            "topright",
+            "bottomleft",
+            "bottomright",
+            "center",
+            "midtop",
+            "midright",
+            "midbottom",
+            "midleft",
+            None,
+        ), f"invalid argument for 'anchor': {anchor}"
         if anchor is not None:
             self.__anchor = anchor
 
@@ -169,7 +199,10 @@ class Bar:
         self.__update_filling_pos()
 
     def __update_filling_pos(self):
-        self.__r_filling.__setattr__("mid" + self.__fill_start, self.__r_foreground.__getattribute__("mid" + self.__fill_start))
+        self.__r_filling.__setattr__(
+            "mid" + self.__fill_start,
+            self.__r_foreground.__getattribute__("mid" + self.__fill_start),
+        )
 
     def update(self, value, max_value):
         fill = min(1, max(0, value / max_value))
@@ -183,22 +216,43 @@ class Bar:
         self.draw_to(self.__surface)
 
     def draw_to(self, surface):
-        pygame.draw.rect(surface, self.__backgroundcolor, self.__r_background, 0, self.__borderradius)
-        pygame.draw.rect(surface, self.__fillcolor, self.__r_filling, 0, self.__borderradius)
+        pygame.draw.rect(
+            surface, self.__backgroundcolor, self.__r_background, 0, self.__borderradius
+        )
+        pygame.draw.rect(
+            surface, self.__fillcolor, self.__r_filling, 0, self.__borderradius
+        )
         if self.__borderwidth > 0:
-            pygame.draw.rect(surface, self.__bordercolor, self.__r_background, self.__borderwidth, self.__borderradius)
+            pygame.draw.rect(
+                surface,
+                self.__bordercolor,
+                self.__r_background,
+                self.__borderwidth,
+                self.__borderradius,
+            )
 
     def update_colors(self, backgroundcolor=None, fillcolor=None, bordercolor=None):
         if backgroundcolor is not None:
-            assert isinstance(self.__backgroundcolor, (tuple, list)), f"invalid argument for 'backgroundcolor': {self.__backgroundcolor}"
-            assert len(self.__backgroundcolor) == 3, f"invalid argument for 'backgroundcolor': {self.__backgroundcolor}"
+            assert isinstance(
+                self.__backgroundcolor, (tuple, list)
+            ), f"invalid argument for 'backgroundcolor': {self.__backgroundcolor}"
+            assert (
+                len(self.__backgroundcolor) == 3
+            ), f"invalid argument for 'backgroundcolor': {self.__backgroundcolor}"
             self.__backgroundcolor = backgroundcolor
         if fillcolor is not None:
-            assert isinstance(self.__fillcolor, (tuple, list)), f"invalid argument for 'fillcolor': {self.__fillcolor}"
-            assert len(self.__fillcolor) == 3, f"invalid argument for 'fillcolor': {self.__fillcolor}"
+            assert isinstance(
+                self.__fillcolor, (tuple, list)
+            ), f"invalid argument for 'fillcolor': {self.__fillcolor}"
+            assert (
+                len(self.__fillcolor) == 3
+            ), f"invalid argument for 'fillcolor': {self.__fillcolor}"
             self.__fillcolor = fillcolor
         if bordercolor is not None:
-            assert isinstance(self.__bordercolor, (tuple, list)), f"invalid argument for 'bordercolor': {self.__bordercolor}"
-            assert len(self.__bordercolor) == 3, f"invalid argument for 'bordercolor': {self.__bordercolor}"
+            assert isinstance(
+                self.__bordercolor, (tuple, list)
+            ), f"invalid argument for 'bordercolor': {self.__bordercolor}"
+            assert (
+                len(self.__bordercolor) == 3
+            ), f"invalid argument for 'bordercolor': {self.__bordercolor}"
             self.__bordercolor = bordercolor
-        

@@ -735,11 +735,7 @@ class Label:
         Changes the widgets position. Call this
         method before drawing to the screen.
         """
-        if not isinstance(xy, (tuple, list)):
-            raise ValueError(f"invalid argument for 'xy': {xy}")
-        if not len(xy) == 2:
-            raise ValueError(f"invalid argument for 'xy': {xy}")
-        self.xy = xy
+        self.xy = Coordinate.parse(xy)
         if not anchor in [
             "topleft",
             "topright",
