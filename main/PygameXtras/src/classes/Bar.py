@@ -1,5 +1,7 @@
 import pygame
 
+from ..parsers.size2 import Size2
+
 from ..parsers.color import Color
 from ..parsers.coordinate import Coordinate
 from ..parsers.positive_int import PositiveInt
@@ -80,9 +82,21 @@ class Bar:
         }
 
         self.__surface = surface
-        self.__width_height = width_height
-        self.__xy = xy
+        self.__width_height = Size2.parse(width_height)
+
+        self.__xy = Coordinate.parse(xy)
         self.__anchor = anchor
+        assert self.__anchor in (
+            "topleft",
+            "midtop",
+            "topright",
+            "midleft",
+            "center",
+            "midright",
+            "bottomleft",
+            "midbottom",
+            "bottomright",
+        ), f"invalid argument for 'anchor': {self.__anchor}"
 
         # backgroundcolor #
         self.__backgroundcolor = kwargs.get("backgroundcolor", (0, 0, 0))
@@ -146,10 +160,10 @@ class Bar:
             ), f"invalid argument for 'fill_start': {self.__fill_start}"
 
         assert (
-            self.__width_height[0] - 2 * self.__borderwidth > 0
+            self.__width_height[0] - 2 * self.__borderwidth >= 2
         ), "widget width is too small"
         assert (
-            self.__width_height[1] - 2 * self.__borderwidth > 0
+            self.__width_height[1] - 2 * self.__borderwidth >= 2
         ), "widget height is too small"
 
         self.__create()
@@ -207,7 +221,12 @@ class Bar:
     def update(self, value, max_value):
         fill = min(1, max(0, value / max_value))
         if self.__fill_start in ["left", "right"]:
-            self.__r_filling.width = self.__r_foreground.width * fill
+            if fill == 0:
+                self.__r_filling.width = 0
+            elif fill == 1:
+                self.__r_filling.width = self.__r_foreground.width
+            else:
+                self.__r_filling.width = min(self.__r_foreground.width - 1, max(1, self.__r_foreground.width * fill))
         elif self.__fill_start in ["top", "bottom"]:
             self.__r_filling.height = self.__r_foreground.height * fill
         self.__update_filling_pos()

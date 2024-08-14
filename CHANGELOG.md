@@ -1,3 +1,6 @@
+## 1.2.5 (14.8.2024)
+- improved accuracy of Bar.update
+
 ## 1.2.4 (12.8.2024)
 - fixed README formatting
 
