@@ -1,3 +1,6 @@
+## 1.3.0 (10.12.2024)
+- added RetroController
+
 ## 1.2.5 (14.8.2024)
 - improved accuracy of Bar.update
 

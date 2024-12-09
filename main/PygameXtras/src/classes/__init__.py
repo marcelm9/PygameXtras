@@ -14,10 +14,11 @@ from .Messagebox import Messagebox
 from .OneClickManager import OneClickManager
 from .Paragraph import Paragraph
 from .PerformanceGraph import PerformanceGraph
-from .PSController import PSController
 from .PlayStationVectorGraphics.psvg import PSVG
 from .PopupMessage import PopupMessage
+from .PSController import PSController
 from .RandomClasses import *
+from .RetroController import RetroController
 from .ScrollableButtonList import ScrollableButtonList
 from .Spritesheet import Spritesheet
 from .Table import Table
