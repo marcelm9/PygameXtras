@@ -1,3 +1,6 @@
+## 1.3.1 (13.12.2024)
+- added RetroController methods `get_index` and `get_guid`
+
 ## 1.3.0 (10.12.2024)
 - added RetroController
 
