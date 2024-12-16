@@ -212,6 +212,20 @@ class Bar:
         self.__r_foreground.center = self.__r_background.center
         self.__update_filling_pos()
 
+        self.topleft = self.__r_background.topleft
+        self.topright = self.__r_background.topright
+        self.bottomleft = self.__r_background.bottomleft
+        self.bottomright = self.__r_background.bottomright
+        self.center = self.__r_background.center
+        self.midtop = self.__r_background.midtop
+        self.midright = self.__r_background.midright
+        self.midbottom = self.__r_background.midbottom
+        self.midleft = self.__r_background.midleft
+        self.left = self.__r_background.left
+        self.right = self.__r_background.right
+        self.top = self.__r_background.top
+        self.bottom = self.__r_background.bottom
+
     def __update_filling_pos(self):
         self.__r_filling.__setattr__(
             "mid" + self.__fill_start,

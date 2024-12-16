@@ -1,3 +1,6 @@
+## 1.3.2 (16.12.2024)
+- added left, right, ... properties to Bar
+
 ## 1.3.1 (13.12.2024)
 - added RetroController methods `get_index` and `get_guid`
 
