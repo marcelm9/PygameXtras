@@ -2,6 +2,7 @@ import pygame
 from .Button import Button
 from .Keyboard import Keyboard
 
+
 class Entry(Button):
     def __init__(self, surface, text, size, xy: tuple, anchor="center", **kwargs):
         """
@@ -43,8 +44,12 @@ class Entry(Button):
             self.max_chars = kwargs.get("max", None)
         # assertion
         if self.max_chars != None:
-            assert type(self.max_chars) == int, f"invalid argument for 'max_chars': {self.max_chars}"
-            assert self.max_chars >= 0, f"invalid argument for 'max_chars': {self.max_chars}"
+            assert (
+                type(self.max_chars) == int
+            ), f"invalid argument for 'max_chars': {self.max_chars}"
+            assert (
+                self.max_chars >= 0
+            ), f"invalid argument for 'max_chars': {self.max_chars}"
 
         # min_chars
         self.min_chars = kwargs.get("min_chars", None)
@@ -52,8 +57,12 @@ class Entry(Button):
             self.min_chars = kwargs.get("min", None)
         # assertion
         if self.min_chars != None:
-            assert type(self.min_chars) == int, f"invalid argument for 'min_chars': {self.min_chars}"
-            assert self.min_chars >= 0, f"invalid argument for 'min_chars': {self.min_chars}"
+            assert (
+                type(self.min_chars) == int
+            ), f"invalid argument for 'min_chars': {self.min_chars}"
+            assert (
+                self.min_chars >= 0
+            ), f"invalid argument for 'min_chars': {self.min_chars}"
 
         # text_when_empty
         self.text_when_empty = kwargs.get("text_when_empty", None)
@@ -77,7 +86,13 @@ class Entry(Button):
         if self.strict_input == None:
             self.strict_input = kwargs.get("si", None)
         # assertion
-        assert self.strict_input is None or self.strict_input in ["int", "float", "int+", "float+", "str"], f"invalid argument for 'strict_input': {self.strict_input}"
+        assert self.strict_input is None or self.strict_input in [
+            "int",
+            "float",
+            "int+",
+            "float+",
+            "str",
+        ], f"invalid argument for 'strict_input': {self.strict_input}"
 
         # show_cursor
         self.show_cursor = kwargs.get("show_cursor", None)
@@ -85,24 +100,20 @@ class Entry(Button):
             self.show_cursor = kwargs.get("sc", True)
         # assertion
         self.show_cursor = bool(self.show_cursor)
-        self.__cursor_pos = 0 # 0 means "at the end", while 2 means "2 characters from the end", ...
+        self.__cursor_pos = (
+            0  # 0 means "at the end", while 2 means "2 characters from the end", ...
+        )
         self.__old_cursor_pos = 0
-        
-        
-        
 
         self.__state__ = False
         self.__old_state__ = False
-        self.__force__ = False # used to set state even before the update method
+        self.__force__ = False  # used to set state even before the update method
         self.__permanent_state__ = None
         self.__value__ = str(text)
         self.__old_value__ = str(text)
 
         self.__keyboard__ = Keyboard()
         self.__keyboard__.set_forbidden_characters(["\t", "\n"])
-
-
-
 
         super().__init__(surface, text, size, xy, anchor, **kwargs)
 
@@ -124,10 +135,13 @@ class Entry(Button):
         assert len(offset) == 2, f"invalid argument for 'offset: {offset}"
 
         # stops if one_click_manager tells that a click has taken place elsewhere
-        if self.one_click_manager != None and self.one_click_manager.get_clicked() == True:
+        if (
+            self.one_click_manager != None
+            and self.one_click_manager.get_clicked() == True
+        ):
             self.__is_touching__ = False
             return False
-        
+
         # managing the actual clicks
         for event in event_list:
             if event.type == pygame.MOUSEBUTTONUP:
@@ -137,19 +151,25 @@ class Entry(Button):
                 pos[0] -= offset[0]
                 pos[1] -= offset[1]
                 if button == None:
-                    if self.x_range[0] < pos[0] < self.x_range[1] and self.y_range[0] < pos[1] < self.y_range[1]:
+                    if (
+                        self.x_range[0] < pos[0] < self.x_range[1]
+                        and self.y_range[0] < pos[1] < self.y_range[1]
+                    ):
                         if self.one_click_manager != None:
                             self.one_click_manager.set_clicked()
-                        self.__state__ =  True
+                        self.__state__ = True
                     else:
                         self.__state__ = False
 
                 elif 0 < button < 4:
                     if button == event.button:
-                        if self.x_range[0] < pos[0] < self.x_range[1] and self.y_range[0] < pos[1] < self.y_range[1]:
+                        if (
+                            self.x_range[0] < pos[0] < self.x_range[1]
+                            and self.y_range[0] < pos[1] < self.y_range[1]
+                        ):
                             if self.one_click_manager != None:
                                 self.one_click_manager.set_clicked()
-                            self.__state__ =  True
+                            self.__state__ = True
                         else:
                             self.__state__ = False
 
@@ -169,7 +189,10 @@ class Entry(Button):
             self.__state__ = False
         pos[0] -= offset[0]
         pos[1] -= offset[1]
-        if self.x_range[0] < pos[0] < self.x_range[1] and self.y_range[0] < pos[1] < self.y_range[1]:
+        if (
+            self.x_range[0] < pos[0] < self.x_range[1]
+            and self.y_range[0] < pos[1] < self.y_range[1]
+        ):
             if self.highlight != None:
                 self.__is_touching__ = True
             if self.one_click_manager != None:
@@ -178,15 +201,19 @@ class Entry(Button):
             self.__is_touching__ = False
 
         if self.__state__:
-
             # deleting chars
             for event in event_list:
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_BACKSPACE:
-                    if self.min_chars == None or len(self.__value__) - 1 >= self.min_chars:
+                    if (
+                        self.min_chars == None
+                        or len(self.__value__) - 1 >= self.min_chars
+                    ):
                         if self.show_cursor:
                             if self.__cursor_pos != len(self.__value__):
                                 val_list = list(self.__value__)
-                                del val_list[len(self.__value__)-1-self.__cursor_pos]
+                                del val_list[
+                                    len(self.__value__) - 1 - self.__cursor_pos
+                                ]
                                 self.__value__ = "".join(val_list)
                         else:
                             self.__value__ = self.__value__[:-1]
@@ -197,9 +224,9 @@ class Entry(Button):
                         self.__cursor_pos += 1
                     elif event.key == pygame.K_RIGHT:
                         self.__cursor_pos -= 1
-                    elif event.key == 1073741898: # key "pos1"
+                    elif event.key == 1073741898:  # key "pos1"
                         self.__cursor_pos = len(self.__value__)
-                    elif event.key == 1073741901: # key "ende"
+                    elif event.key == 1073741901:  # key "ende"
                         self.__cursor_pos = 0
 
             # adding chars
@@ -210,33 +237,49 @@ class Entry(Button):
 
             # checks for self.strict_input and sets val to "" if condition does not apply
             if self.strict_input is not None and val != "":
-
                 if new_val == "-":
-                    if not (self.strict_input == "int+" or self.strict_input == "float+"):
+                    if not (
+                        self.strict_input == "int+" or self.strict_input == "float+"
+                    ):
                         self.__value__ = new_val
                 elif new_val.startswith("-"):
-                    if (self.strict_input == "int"     and new_val[1:].isnumeric()) or \
-                       (self.strict_input == "float"   and "".join(new_val[1:].split(".", 1)).isnumeric()) or \
-                       (self.strict_input == "str"     and new_val[1:].isalpha()):
+                    if (
+                        (self.strict_input == "int" and new_val[1:].isnumeric())
+                        or (
+                            self.strict_input == "float"
+                            and "".join(new_val[1:].split(".", 1)).isnumeric()
+                        )
+                        or (self.strict_input == "str" and new_val[1:].isalpha())
+                    ):
                         self.__value__ = new_val
                 else:
-                    if (self.strict_input == "int"     and new_val.isnumeric()) or \
-                       (self.strict_input == "float"   and "".join(new_val.split(".", 1)).isnumeric()) or \
-                       (self.strict_input == "str"     and new_val.isalpha()) or \
-                       (self.strict_input == "int+"    and new_val.isnumeric()) or \
-                       (self.strict_input == "float+"  and "".join(new_val.split(".", 1)).isnumeric()):
+                    if (
+                        (self.strict_input == "int" and new_val.isnumeric())
+                        or (
+                            self.strict_input == "float"
+                            and "".join(new_val.split(".", 1)).isnumeric()
+                        )
+                        or (self.strict_input == "str" and new_val.isalpha())
+                        or (self.strict_input == "int+" and new_val.isnumeric())
+                        or (
+                            self.strict_input == "float+"
+                            and "".join(new_val.split(".", 1)).isnumeric()
+                        )
+                    ):
                         self.__value__ = new_val
-                        
+
             else:
                 self.__value__ = new_val
 
-
-
             # dealing with self.max_chars
             if self.max_chars is not None:
-                self.__value__ = self.__value__[:self.max_chars]
+                self.__value__ = self.__value__[: self.max_chars]
 
-        if self.__value__ != self.__old_value__ or self.__cursor_pos != self.__old_cursor_pos or self.__old_state__ != self.__state__:
+        if (
+            self.__value__ != self.__old_value__
+            or self.__cursor_pos != self.__old_cursor_pos
+            or self.__old_state__ != self.__state__
+        ):
             if self.show_cursor:
                 if self.__old_state__ != self.__state__:
                     self.__cursor_pos = 0
@@ -275,7 +318,7 @@ class Entry(Button):
         self.__keyboard__.set_forbidden_characters(characters)
 
     def set_forbidden_characters_for_filename(self):
-        forbidden_chars_in_filenames = "<>:\"/\\|?* \n\t\r,.;"
+        forbidden_chars_in_filenames = '<>:"/\\|?* \n\t\r,.;'
         self.set_forbidden_characters(list(forbidden_chars_in_filenames))
 
     def clear(self):
@@ -302,7 +345,7 @@ class Entry(Button):
         Removes permanent state.
         """
         self.__permanent_state__ = None
-    
+
     def __refresh_text(self):
         if self.show_cursor and self.__state__:
             chars = list(self.__value__)

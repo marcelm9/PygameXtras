@@ -1,5 +1,4 @@
 class Coordinate:
-
     @staticmethod
     def parse(value):
         if isinstance(value, (tuple, list)):

@@ -125,7 +125,7 @@ def draw_rect_alpha(
     shape_surf = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)
     pygame.draw.rect(
         shape_surf,
-        Color.parse(color),
+        color,
         shape_surf.get_rect(),
         width,
         border_radius,
@@ -143,16 +143,16 @@ def draw_circle_alpha(
     center,
     radius,
     width: int = 0,
-    draw_top_right: bool = None,
-    draw_top_left: bool = None,
-    draw_bottom_left: bool = None,
-    draw_bottom_right: bool = None,
+    draw_top_right: bool = True,
+    draw_top_left: bool = True,
+    draw_bottom_left: bool = True,
+    draw_bottom_right: bool = True,
 ):
     target_rect = pygame.Rect(center, (0, 0)).inflate((radius * 2, radius * 2))
     shape_surf = pygame.Surface(target_rect.size, pygame.SRCALPHA)
     pygame.draw.circle(
         shape_surf,
-        Color.parse(color),
+        color,
         (radius, radius),
         radius,
         width,
@@ -169,9 +169,7 @@ def draw_polygon_alpha(surface, color, points):
     min_x, min_y, max_x, max_y = min(lx), min(ly), max(lx), max(ly)
     target_rect = pygame.Rect(min_x, min_y, max_x - min_x, max_y - min_y)
     shape_surf = pygame.Surface(target_rect.size, pygame.SRCALPHA)
-    pygame.draw.polygon(
-        shape_surf, Color.parse(color), [(x - min_x, y - min_y) for x, y in points]
-    )
+    pygame.draw.polygon(shape_surf, color, [(x - min_x, y - min_y) for x, y in points])
     surface.blit(shape_surf, target_rect)
 
 

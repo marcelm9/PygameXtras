@@ -138,7 +138,8 @@ class Colors:
     light_gray = (211, 211, 211)
     gainsboro = (220, 220, 220)
     white_smoke = (245, 245, 245)
-    
+
+
 color_dict = {
     "black": (0, 0, 0),
     "white": (255, 255, 255),

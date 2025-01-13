@@ -1,6 +1,7 @@
 import pygame
 from .Label import Label
 
+
 class Paragraph:
     def __init__(self, surface, text, size, xy: tuple, anchor="center", **kwargs):
         """
@@ -130,8 +131,12 @@ class Paragraph:
         assert type(xy) in [tuple, list], f"invalid argument for 'xy': {xy}"
         assert len(xy) == 2, f"invalid argument for 'xy': {xy}"
         self.xy = xy
-        assert anchor in "topleft,midtop,topright,midleft,center,midright,bottomleft,midbottom,bottomright".split(
-            ","), f"invalid argument for 'anchor': {anchor}"
+        assert (
+            anchor
+            in "topleft,midtop,topright,midleft,center,midright,bottomleft,midbottom,bottomright".split(
+                ","
+            )
+        ), f"invalid argument for 'anchor': {anchor}"
         self.anchor = anchor
 
         kw = kwargs
@@ -145,8 +150,12 @@ class Paragraph:
         # assertion
         if self.textcolor != None:
             assert type(self.textcolor) in [
-                tuple, list], f"invalid argument for 'textcolor': {self.textcolor}"
-            assert len(self.textcolor) == 3, f"invalid argument for 'textcolor': {self.textcolor}"
+                tuple,
+                list,
+            ], f"invalid argument for 'textcolor': {self.textcolor}"
+            assert (
+                len(self.textcolor) == 3
+            ), f"invalid argument for 'textcolor': {self.textcolor}"
 
         # backgroundcolor
         self.backgroundcolor = kw.get("backgroundcolor", None)
@@ -155,14 +164,19 @@ class Paragraph:
         # assertion
         if self.backgroundcolor != None:
             assert type(self.backgroundcolor) in [
-                tuple, list], f"invalid argument for 'backgroundcolor': {self.backgroundcolor}"
-            assert len(
-                self.backgroundcolor) == 3, f"invalid argument for 'backgroundcolor': {self.backgroundcolor}"
+                tuple,
+                list,
+            ], f"invalid argument for 'backgroundcolor': {self.backgroundcolor}"
+            assert (
+                len(self.backgroundcolor) == 3
+            ), f"invalid argument for 'backgroundcolor': {self.backgroundcolor}"
 
         # backgroundcolor backup
         self.backgroundcolor_init = kw.get("backgroundcolor", None)
         if self.backgroundcolor_init == None:
-            self.backgroundcolor_init = kw.get(self.ABBREVIATIONS["backgroundcolor"], None)
+            self.backgroundcolor_init = kw.get(
+                self.ABBREVIATIONS["backgroundcolor"], None
+            )
         # assertion completed by previous assertion
 
         # antialias
@@ -172,7 +186,9 @@ class Paragraph:
         if self.antialias == None:
             self.antialias = True
         # assertion
-        assert type(self.antialias) == bool, f"invalid argument for 'antialias': {self.antialias}"
+        assert (
+            type(self.antialias) == bool
+        ), f"invalid argument for 'antialias': {self.antialias}"
 
         # font
         self.font = kw.get("font", None)
@@ -192,9 +208,12 @@ class Paragraph:
             self.x_axis_addition = 0
         # assertion
         if self.x_axis_addition != None:
-            assert type(
-                self.x_axis_addition) == int, f"invalid argument for 'x_axis_addition': {self.x_axis_addition}"
-            assert self.x_axis_addition >= 0, f"invalid argument for 'x_axis_addition': {self.x_axis_addition}"
+            assert (
+                type(self.x_axis_addition) == int
+            ), f"invalid argument for 'x_axis_addition': {self.x_axis_addition}"
+            assert (
+                self.x_axis_addition >= 0
+            ), f"invalid argument for 'x_axis_addition': {self.x_axis_addition}"
 
         # y_axis_addition
         self.y_axis_addition = kw.get("y_axis_addition", None)
@@ -204,9 +223,12 @@ class Paragraph:
             self.y_axis_addition = 0
         # assertion
         if self.y_axis_addition != None:
-            assert type(
-                self.y_axis_addition) == int, f"invalid argument for 'y_axis_addition': {self.y_axis_addition}"
-            assert self.y_axis_addition >= 0, f"invalid argument for 'y_axis_addition': {self.y_axis_addition}"
+            assert (
+                type(self.y_axis_addition) == int
+            ), f"invalid argument for 'y_axis_addition': {self.y_axis_addition}"
+            assert (
+                self.y_axis_addition >= 0
+            ), f"invalid argument for 'y_axis_addition': {self.y_axis_addition}"
 
         # borderwidth
         self.borderwidth = kw.get("borderwidth", None)
@@ -216,8 +238,12 @@ class Paragraph:
             self.borderwidth = 0
         # assertion
         if self.borderwidth != None:
-            assert type(self.borderwidth) == int, f"invalid argument for 'borderwidth': {self.borderwidth}"
-            assert self.borderwidth >= 0, f"invalid argument for 'borderwidth': {self.borderwidth}"
+            assert (
+                type(self.borderwidth) == int
+            ), f"invalid argument for 'borderwidth': {self.borderwidth}"
+            assert (
+                self.borderwidth >= 0
+            ), f"invalid argument for 'borderwidth': {self.borderwidth}"
 
         # bordercolor
         self.bordercolor = kw.get("bordercolor", None)
@@ -228,8 +254,12 @@ class Paragraph:
         # assertion
         if self.bordercolor != None:
             assert type(self.bordercolor) in [
-                tuple, list], f"invalid argument for 'bordercolor': {self.bordercolor}"
-            assert len(self.bordercolor) == 3, f"invalid argument for 'bordercolor': {self.bordercolor}"
+                tuple,
+                list,
+            ], f"invalid argument for 'bordercolor': {self.bordercolor}"
+            assert (
+                len(self.bordercolor) == 3
+            ), f"invalid argument for 'bordercolor': {self.bordercolor}"
 
         # force_width
         self.force_width = kw.get("force_width", None)
@@ -237,8 +267,12 @@ class Paragraph:
             self.force_width = kw.get(self.ABBREVIATIONS["force_width"], None)
         # assertion
         if self.force_width != None:
-            assert type(self.force_width) == int, f"invalid argument for 'force_width': {self.force_width}"
-            assert self.force_width > 0, f"invalid argument for 'force_width': {self.force_width}"
+            assert (
+                type(self.force_width) == int
+            ), f"invalid argument for 'force_width': {self.force_width}"
+            assert (
+                self.force_width > 0
+            ), f"invalid argument for 'force_width': {self.force_width}"
 
         # force_height
         self.force_height = kw.get("force_height", None)
@@ -246,8 +280,12 @@ class Paragraph:
             self.force_height = kw.get(self.ABBREVIATIONS["force_height"], None)
         # assertion
         if self.force_height != None:
-            assert type(self.force_height) == int, f"invalid argument for 'force_height': {self.force_height}"
-            assert self.force_height > 0, f"invalid argument for 'force_height': {self.force_height}"
+            assert (
+                type(self.force_height) == int
+            ), f"invalid argument for 'force_height': {self.force_height}"
+            assert (
+                self.force_height > 0
+            ), f"invalid argument for 'force_height': {self.force_height}"
 
         # force_dim
         force_dim = kw.get("force_dim", None)
@@ -256,8 +294,7 @@ class Paragraph:
         # assertion
         if force_dim != None:
             if type(force_dim) not in [tuple, list] or len(force_dim) != 2:
-                raise ValueError(
-                    f"Invalid argument for 'force_dim': '{force_dim}'.")
+                raise ValueError(f"Invalid argument for 'force_dim': '{force_dim}'.")
             if force_dim[0] != None:
                 self.force_width = force_dim[0]
             if force_dim[1] != None:
@@ -270,7 +307,10 @@ class Paragraph:
         if self.binding_rect == None:
             self.binding_rect = 0
         # assertion
-        assert self.binding_rect in [0, 1], f"invalid argument for 'binding_rect': {self.binding_rect}"
+        assert self.binding_rect in [
+            0,
+            1,
+        ], f"invalid argument for 'binding_rect': {self.binding_rect}"
 
         # borderradius
         self.borderradius = kw.get("borderradius", None)
@@ -281,11 +321,16 @@ class Paragraph:
         # assertion
         elif type(self.borderradius) == int:
             self.borderradius = (
-                self.borderradius, self.borderradius, self.borderradius, self.borderradius)
+                self.borderradius,
+                self.borderradius,
+                self.borderradius,
+                self.borderradius,
+            )
         elif type(self.borderradius) in [tuple, list]:
             if len(self.borderradius) != 4:
                 raise ValueError(
-                    f"Invalid argument for 'borderradius': {self.borderradius}.")
+                    f"Invalid argument for 'borderradius': {self.borderradius}."
+                )
         else:
             raise Exception(f"invalid argument for 'borderradius': {self.borderradius}")
 
@@ -298,8 +343,12 @@ class Paragraph:
         # assertion
         if self.text_offset != None:
             assert type(self.text_offset) in [
-                tuple, list], f"invalid argument for 'text_offset': {self.text_offset}"
-            assert len(self.text_offset) == 2, f"invalid argument for 'text_offset': {self.text_offset}"
+                tuple,
+                list,
+            ], f"invalid argument for 'text_offset': {self.text_offset}"
+            assert (
+                len(self.text_offset) == 2
+            ), f"invalid argument for 'text_offset': {self.text_offset}"
 
         # image
         self.image = kw.get("image", None)
@@ -330,8 +379,12 @@ class Paragraph:
             self.text_binding = "center"
         # assertion
         if self.text_binding != None:
-            assert self.text_binding in "topleft,midtop,topright,midleft,center,midright,bottomleft,midbottom,bottomright".split(
-                ","), f"invalid argument for 'text_binding': {self.text_binding}"
+            assert (
+                self.text_binding
+                in "topleft,midtop,topright,midleft,center,midright,bottomleft,midbottom,bottomright".split(
+                    ","
+                )
+            ), f"invalid argument for 'text_binding': {self.text_binding}"
 
         # highlight
         self.highlight = kw.get("highlight", None)
@@ -339,18 +392,20 @@ class Paragraph:
             self.highlight = kw.get(self.ABBREVIATIONS["highlight"], None)
         # assertion
         if self.highlight != None:
-            assert type(self.backgroundcolor) in [
-                tuple, list], f"'backgroundcolor' (currently: {self.backgroundcolor}) must be defined when using 'highlight' (currently: {self.highlight})"
+            assert (
+                type(self.backgroundcolor) in [tuple, list]
+            ), f"'backgroundcolor' (currently: {self.backgroundcolor}) must be defined when using 'highlight' (currently: {self.highlight})"
             if self.highlight == True:
                 val = 50
                 self.highlight = (
                     min(self.backgroundcolor[0] + val, 255),
                     min(self.backgroundcolor[1] + val, 255),
-                    min(self.backgroundcolor[2] + val, 255)
+                    min(self.backgroundcolor[2] + val, 255),
                 )
             else:
-                assert type(self.highlight) in [
-                    tuple, list], f"unknown format for 'highlight': (type: {type(self.highlight)}, value: {self.highlight})"
+                assert (
+                    type(self.highlight) in [tuple, list]
+                ), f"unknown format for 'highlight': (type: {type(self.highlight)}, value: {self.highlight})"
 
         # active_area
         self.active_area = kw.get("active_area", None)
@@ -359,12 +414,16 @@ class Paragraph:
         # assertion
         if self.active_area != None:
             if type(self.active_area) in [tuple, list]:
-                assert len(self.active_area) == 4, f"invalid argument for 'active_area': {self.active_area}"
+                assert (
+                    len(self.active_area) == 4
+                ), f"invalid argument for 'active_area': {self.active_area}"
                 self.active_area = pygame.Rect(*self.active_area)
             elif type(self.active_area) == pygame.Rect:
                 pass
             else:
-                raise Exception(f"invalid argument for 'active_area': {self.active_area}")
+                raise Exception(
+                    f"invalid argument for 'active_area': {self.active_area}"
+                )
 
         self.kwargs = kwargs
         self.__create__()
@@ -375,9 +434,7 @@ class Paragraph:
         width = 0
         height = 0
         for string in strings:
-            l = Label(
-                self.surface, string, self.size, self.xy, **self.kwargs
-            )
+            l = Label(self.surface, string, self.size, self.xy, **self.kwargs)
             width = max(width, l.rect.width)
             height = max(height, l.rect.height)
 
@@ -396,22 +453,35 @@ class Paragraph:
         for count, string in enumerate(strings):
             self.__labels__.append(
                 Label(
-                    self.surface, string, self.size,
-                    (self.xy[0],
-                     self.xy[1] + height * count),
-                    self.anchor, **parsed_kwargs))
+                    self.surface,
+                    string,
+                    self.size,
+                    (self.xy[0], self.xy[1] + height * count),
+                    self.anchor,
+                    **parsed_kwargs,
+                )
+            )
 
-        fl = self.__labels__[0]     # first label
-        ll = self.__labels__[-1]    # last label
-        self.rect = pygame.Rect(fl.rect.left, fl.rect.top, ll.rect.right-fl.rect.left,
-                                ll.rect.bottom-fl.rect.top)
+        fl = self.__labels__[0]  # first label
+        ll = self.__labels__[-1]  # last label
+        self.rect = pygame.Rect(
+            fl.rect.left,
+            fl.rect.top,
+            ll.rect.right - fl.rect.left,
+            ll.rect.bottom - fl.rect.top,
+        )
 
     def draw(self):
         for label in self.__labels__:
             label.draw()
         if self.__borderwidth__ > 0:
-            pygame.draw.rect(self.surface, self.__bordercolor__, self.rect,
-                             self.__borderwidth__, *self.__borderradius__)
+            pygame.draw.rect(
+                self.surface,
+                self.__bordercolor__,
+                self.rect,
+                self.__borderwidth__,
+                *self.__borderradius__,
+            )
 
     def update_text(self, text: str):
         if str(text) != str(self.text):
@@ -421,26 +491,35 @@ class Paragraph:
     def update_colors(self, textcolor=None, backgroundcolor=None, bordercolor=None):
         if textcolor != None:
             assert type(textcolor) in [
-                tuple, list], f"invalid argument for 'textcolor': {textcolor}"
+                tuple,
+                list,
+            ], f"invalid argument for 'textcolor': {textcolor}"
             assert len(textcolor) == 3, f"invalid argument for 'textcolor': {textcolor}"
             self.textcolor = textcolor
             self.__create__()
         if backgroundcolor != None:
             assert type(backgroundcolor) in [
-                tuple, list], f"invalid argument for 'backgroundcolor': {backgroundcolor}"
-            assert len(
-                backgroundcolor) == 3, f"invalid argument for 'backgroundcolor': {backgroundcolor}"
+                tuple,
+                list,
+            ], f"invalid argument for 'backgroundcolor': {backgroundcolor}"
+            assert (
+                len(backgroundcolor) == 3
+            ), f"invalid argument for 'backgroundcolor': {backgroundcolor}"
             self.backgroundcolor = backgroundcolor
             self.backgroundcolor_init = backgroundcolor
             val = 50
             self.highlight = (
                 min(self.backgroundcolor[0] + val, 255),
                 min(self.backgroundcolor[1] + val, 255),
-                min(self.backgroundcolor[2] + val, 255)
+                min(self.backgroundcolor[2] + val, 255),
             )
             self.__create__()
         if bordercolor != None:
             assert type(bordercolor) in [
-                tuple, list], f"invalid argument for 'bordercolor': {bordercolor}"
-            assert len(bordercolor) == 3, f"invalid argument for 'bordercolor': {bordercolor}"
+                tuple,
+                list,
+            ], f"invalid argument for 'bordercolor': {bordercolor}"
+            assert (
+                len(bordercolor) == 3
+            ), f"invalid argument for 'bordercolor': {bordercolor}"
             self.bordercolor = bordercolor

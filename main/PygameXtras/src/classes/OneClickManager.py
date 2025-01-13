@@ -12,7 +12,7 @@ class OneClickManager:
 
     def get_hovering(self):
         return self.hovering
-    
+
     def set_clicked(self, status=True):
         self.clicked = bool(status)
 

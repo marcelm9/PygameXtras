@@ -2,7 +2,6 @@ from ..classes.Colors import color_dict
 
 
 class Color:
-
     @staticmethod
     def parse(value):
         if isinstance(value, (tuple, list)):

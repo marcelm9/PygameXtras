@@ -1,11 +1,11 @@
 import pygame
+
 pygame.init()
 
 from .psvg_util import *
 
 
 class PSVG:
-
     __color = (255, 255, 255)
     __size = 50
     __linewidth = 5

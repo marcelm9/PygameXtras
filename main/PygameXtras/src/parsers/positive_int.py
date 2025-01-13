@@ -1,5 +1,4 @@
 class PositiveInt:
-
     @staticmethod
     def parse(value):
         if isinstance(value, int):

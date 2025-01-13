@@ -1,5 +1,6 @@
 import pygame
 
+
 class Keyboard:
     def __init__(self):
         """
@@ -96,7 +97,7 @@ class Keyboard:
             pygame.K_z: "Z",
             pygame.K_0: "=",
             pygame.K_1: "!",
-            pygame.K_2: "\"",
+            pygame.K_2: '"',
             pygame.K_3: "§",
             pygame.K_4: "$",
             pygame.K_5: "%",
@@ -109,7 +110,7 @@ class Keyboard:
             pygame.K_MINUS: "_",
             pygame.K_HASH: "'",
             pygame.K_LESS: ">",
-            pygame.K_COMMA: ";"
+            pygame.K_COMMA: ";",
         }
         self.__forbidden_chars__ = []
 
@@ -126,7 +127,9 @@ class Keyboard:
         """
         Bans all given characters.
         """
-        assert type(characters) == list, f"invalid argument for 'characters': {characters}"
+        assert (
+            type(characters) == list
+        ), f"invalid argument for 'characters': {characters}"
         for char in characters:
             assert type(char) == str, f"invalid character '{char}'"
             assert len(char) == 1, f"invalid character '{char}'"

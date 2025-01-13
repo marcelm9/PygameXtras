@@ -1,5 +1,4 @@
 class Size4:
-
     @staticmethod
     def parse(value):
         if isinstance(value, (tuple, list)):

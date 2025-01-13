@@ -1,11 +1,15 @@
 class Collisions:
     @staticmethod
-    def circle_circle(c1_center: tuple, c1_radius: float, c2_center: tuple, c2_radius: float) -> bool:
-        return (c2_center[0] - c1_center[0]) ** 2 + (c2_center[1] - c1_center[1]) ** 2 <= (c1_radius + c2_radius) ** 2
+    def circle_circle(
+        c1_center: tuple, c1_radius: float, c2_center: tuple, c2_radius: float
+    ) -> bool:
+        return (c2_center[0] - c1_center[0]) ** 2 + (
+            c2_center[1] - c1_center[1]
+        ) ** 2 <= (c1_radius + c2_radius) ** 2
 
     @staticmethod
     def rect_rect(rect1: tuple, rect2: tuple) -> bool:
-        """ expects rects in the form of (x, y, width, height) """
+        """expects rects in the form of (x, y, width, height)"""
         x1, y1, w1, h1 = rect1
         x2, y2, w2, h2 = rect2
         if x1 + w1 < x2 or x2 + w2 < x1:
@@ -28,10 +32,12 @@ class Collisions:
         distance_y = cy - closest_y
 
         # If the distance is less than or equal to the circle's radius, there's an intersection
-        return distance_x ** 2 + distance_y ** 2 <= circle_radius ** 2
+        return distance_x**2 + distance_y**2 <= circle_radius**2
 
     @staticmethod
-    def line_circle(line_pos1: tuple, line_pos2: tuple, circle_center: tuple, circle_radius: float) -> bool:
+    def line_circle(
+        line_pos1: tuple, line_pos2: tuple, circle_center: tuple, circle_radius: float
+    ) -> bool:
         x1, y1 = line_pos1
         x2, y2 = line_pos2
         cx, cy = circle_center
@@ -57,7 +63,7 @@ class Collisions:
         distance_y = closest_y - cy
 
         # Check if the distance is less than or equal to the circle's radius
-        return distance_x ** 2 + distance_y ** 2 <= circle_radius ** 2
+        return distance_x**2 + distance_y**2 <= circle_radius**2
 
     @staticmethod
     def line_rect(line_pos1: tuple, line_pos2: tuple, rect: tuple) -> bool:
@@ -76,18 +82,22 @@ class Collisions:
         # Check if the line starts or ends inside the rectangle
         x1, y1 = line_pos1
         x2, y2 = line_pos2
-        if (rx <= x1 <= rx + rw and ry <= y1 <= ry + rh) or (rx <= x2 <= rx + rw and ry <= y2 <= ry + rh):
+        if (rx <= x1 <= rx + rw and ry <= y1 <= ry + rh) or (
+            rx <= x2 <= rx + rw and ry <= y2 <= ry + rh
+        ):
             return True
 
         return False
 
     @staticmethod
-    def polygon_circle(polygon: tuple, circle_center: tuple, circle_radius: float) -> bool:
+    def polygon_circle(
+        polygon: tuple, circle_center: tuple, circle_radius: float
+    ) -> bool:
         cx, cy = circle_center
 
         # Check if any of the polygon's vertices are within the circle
         for px, py in polygon:
-            if (px - cx) ** 2 + (py - cy) ** 2 <= circle_radius ** 2:
+            if (px - cx) ** 2 + (py - cy) ** 2 <= circle_radius**2:
                 return True
 
         # Check if any of the polygon's edges intersect the circle
@@ -136,7 +146,9 @@ class Collisions:
                 return True
 
         # Check if polygon2 is entirely inside polygon1 or vice versa
-        if Collisions._point_in_polygon(polygon1[0], polygon2) or Collisions._point_in_polygon(polygon2[0], polygon1):
+        if Collisions._point_in_polygon(
+            polygon1[0], polygon2
+        ) or Collisions._point_in_polygon(polygon2[0], polygon1):
             return True
 
         return False
@@ -148,13 +160,17 @@ class Collisions:
         for i in range(len(polygon)):
             xi, yi = polygon[i]
             xj, yj = polygon[(i + 1) % len(polygon)]
-            intersect = ((yi > y) != (yj > y)) and (x < (xj - xi) * (y - yi) / (yj - yi) + xi)
+            intersect = ((yi > y) != (yj > y)) and (
+                x < (xj - xi) * (y - yi) / (yj - yi) + xi
+            )
             if intersect:
                 inside = not inside
         return inside
 
     @staticmethod
-    def line_line(line1_pos1: tuple, line1_pos2: tuple, line2_pos1: tuple, line2_pos2: tuple) -> bool:
+    def line_line(
+        line1_pos1: tuple, line1_pos2: tuple, line2_pos1: tuple, line2_pos2: tuple
+    ) -> bool:
         def ccw(A, B, C):
             return (C[1] - A[1]) * (B[0] - A[0]) > (B[1] - A[1]) * (C[0] - A[0])
 

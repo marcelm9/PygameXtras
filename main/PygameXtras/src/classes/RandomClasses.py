@@ -9,9 +9,16 @@ from .Messagebox import Messagebox
 
 class ImageFrame:
     def __init__(
-            self, surface, width_height: tuple, xy: tuple, anchor="center", auto_scale=True, borderwidth=0,
-            bordercolor=(0, 0, 0),
-            borderradius=0):
+        self,
+        surface,
+        width_height: tuple,
+        xy: tuple,
+        anchor="center",
+        auto_scale=True,
+        borderwidth=0,
+        bordercolor=(0, 0, 0),
+        borderradius=0,
+    ):
         self.surface = surface
         self.width = width_height[0]
         self.height = width_height[1]
@@ -24,11 +31,16 @@ class ImageFrame:
         self.borderradius = borderradius
         if type(self.borderradius) == int:
             self.borderradius = (
-                self.borderradius, self.borderradius, self.borderradius, self.borderradius)
+                self.borderradius,
+                self.borderradius,
+                self.borderradius,
+                self.borderradius,
+            )
         elif type(self.borderradius) == tuple:
             if len(self.borderradius) != 4:
                 raise ValueError(
-                    f"Invalid argument for 'borderradius': {self.borderradius}.")
+                    f"Invalid argument for 'borderradius': {self.borderradius}."
+                )
 
         self.rect = pygame.Rect(0, 0, self.width, self.height)
 
@@ -57,8 +69,7 @@ class ImageFrame:
         Puts a pygame image into the frame.
         """
         if self.auto_scale == True:
-            self.image = pygame.transform.scale(
-                image, (self.width, self.height))
+            self.image = pygame.transform.scale(image, (self.width, self.height))
         else:
             self.image = image
             self.image_rect = self.image.get_rect()
@@ -74,11 +85,15 @@ class ImageFrame:
             self.surface.blit(self.image, self.rect)
         if self.borderwidth > 0:
             pygame.draw.rect(
-                self.surface, self.bordercolor, self.rect, self.borderwidth,
+                self.surface,
+                self.bordercolor,
+                self.rect,
+                self.borderwidth,
                 border_top_left_radius=self.borderradius[0],
                 border_top_right_radius=self.borderradius[1],
                 border_bottom_right_radius=self.borderradius[2],
-                border_bottom_left_radius=self.borderradius[3])
+                border_bottom_left_radius=self.borderradius[3],
+            )
 
 
 class PlayStation_Controller_Buttons:
@@ -105,11 +120,20 @@ class PlayStation_Controller_Buttons:
 
 
 class Switcheroo:
-    def __init__(self, surface, switcheroo_elements, previous_next_keys, lower_higher_keys,
-                 scrolling_cooldown, starting_index=0, bordercolor=(255, 255, 255),
-                 borderwidth=1, borderradius=0):
+    def __init__(
+        self,
+        surface,
+        switcheroo_elements,
+        previous_next_keys,
+        lower_higher_keys,
+        scrolling_cooldown,
+        starting_index=0,
+        bordercolor=(255, 255, 255),
+        borderwidth=1,
+        borderradius=0,
+    ):
         """
-        game = pygame game object 
+        game = pygame game object
         """
         self.surface = surface
         self.switcheroo_elements = switcheroo_elements
@@ -125,7 +149,8 @@ class Switcheroo:
 
         if starting_index not in range(len(switcheroo_elements)):
             raise ValueError(
-                f"Invalid argument for 'starting index': '{starting_index}'. Index out of range.")
+                f"Invalid argument for 'starting index': '{starting_index}'. Index out of range."
+            )
 
     def draw_box(self):
         """
@@ -134,9 +159,12 @@ class Switcheroo:
         active_element = self.switcheroo_elements[self.current_index]
         label = active_element.label_object
         pygame.draw.rect(
-            self.surface, self.bordercolor,
+            self.surface,
+            self.bordercolor,
             (label.rect.x, label.rect.y, label.rect.width, label.rect.height),
-            self.borderwidth, self.borderradius)
+            self.borderwidth,
+            self.borderradius,
+        )
 
     def update(self, keys_pressed):
         """
@@ -156,10 +184,18 @@ class Switcheroo:
         # handles global scrolling first #
         keys = keys_pressed
         if not (keys[self.previous_key] and keys[self.next_key]):
-            if keys[self.previous_key] and self.current_index > 0 and self.scrolling_cooldown_frames == 0:
+            if (
+                keys[self.previous_key]
+                and self.current_index > 0
+                and self.scrolling_cooldown_frames == 0
+            ):
                 self.current_index -= 1
                 self.scrolling_cooldown_frames = self.scrolling_cooldown
-            if keys[self.next_key] and self.current_index < len(self.switcheroo_elements)-1 and self.scrolling_cooldown_frames == 0:
+            if (
+                keys[self.next_key]
+                and self.current_index < len(self.switcheroo_elements) - 1
+                and self.scrolling_cooldown_frames == 0
+            ):
                 self.current_index += 1
                 self.scrolling_cooldown_frames = self.scrolling_cooldown
         # END OF BLOCK #
@@ -197,7 +233,15 @@ class Switcheroo:
 
 
 class Switcheroo_Element:
-    def __init__(self, label_object, variable, var_range, starting_variable, cooldown, custom_dict=None):
+    def __init__(
+        self,
+        label_object,
+        variable,
+        var_range,
+        starting_variable,
+        cooldown,
+        custom_dict=None,
+    ):
         self.label_object = label_object
         self.variable = variable
         self.var_range = var_range
@@ -217,7 +261,8 @@ class Switcheroo_Element:
                 break
         if found == False:
             raise ValueError(
-                f"The starting variable '{starting_variable}' could not be found in the variables range.")
+                f"The starting variable '{starting_variable}' could not be found in the variables range."
+            )
 
     def increase(self):
         """
@@ -243,7 +288,9 @@ class ImageImport_rotate:
         """
         self.assets_dir = assets_dir
 
-    def load(self, img_name, width, height, facing="right", colorkey=None, assets_dir=None):
+    def load(
+        self, img_name, width, height, facing="right", colorkey=None, assets_dir=None
+    ):
         if assets_dir != None:
             ad = assets_dir
         else:
@@ -251,8 +298,7 @@ class ImageImport_rotate:
         try:
             img = pygame.image.load(os.path.join(ad, img_name))
         except:
-            raise ValueError(
-                f"Could not find file '{img_name}' in '{ad}'.")
+            raise ValueError(f"Could not find file '{img_name}' in '{ad}'.")
         img = pygame.transform.scale(img, (int(width), int(height)))
         if colorkey != None:
             img.set_colorkey(colorkey)
@@ -292,7 +338,9 @@ class ImageImport_flip:
         """
         self.assets_dir = assets_dir
 
-    def load(self, img_name, width, height, facing="right", colorkey=None, assets_dir=None):
+    def load(
+        self, img_name, width, height, facing="right", colorkey=None, assets_dir=None
+    ):
         if assets_dir != None:
             ad = assets_dir
         else:
@@ -300,8 +348,7 @@ class ImageImport_flip:
         try:
             img = pygame.image.load(os.path.join(ad, img_name))
         except:
-            raise ValueError(
-                f"Could not find file '{img_name}' in '{ad}'.")
+            raise ValueError(f"Could not find file '{img_name}' in '{ad}'.")
         img = pygame.transform.scale(img, (int(width), int(height)))
         if colorkey != None:
             img.set_colorkey(colorkey)
@@ -334,13 +381,24 @@ class Tile:
                 self.rect.x + hitbox.x,
                 self.rect.y + hitbox.y,
                 hitbox.width,
-                hitbox.height
+                hitbox.height,
             )
 
 
 class FileDialogElement:
-    def __init__(self, surface, name: str, count: int, role: str, topleft_pos, dimensions, textsize, textcolor,
-                 backgroundcolor2, borderwidth):
+    def __init__(
+        self,
+        surface,
+        name: str,
+        count: int,
+        role: str,
+        topleft_pos,
+        dimensions,
+        textsize,
+        textcolor,
+        backgroundcolor2,
+        borderwidth,
+    ):
         self.name = name
         self.role = role
 
@@ -350,11 +408,28 @@ class FileDialogElement:
             bgc = backgroundcolor2
 
         self.b_name = Button(
-            surface, name, textsize, (0, count * textsize),
-            "topleft", fd=(dimensions[0], textsize),
-            tc=textcolor, bgc=bgc, hl=True, bR=1, tb="midleft", to=(5, 1),
-            aA=(topleft_pos[0] + 0, topleft_pos[1] + textsize, dimensions[0],
-                dimensions[1] - textsize - 50), bc=(0, 0, 200), bw=borderwidth, br=1)
+            surface,
+            name,
+            textsize,
+            (0, count * textsize),
+            "topleft",
+            fd=(dimensions[0], textsize),
+            tc=textcolor,
+            bgc=bgc,
+            hl=True,
+            bR=1,
+            tb="midleft",
+            to=(5, 1),
+            aA=(
+                topleft_pos[0] + 0,
+                topleft_pos[1] + textsize,
+                dimensions[0],
+                dimensions[1] - textsize - 50,
+            ),
+            bc=(0, 0, 200),
+            bw=borderwidth,
+            br=1,
+        )
 
     def update(self, mouse_events, _offset):
         if self.b_name.update(mouse_events, offset=_offset):
@@ -367,12 +442,17 @@ class FileDialogElement:
 
 class FileDialog:
     def __init__(
-            self, surface, pygame_clock, fps, topleft_pos=(100, 50),
-            dimensions=(600, 400), textsize=25,
-            textcolor=(0, 0, 0),
-            backgroundcolor1=(150, 180, 240),
-            backgroundcolor2=(128, 128, 128)):
-
+        self,
+        surface,
+        pygame_clock,
+        fps,
+        topleft_pos=(100, 50),
+        dimensions=(600, 400),
+        textsize=25,
+        textcolor=(0, 0, 0),
+        backgroundcolor1=(150, 180, 240),
+        backgroundcolor2=(128, 128, 128),
+    ):
         self.blitting_surface = surface
         self.pygame_clock = pygame_clock
         self.fps = fps
@@ -386,64 +466,161 @@ class FileDialog:
         self.backgroundcolor1 = backgroundcolor1
         self.backgroundcolor2 = backgroundcolor2
 
-
         w, h = self.dimensions
-        self.center = (self.topleft_pos[0]+w//2, self.topleft_pos[1]+h//2)
+        self.center = (self.topleft_pos[0] + w // 2, self.topleft_pos[1] + h // 2)
         self.surface = pygame.Surface((w, h))
         self.surface.fill(self.backgroundcolor1)
-        self.messagebox = Messagebox(self.blitting_surface, self.pygame_clock, self.fps, (topleft_pos[0]+dimensions[0]//2, topleft_pos[1]+dimensions[1]//2))
+        self.messagebox = Messagebox(
+            self.blitting_surface,
+            self.pygame_clock,
+            self.fps,
+            (topleft_pos[0] + dimensions[0] // 2, topleft_pos[1] + dimensions[1] // 2),
+        )
         self.l_path = Label(
-            self.surface, "", textsize, (0, 0),
-            "topleft", tc=self.textcolor, bgc=self.backgroundcolor1, br=1, tb="midright", to=(-4, 2),
-            bR=1, fd=(self.dimensions[0],
-                      textsize),
-            bw=1)
+            self.surface,
+            "",
+            textsize,
+            (0, 0),
+            "topleft",
+            tc=self.textcolor,
+            bgc=self.backgroundcolor1,
+            br=1,
+            tb="midright",
+            to=(-4, 2),
+            bR=1,
+            fd=(self.dimensions[0], textsize),
+            bw=1,
+        )
         self.b_back = Button(
-            self.surface, "<", int(textsize*1.5), (0, 0),
-            "topleft", tc=self.textcolor, fd=(textsize, textsize),
-            bgc=self.backgroundcolor1, hl=True, bw=1, bR=1, to=(0, -3))
+            self.surface,
+            "<",
+            int(textsize * 1.5),
+            (0, 0),
+            "topleft",
+            tc=self.textcolor,
+            fd=(textsize, textsize),
+            bgc=self.backgroundcolor1,
+            hl=True,
+            bw=1,
+            bR=1,
+            to=(0, -3),
+        )
 
-        self.b_cancel = Button(self.surface, "Cancel", textsize,
-                               (11, self.dimensions[1] - int(self.textsize * 1.5) // 2),
-                               "midleft", tc=self.textcolor, bgc=self.backgroundcolor1, bR=1, xad=10,
-                               fh=textsize, bw=3, br=1, hl=True)
-        self.l_selected = Label(self.surface, "Selected:", textsize,
-                                vect_sum(self.b_cancel.midright, (10, 0)),
-                                "midleft", bR=1, tc=self.textcolor, bgc=self.backgroundcolor1)
+        self.b_cancel = Button(
+            self.surface,
+            "Cancel",
+            textsize,
+            (11, self.dimensions[1] - int(self.textsize * 1.5) // 2),
+            "midleft",
+            tc=self.textcolor,
+            bgc=self.backgroundcolor1,
+            bR=1,
+            xad=10,
+            fh=textsize,
+            bw=3,
+            br=1,
+            hl=True,
+        )
+        self.l_selected = Label(
+            self.surface,
+            "Selected:",
+            textsize,
+            vect_sum(self.b_cancel.midright, (10, 0)),
+            "midleft",
+            bR=1,
+            tc=self.textcolor,
+            bgc=self.backgroundcolor1,
+        )
         self.l_selected_name = Label(
-            self.surface, "", textsize, vect_sum(self.l_selected.midright, (10, 0)),
-            "midleft", bR=1, tc=self.textcolor, bgc=self.backgroundcolor1)
-        self.b_open = Button(self.surface, "Open", textsize,
-                             (self.dimensions[0] - 11, self.b_cancel.rect.centery),
-                             "midright", tc=self.textcolor, bgc=self.backgroundcolor1, bR=1, xad=10,
-                             fh=textsize, bw=3, br=1, hl=True)
+            self.surface,
+            "",
+            textsize,
+            vect_sum(self.l_selected.midright, (10, 0)),
+            "midleft",
+            bR=1,
+            tc=self.textcolor,
+            bgc=self.backgroundcolor1,
+        )
+        self.b_open = Button(
+            self.surface,
+            "Open",
+            textsize,
+            (self.dimensions[0] - 11, self.b_cancel.rect.centery),
+            "midright",
+            tc=self.textcolor,
+            bgc=self.backgroundcolor1,
+            bR=1,
+            xad=10,
+            fh=textsize,
+            bw=3,
+            br=1,
+            hl=True,
+        )
 
         self.b_req_ending = Button(
-            self.surface, "!", textsize, vect_sum(self.b_open.midleft, (-5, 0)),
-            "midright", tc=(0,0,0), bR=1, f="bauhaus", to=(0, 0),
-            br=1, fd=(textsize, textsize),
-            bw=3, hl=True, bgc=(255, 80, 80))
+            self.surface,
+            "!",
+            textsize,
+            vect_sum(self.b_open.midleft, (-5, 0)),
+            "midright",
+            tc=(0, 0, 0),
+            bR=1,
+            f="bauhaus",
+            to=(0, 0),
+            br=1,
+            fd=(textsize, textsize),
+            bw=3,
+            hl=True,
+            bgc=(255, 80, 80),
+        )
 
     def error(self, error_message: str):
-        surface = pygame.Surface((self.textsize*10, self.textsize*4))
+        surface = pygame.Surface((self.textsize * 10, self.textsize * 4))
         surface.fill(self.backgroundcolor2)
         rect = surface.get_rect()
         rect.center = self.center
 
-        l_error = Label(surface, "Error", self.textsize, (0, 0), "topleft",
-                        bR=1, tc=self.textcolor, fh=self.textsize, to=(7, 1))
-        l_error_name = Label(surface, error_message, self.textsize,
-                             (surface.get_width() // 2, int(self.textsize * 1.7)),
-                             "midtop", tc=self.textcolor)
+        l_error = Label(
+            surface,
+            "Error",
+            self.textsize,
+            (0, 0),
+            "topleft",
+            bR=1,
+            tc=self.textcolor,
+            fh=self.textsize,
+            to=(7, 1),
+        )
+        l_error_name = Label(
+            surface,
+            error_message,
+            self.textsize,
+            (surface.get_width() // 2, int(self.textsize * 1.7)),
+            "midtop",
+            tc=self.textcolor,
+        )
         b_okay = Button(
-            surface, "OK", self.textsize, (surface.get_width() - 7, surface.get_height() - 7),
-            "bottomright", tc=self.textcolor, bgc=self.backgroundcolor2, hl=True, xad=5, yad=3, bR=1, bw=2,
-            br=1)
+            surface,
+            "OK",
+            self.textsize,
+            (surface.get_width() - 7, surface.get_height() - 7),
+            "bottomright",
+            tc=self.textcolor,
+            bgc=self.backgroundcolor2,
+            hl=True,
+            xad=5,
+            yad=3,
+            bR=1,
+            bw=2,
+            br=1,
+        )
 
         run = True
         while run:
             event_list = pygame.event.get()
-            mouse_events = [event for event in event_list if event.type == pygame.MOUSEBUTTONUP]
+            mouse_events = [
+                event for event in event_list if event.type == pygame.MOUSEBUTTONUP
+            ]
             for event in event_list:
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -456,7 +633,13 @@ class FileDialog:
             l_error.draw()
             l_error_name.draw()
             b_okay.draw()
-            pygame.draw.line(surface, (0, 0, 0), (0, self.textsize), (self.dimensions[0], self.textsize), 3)
+            pygame.draw.line(
+                surface,
+                (0, 0, 0),
+                (0, self.textsize),
+                (self.dimensions[0], self.textsize),
+                3,
+            )
             self.blitting_surface.blit(surface, rect)
             pygame.draw.rect(self.blitting_surface, (0, 0, 0), rect, 3, 1, 1, 1, 1)
 
@@ -466,14 +649,20 @@ class FileDialog:
             pygame.display.flip()
             self.pygame_clock.tick(self.fps)
 
-    def ask_filename(self, starting_path, required_ending: str = None, dim_background: bool = True) -> str:
+    def ask_filename(
+        self, starting_path, required_ending: str = None, dim_background: bool = True
+    ) -> str:
         if not os.path.exists(starting_path):
             raise Exception(f"Given path does not exist. ({starting_path})")
         if required_ending != None:
-            assert type(required_ending) == str, f"invalid argument for 'required_ending': {required_ending}"
+            assert (
+                type(required_ending) == str
+            ), f"invalid argument for 'required_ending': {required_ending}"
 
         if dim_background:
-            self.blitting_surface.fill([60 for i in range(3)], special_flags=pygame.BLEND_MULT)
+            self.blitting_surface.fill(
+                [60 for i in range(3)], special_flags=pygame.BLEND_MULT
+            )
 
         current_path = starting_path
         old_path = ""
@@ -490,7 +679,9 @@ class FileDialog:
         run = True
         while run:
             event_list = pygame.event.get()
-            mouse_events = [event for event in event_list if event.type == pygame.MOUSEBUTTONUP]
+            mouse_events = [
+                event for event in event_list if event.type == pygame.MOUSEBUTTONUP
+            ]
             for event in event_list:
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -499,7 +690,12 @@ class FileDialog:
                     if event.key == pygame.K_ESCAPE:
                         run = False
                 elif max_scroll > 0 and event.type == pygame.MOUSEWHEEL:
-                    scroll = max(min(max_scroll, scroll + event.y*-1*int(self.textsize*1.5)), 0)
+                    scroll = max(
+                        min(
+                            max_scroll, scroll + event.y * -1 * int(self.textsize * 1.5)
+                        ),
+                        0,
+                    )
 
             # update
             if current_path != old_path or selected != old_selected:
@@ -510,7 +706,9 @@ class FileDialog:
                     old_path = current_path
                     buttons_list = []
                     MAX_ELEMENTS = 80
-                    length = min(len(os.listdir(current_path)), MAX_ELEMENTS) * self.textsize
+                    length = (
+                        min(len(os.listdir(current_path)), MAX_ELEMENTS) * self.textsize
+                    )
                     dir_surf = pygame.Surface((self.dimensions[0], length))
                     for count, path in enumerate(directory_scan):
                         if count == MAX_ELEMENTS:
@@ -526,11 +724,27 @@ class FileDialog:
                             bw = 3
                         else:
                             bw = 0
-                        buttons_list.append(FileDialogElement(dir_surf, path.name, count, role, self.topleft_pos,
-                                                              self.dimensions, self.textsize, self.textcolor, self.backgroundcolor2, bw))
+                        buttons_list.append(
+                            FileDialogElement(
+                                dir_surf,
+                                path.name,
+                                count,
+                                role,
+                                self.topleft_pos,
+                                self.dimensions,
+                                self.textsize,
+                                self.textcolor,
+                                self.backgroundcolor2,
+                                bw,
+                            )
+                        )
                     if selected == old_selected:
                         scroll = 0
-                        max_scroll = length - (self.dimensions[1]-self.textsize-int(self.textsize*1.5))
+                        max_scroll = length - (
+                            self.dimensions[1]
+                            - self.textsize
+                            - int(self.textsize * 1.5)
+                        )
                 except PermissionError:
                     self.error("Permission denied.")
                     current_path = os.path.split(current_path)[0]
@@ -542,13 +756,20 @@ class FileDialog:
             # updating each button
             for element in buttons_list:
                 if element.update(
-                    mouse_events, _offset=(self.topleft_pos[0],
-                                           self.topleft_pos[1] + self.textsize + scroll)):
+                    mouse_events,
+                    _offset=(
+                        self.topleft_pos[0],
+                        self.topleft_pos[1] + self.textsize + scroll,
+                    ),
+                ):
                     if element.role == "dir":
                         current_path = os.path.join(current_path, element.name)
                     elif element.role == "file":
-                        if required_ending == None or required_ending != None and element.name.endswith(
-                                required_ending):
+                        if (
+                            required_ending == None
+                            or required_ending != None
+                            and element.name.endswith(required_ending)
+                        ):
                             selected[0] = os.path.join(current_path, element.name)
                             selected[1] = element.name
 
@@ -563,9 +784,13 @@ class FileDialog:
                     return selected[0]
                 else:
                     return None
-            
-            if required_ending != None and self.b_req_ending.update(mouse_events, offset=self.topleft_pos):
-                self.messagebox.show_message(f"Required file ending: '{required_ending}'", False)
+
+            if required_ending != None and self.b_req_ending.update(
+                mouse_events, offset=self.topleft_pos
+            ):
+                self.messagebox.show_message(
+                    f"Required file ending: '{required_ending}'", False
+                )
 
             # ? DRAWING ? #
             self.surface.fill(self.backgroundcolor1)
@@ -573,27 +798,43 @@ class FileDialog:
             # drawing on dir_surf
             for button in buttons_list:
                 button.draw()
-            self.surface.blit(dir_surf, (0, self.textsize-scroll))
+            self.surface.blit(dir_surf, (0, self.textsize - scroll))
             self.l_path.draw()
             self.b_back.draw()
             pygame.draw.rect(
-                self.surface, (0, 0, 0),
-                (0, self.textsize, self.dimensions[0],
-                 self.dimensions[1] - self.textsize - int(self.textsize * 1.5)),
-                1)
+                self.surface,
+                (0, 0, 0),
+                (
+                    0,
+                    self.textsize,
+                    self.dimensions[0],
+                    self.dimensions[1] - self.textsize - int(self.textsize * 1.5),
+                ),
+                1,
+            )
 
             # bottom part
             pygame.draw.rect(
-                self.surface, self.backgroundcolor1,
-                (0, self.dimensions[1] - int(self.textsize * 1.5),
-                 self.dimensions[0],
-                 int(self.textsize * 1.5)))
+                self.surface,
+                self.backgroundcolor1,
+                (
+                    0,
+                    self.dimensions[1] - int(self.textsize * 1.5),
+                    self.dimensions[0],
+                    int(self.textsize * 1.5),
+                ),
+            )
             pygame.draw.rect(
-                self.surface, (0, 0, 0),
-                (0, self.dimensions[1] - int(self.textsize * 1.5),
-                 self.dimensions[0],
-                 int(self.textsize * 1.5)),
-                1)
+                self.surface,
+                (0, 0, 0),
+                (
+                    0,
+                    self.dimensions[1] - int(self.textsize * 1.5),
+                    self.dimensions[0],
+                    int(self.textsize * 1.5),
+                ),
+                1,
+            )
             self.b_cancel.draw()
             self.l_selected.draw()
             self.l_selected_name.draw()
@@ -604,10 +845,20 @@ class FileDialog:
             # at the end
             self.blitting_surface.blit(self.surface, self.topleft_pos)
             pygame.draw.rect(
-                self.blitting_surface, (0, 0, 0),
-                (self.topleft_pos[0] - 5, self.topleft_pos[1] - 5, self.dimensions[0] + 10, self.dimensions
-                 [1] + 10),
-                5, 1, 1, 1, 1)
+                self.blitting_surface,
+                (0, 0, 0),
+                (
+                    self.topleft_pos[0] - 5,
+                    self.topleft_pos[1] - 5,
+                    self.dimensions[0] + 10,
+                    self.dimensions[1] + 10,
+                ),
+                5,
+                1,
+                1,
+                1,
+                1,
+            )
 
             pygame.display.flip()
             self.pygame_clock.tick(self.fps)

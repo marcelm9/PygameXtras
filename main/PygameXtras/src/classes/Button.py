@@ -1,6 +1,7 @@
 import pygame
 from .Label import Label
 
+
 class Button(Label):
     def __init__(self, surface, text, size, xy: tuple, anchor="center", **kwargs):
         """
@@ -39,7 +40,10 @@ class Button(Label):
         assert len(offset) == 2, f"invalid argument for 'offset: {offset}"
 
         # stops if one_click_manager tells that a click has taken place elsewhere
-        if self.one_click_manager != None and self.one_click_manager.get_clicked() == True:
+        if (
+            self.one_click_manager != None
+            and self.one_click_manager.get_clicked() == True
+        ):
             self.__is_touching__ = False
             return False
 
@@ -52,14 +56,20 @@ class Button(Label):
                 pos[0] -= offset[0]
                 pos[1] -= offset[1]
                 if button == None:
-                    if self.x_range[0] < pos[0] < self.x_range[1] and self.y_range[0] < pos[1] < self.y_range[1]:
+                    if (
+                        self.x_range[0] < pos[0] < self.x_range[1]
+                        and self.y_range[0] < pos[1] < self.y_range[1]
+                    ):
                         if self.one_click_manager != None:
                             self.one_click_manager.set_clicked()
                         return True
 
                 elif 0 < button < 4:
                     if button == event.button:
-                        if self.x_range[0] < pos[0] < self.x_range[1] and self.y_range[0] < pos[1] < self.y_range[1]:
+                        if (
+                            self.x_range[0] < pos[0] < self.x_range[1]
+                            and self.y_range[0] < pos[1] < self.y_range[1]
+                        ):
                             if self.one_click_manager != None:
                                 self.one_click_manager.set_clicked()
                             return True
@@ -67,7 +77,10 @@ class Button(Label):
                 else:
                     raise ValueError(f"invalid argument for 'button': {button}")
 
-        if self.one_click_manager != None and self.one_click_manager.get_hovering() == True:
+        if (
+            self.one_click_manager != None
+            and self.one_click_manager.get_hovering() == True
+        ):
             self.__is_touching__ = False
             return False
 
@@ -78,7 +91,10 @@ class Button(Label):
             return False
         pos[0] -= offset[0]
         pos[1] -= offset[1]
-        if self.x_range[0] < pos[0] < self.x_range[1] and self.y_range[0] < pos[1] < self.y_range[1]:
+        if (
+            self.x_range[0] < pos[0] < self.x_range[1]
+            and self.y_range[0] < pos[1] < self.y_range[1]
+        ):
             if self.highlight != None:
                 self.__is_touching__ = True
             if self.one_click_manager != None:

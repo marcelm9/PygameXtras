@@ -27,8 +27,9 @@ class CustomTemplate:
             local_kwargs.pop("size"),
             local_kwargs.pop("xy"),
             local_kwargs.pop("anchor"),
-            **local_kwargs)
-    
+            **local_kwargs,
+        )
+
     def button(self, **kwargs) -> Button:
         local_kwargs = self.__kwargs.copy()
         for k, v in kwargs.items():
@@ -46,8 +47,9 @@ class CustomTemplate:
             local_kwargs.pop("size"),
             local_kwargs.pop("xy"),
             local_kwargs.pop("anchor"),
-            **local_kwargs)
-    
+            **local_kwargs,
+        )
+
     def entry(self, **kwargs) -> Entry:
         local_kwargs = self.__kwargs.copy()
         for k, v in kwargs.items():
@@ -65,4 +67,5 @@ class CustomTemplate:
             local_kwargs.pop("size"),
             local_kwargs.pop("xy"),
             local_kwargs.pop("anchor"),
-            **local_kwargs)
+            **local_kwargs,
+        )

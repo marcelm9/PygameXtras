@@ -1,5 +1,4 @@
 class PositiveFloat:
-
     @staticmethod
     def parse(value):
         if isinstance(value, (int, float)):

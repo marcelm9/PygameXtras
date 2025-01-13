@@ -12,7 +12,6 @@ from .OneClickManager import OneClickManager
 
 
 class Label:
-
     def __init__(
         self,
         surface: pygame.Surface | None,
@@ -170,12 +169,21 @@ class Label:
             "font_file": "ff",
         }
 
+        for k in kwargs.keys():
+            if (
+                k not in self.ABBREVIATIONS.keys()
+                and k not in self.ABBREVIATIONS.values()
+            ):
+                raise ValueError(f"Unrecognized keyword argument: {k}")
+
         # inserting template (if exists)
         template = kwargs.get("template", None)
         if template is None:
             template = kwargs.get(self.ABBREVIATIONS["template"], None)
         if template is not None:
-            assert isinstance(template, dict), f"invalid argument for 'template': {template}"
+            assert isinstance(
+                template, dict
+            ), f"invalid argument for 'template': {template}"
             for k in template.keys():
                 if not k in kwargs.keys():
                     kwargs[k] = template[k]
@@ -526,7 +534,6 @@ class Label:
         self.__create__()
 
     def __create__(self):
-
         font = pygame.font.Font(self.font_path, self.size)
         font.set_bold(self.bold)
         font.set_italic(self.italic)

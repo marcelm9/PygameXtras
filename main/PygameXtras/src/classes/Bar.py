@@ -240,7 +240,10 @@ class Bar:
             elif fill == 1:
                 self.__r_filling.width = self.__r_foreground.width
             else:
-                self.__r_filling.width = min(self.__r_foreground.width - 1, max(1, self.__r_foreground.width * fill))
+                self.__r_filling.width = min(
+                    self.__r_foreground.width - 1,
+                    max(1, self.__r_foreground.width * fill),
+                )
         elif self.__fill_start in ["top", "bottom"]:
             self.__r_filling.height = self.__r_foreground.height * fill
         self.__update_filling_pos()

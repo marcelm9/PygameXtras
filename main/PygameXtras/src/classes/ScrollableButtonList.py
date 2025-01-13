@@ -1,13 +1,19 @@
 import pygame
 from .Button import Button
 
+
 class ScrollableButtonList:
     def __init__(
-            self, surface, target_rect: tuple[int, int, int, int], scrolling_speed: int, backgroundcolor: tuple = (0,0,0)):
+        self,
+        surface,
+        target_rect: tuple[int, int, int, int],
+        scrolling_speed: int,
+        backgroundcolor: tuple = (0, 0, 0),
+    ):
         """
         target_rect specifies the area in which buttons will be visible
 
-        to update the buttons, use: 
+        to update the buttons, use:
             for b in self.get_buttons():
                 if b.update(event_list, offset=self.get_offset()):
                     ...
@@ -29,37 +35,59 @@ class ScrollableButtonList:
 
         # only vertical scroll
         # TODO: assertions
-        assert type(surface) == pygame.Surface, f"invalid argument for 'surface': {surface}"
+        assert (
+            type(surface) == pygame.Surface
+        ), f"invalid argument for 'surface': {surface}"
         self.__main_surface__ = surface
         assert type(target_rect) in [tuple, list, pygame.Rect]
         if type(target_rect) in [tuple, list]:
-            assert len(target_rect) == 4, f"invalid argument for 'target_rect': {target_rect}"
+            assert (
+                len(target_rect) == 4
+            ), f"invalid argument for 'target_rect': {target_rect}"
         self.__target_rect__ = pygame.Rect(target_rect)
         self.__surface__ = pygame.Surface((self.__target_rect__.width, 0))
 
-        assert type(scrolling_speed) == int, f"invalid argument for 'scrolling_speed': {scrolling_speed}"
-        assert scrolling_speed > 0, f"invalid argument for 'scrolling_speed': {scrolling_speed}"
+        assert (
+            type(scrolling_speed) == int
+        ), f"invalid argument for 'scrolling_speed': {scrolling_speed}"
+        assert (
+            scrolling_speed > 0
+        ), f"invalid argument for 'scrolling_speed': {scrolling_speed}"
         self.__scrolling_speed__ = scrolling_speed
 
-        assert type(backgroundcolor) in [tuple, list], f"invalid argument for 'backgroundcolor': {backgroundcolor}"
-        assert len(backgroundcolor) == 3, f"invalid argument for 'backgroundcolor': {backgroundcolor}"
-        self.__backgroundcolor__ = backgroundcolor        
+        assert type(backgroundcolor) in [
+            tuple,
+            list,
+        ], f"invalid argument for 'backgroundcolor': {backgroundcolor}"
+        assert (
+            len(backgroundcolor) == 3
+        ), f"invalid argument for 'backgroundcolor': {backgroundcolor}"
+        self.__backgroundcolor__ = backgroundcolor
 
         self.__scroll__ = 0
-        self.__max_scroll__ = self.__surface__.get_height() - self.__target_rect__.height #! has to be reconfigured if anything changes
+        self.__max_scroll__ = (
+            self.__surface__.get_height() - self.__target_rect__.height
+        )  #! has to be reconfigured if anything changes
 
         self.__button_names__: list[str] = []
         self.__old_button_names__: list[str] = []
         self.__buttons__: list[Button] = []
 
-        self.__int_surf__ = pygame.Surface((10, 10)) # internal surface
+        self.__int_surf__ = pygame.Surface((10, 10))  # internal surface
 
     def set_button_style(self, size: int, **kwargs):
-        """ dont forget about the backgroundcolor and the height """
+        """dont forget about the backgroundcolor and the height"""
         try:
-            Button(self.__int_surf__, "Test", size=size, xy=(0,0), anchor="topleft", **kwargs)
+            Button(
+                self.__int_surf__,
+                "Test",
+                size=size,
+                xy=(0, 0),
+                anchor="topleft",
+                **kwargs,
+            )
             self.__size__ = size
-            kwargs["bR"] = 1 # important !
+            kwargs["bR"] = 1  # important !
             kwargs["fw"] = self.__target_rect__.width
             kwargs["aA"] = self.__target_rect__
             self.__style__ = kwargs
@@ -74,11 +102,11 @@ class ScrollableButtonList:
             self.add_button(button)
 
     def clear_buttons(self):
-        """ removes all buttons """
+        """removes all buttons"""
         self.__button_names__ = []
-    
+
     def reset_scroll(self):
-        """ resets the scroll value """
+        """resets the scroll value"""
         self.__scroll__ = 0
 
     def set_buttons(self, button_names: list[str]):
@@ -86,7 +114,7 @@ class ScrollableButtonList:
         self.add_buttons(button_names)
 
     def update_surface(self):
-        """ updates the surface if something has changed """
+        """updates the surface if something has changed"""
 
         if self.__old_button_names__ != self.__button_names__:
             self.__old_button_names__ = self.__button_names__[:]
@@ -95,12 +123,29 @@ class ScrollableButtonList:
             for count, name in enumerate(self.__button_names__):
                 if count == 0:
                     self.__buttons__.append(
-                        Button(self.__int_surf__, name, self.__size__, (0,0), "topleft", **self.__style__)
+                        Button(
+                            self.__int_surf__,
+                            name,
+                            self.__size__,
+                            (0, 0),
+                            "topleft",
+                            **self.__style__,
+                        )
                     )
                     borderwidth = self.__buttons__[0].borderwidth
                 else:
                     self.__buttons__.append(
-                        Button(self.__int_surf__, name, self.__size__, (self.__buttons__[count-1].left, self.__buttons__[count-1].bottom-borderwidth), "topleft", **self.__style__)
+                        Button(
+                            self.__int_surf__,
+                            name,
+                            self.__size__,
+                            (
+                                self.__buttons__[count - 1].left,
+                                self.__buttons__[count - 1].bottom - borderwidth,
+                            ),
+                            "topleft",
+                            **self.__style__,
+                        )
                     )
 
             # determining the surface height
@@ -109,24 +154,31 @@ class ScrollableButtonList:
             else:
                 lowest = 0
             self.__surface__ = pygame.Surface((self.__target_rect__.width, lowest))
-            
-            self.__max_scroll__ = self.__surface__.get_height() - self.__target_rect__.height
+
+            self.__max_scroll__ = (
+                self.__surface__.get_height() - self.__target_rect__.height
+            )
             if self.__max_scroll__ > 0 and self.__scroll__ > self.__max_scroll__:
                 self.__scroll__ = self.__max_scroll__
             elif self.__max_scroll__ <= 0:
                 self.__scroll__ = 0
 
     def update_scroll(self, event_list):
-        """ updates the scroll value """
-        
+        """updates the scroll value"""
+
         if self.__max_scroll__ > 0:
             for event in event_list:
                 if event.type == pygame.MOUSEWHEEL:
                     self.__scroll__ = max(
-                        min(self.__max_scroll__, self.__scroll__ + event.y*-1*self.__scrolling_speed__), 0)
+                        min(
+                            self.__max_scroll__,
+                            self.__scroll__ + event.y * -1 * self.__scrolling_speed__,
+                        ),
+                        0,
+                    )
 
     def update(self, event_list):
-        """ updates surface and scroll """
+        """updates surface and scroll"""
         self.update_surface()
         self.update_scroll(event_list)
 
@@ -137,8 +189,10 @@ class ScrollableButtonList:
         tr = self.__target_rect__
         pygame.draw.rect(self.__main_surface__, self.__backgroundcolor__, tr)
         if self.__surface__.get_height() > tr.height:
-            self.__main_surface__.blit(self.__surface__.subsurface(
-                (0, self.__scroll__, tr[2], tr[3])), self.__target_rect__.topleft)
+            self.__main_surface__.blit(
+                self.__surface__.subsurface((0, self.__scroll__, tr[2], tr[3])),
+                self.__target_rect__.topleft,
+            )
         else:
             self.__main_surface__.blit(self.__surface__, self.__target_rect__.topleft)
 
