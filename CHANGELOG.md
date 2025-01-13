@@ -1,3 +1,7 @@
+## 1.3.3 (13.1.2024)
+- reformatted code using `ruff`
+- fixed draw_alpha functions
+
 ## 1.3.2 (16.12.2024)
 - added left, right, ... properties to Bar
 
