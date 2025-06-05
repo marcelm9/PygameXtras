@@ -1,3 +1,6 @@
+## 1.3.4 (5.6.2025)
+- added `__init__.py` files to directories
+
 ## 1.3.3 (13.1.2024)
 - reformatted code using `ruff`
 - fixed draw_alpha functions
