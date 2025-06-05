@@ -1,12 +1,16 @@
 [tool.poetry]
 name = "PygameXtras"
-version = "1.3.4"
+version = "1.3.5"
 description = "Labels, Buttons and much more for pygame"
 authors = ["marcelm9 <marcel.menzel09@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 packages = [{ include = "PygameXtras", from = "main" }]
 repository = "https://github.com/marcelm9/PygameXtras.git"
+include = [
+    "main/PygameXtras/src/fonts/**",
+    "main/PygameXtras/src/images/**"
+]
 
 [tool.poetry.dependencies]
 python = "^3.11"

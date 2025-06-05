@@ -1,3 +1,6 @@
+## 1.3.5 (5.6.2025)
+- fixed imports for non-python files
+
 ## 1.3.4 (5.6.2025)
 - added `__init__.py` files to directories
 
