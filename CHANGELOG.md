@@ -1,3 +1,6 @@
+## 1.3.6 (21.7.2025)
+- small fix for Messagebox
+
 ## 1.3.5 (5.6.2025)
 - fixed imports for non-python files
 
