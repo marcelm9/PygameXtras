@@ -127,9 +127,9 @@ class Keyboard:
         """
         Bans all given characters.
         """
-        assert (
-            type(characters) == list
-        ), f"invalid argument for 'characters': {characters}"
+        assert type(characters) == list, (
+            f"invalid argument for 'characters': {characters}"
+        )
         for char in characters:
             assert type(char) == str, f"invalid character '{char}'"
             assert len(char) == 1, f"invalid character '{char}'"

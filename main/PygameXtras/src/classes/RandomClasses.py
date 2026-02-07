@@ -655,9 +655,9 @@ class FileDialog:
         if not os.path.exists(starting_path):
             raise Exception(f"Given path does not exist. ({starting_path})")
         if required_ending != None:
-            assert (
-                type(required_ending) == str
-            ), f"invalid argument for 'required_ending': {required_ending}"
+            assert type(required_ending) == str, (
+                f"invalid argument for 'required_ending': {required_ending}"
+            )
 
         if dim_background:
             self.blitting_surface.fill(

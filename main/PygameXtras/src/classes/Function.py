@@ -20,19 +20,19 @@ class Function:
             # [from (including), to (including), f_from, f_to, func, x_dist, y_dist]
         ]
 
-        assert (
-            isinstance(function_variable, str) and function_variable.isalpha()
-        ), f"invalid argument for 'function_variable': {function_variable}"
+        assert isinstance(function_variable, str) and function_variable.isalpha(), (
+            f"invalid argument for 'function_variable': {function_variable}"
+        )
 
         self.__val_before = None
         self.__val_after = None
 
     def add_const(self, constant: float, length: float = 1):
         """add a constant value"""
-        assert length > 0, f"<length> as to be greater than 0"
-        assert isinstance(
-            constant, (float, int)
-        ), f"invalid argument for 'constant': {constant}"
+        assert length > 0, "<length> as to be greater than 0"
+        assert isinstance(constant, (float, int)), (
+            f"invalid argument for 'constant': {constant}"
+        )
         self.__funcs.append(
             {
                 # i_... = internal_... -> regarding the internal function that is being constructed
@@ -51,14 +51,15 @@ class Function:
         """use the <function_variable> (by default 'x'), eg. '-x**2'; use 'math.' for the math library;
         <start_at> can be either 'min' or 'max'"""
 
-        assert (
-            isinstance(eval(func, {self.__function_variable: 0, "math": math}), int)
-            or isinstance(
-                eval(func, {self.__function_variable: 0, "math": math}), float
-            )
-        ), f"invalid argument for 'func': {func} | error: does not return integer or float"
-        assert f_from < f_to, f"<f_from> can not be greater than or equal to <f_to>"
-        assert length > 0, f"<length> as to be greater than 0"
+        assert isinstance(
+            eval(func, {self.__function_variable: 0, "math": math}), int
+        ) or isinstance(
+            eval(func, {self.__function_variable: 0, "math": math}), float
+        ), (
+            f"invalid argument for 'func': {func} | error: does not return integer or float"
+        )
+        assert f_from < f_to, "<f_from> can not be greater than or equal to <f_to>"
+        assert length > 0, "<length> as to be greater than 0"
         assert start_at in (
             "min",
             "max",
@@ -165,12 +166,12 @@ class Function:
             return value
 
     def set_outer_values(self, value_before: float, value_after: float):
-        assert isinstance(value_before, int) or isinstance(
-            value_before, float
-        ), f"invalid argument for 'value_before': {value_before}"
-        assert isinstance(value_after, int) or isinstance(
-            value_after, float
-        ), f"invalid argument for 'value_after': {value_after}"
+        assert isinstance(value_before, int) or isinstance(value_before, float), (
+            f"invalid argument for 'value_before': {value_before}"
+        )
+        assert isinstance(value_after, int) or isinstance(value_after, float), (
+            f"invalid argument for 'value_after': {value_after}"
+        )
         self.__val_before = value_before
         self.__val_after = value_after
 

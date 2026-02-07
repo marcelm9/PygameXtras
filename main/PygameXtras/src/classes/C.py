@@ -12,15 +12,15 @@ class C:
         if operations like +=, -=, ... are used, the object will
         always stay a C-class!
         """
-        assert len(values) > 0, f"list of values can not be empty"
+        assert len(values) > 0, "list of values can not be empty"
 
         if len(values) == 1 and isinstance(values[0], (tuple, list)):
             self.__value = list(values[0])
         else:
             for value in values:
-                assert isinstance(
-                    value, (int, float)
-                ), f"values have to be int or float, received: '{value}' (type: {type(value)})"
+                assert isinstance(value, (int, float)), (
+                    f"values have to be int or float, received: '{value}' (type: {type(value)})"
+                )
             self.__value = list(values)
 
         self.__more_operations = bool(mo)
@@ -48,9 +48,9 @@ class C:
 
     def __add__(self, other):
         if isinstance(other, C):
-            assert len(self.__value) == len(
-                other
-            ), f"C-objects must have same length ({len(self.__value)} != {len(other)})"
+            assert len(self.__value) == len(other), (
+                f"C-objects must have same length ({len(self.__value)} != {len(other)})"
+            )
             if self.__more_operations:
                 return C(*[v1 + v2 for v1, v2 in zip(self.__value, other)])
             else:
@@ -67,9 +67,9 @@ class C:
 
     def __sub__(self, other):
         if isinstance(other, C):
-            assert len(self.__value) == len(
-                other
-            ), f"C-objects must have same length ({len(self.__value)} != {len(other)})"
+            assert len(self.__value) == len(other), (
+                f"C-objects must have same length ({len(self.__value)} != {len(other)})"
+            )
             if self.__more_operations:
                 return C(*[v1 - v2 for v1, v2 in zip(self.__value, other)])
             else:
@@ -86,9 +86,9 @@ class C:
 
     def __mul__(self, other):
         if isinstance(other, C):
-            assert len(self.__value) == len(
-                other
-            ), f"C-objects must have same length ({len(self.__value)} != {len(other)})"
+            assert len(self.__value) == len(other), (
+                f"C-objects must have same length ({len(self.__value)} != {len(other)})"
+            )
             if self.__more_operations:
                 return C(*[v1 * v2 for v1, v2 in zip(self.__value, other)])
             else:
@@ -105,9 +105,9 @@ class C:
 
     def __truediv__(self, other):
         if isinstance(other, C):
-            assert len(self.__value) == len(
-                other
-            ), f"C-objects must have same length ({len(self.__value)} != {len(other)})"
+            assert len(self.__value) == len(other), (
+                f"C-objects must have same length ({len(self.__value)} != {len(other)})"
+            )
             if self.__more_operations:
                 return C(*[v1 / v2 for v1, v2 in zip(self.__value, other)])
             else:
@@ -124,9 +124,9 @@ class C:
 
     def __floordiv__(self, other):
         if isinstance(other, C):
-            assert len(self.__value) == len(
-                other
-            ), f"C-objects must have same length ({len(self.__value)} != {len(other)})"
+            assert len(self.__value) == len(other), (
+                f"C-objects must have same length ({len(self.__value)} != {len(other)})"
+            )
             if self.__more_operations:
                 return C(*[v1 // v2 for v1, v2 in zip(self.__value, other)])
             else:

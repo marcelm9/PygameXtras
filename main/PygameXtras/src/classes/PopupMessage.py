@@ -17,26 +17,26 @@ class PopupMessage(Label):
         # passive_xy #
         self.__passive_xy = passive_xy
         # assertion #
-        assert isinstance(
-            self.__passive_xy, (tuple, list)
-        ), f"invalid argument for 'passive_xy': {self.__passive_xy}"
-        assert (
-            len(self.__passive_xy) == 2
-        ), f"invalid argument for 'passive_xy': {self.__passive_xy}"
+        assert isinstance(self.__passive_xy, (tuple, list)), (
+            f"invalid argument for 'passive_xy': {self.__passive_xy}"
+        )
+        assert len(self.__passive_xy) == 2, (
+            f"invalid argument for 'passive_xy': {self.__passive_xy}"
+        )
 
         # active_xy #
         self.__active_xy = active_xy
         # assertion #
-        assert isinstance(
-            self.__active_xy, (tuple, list)
-        ), f"invalid argument for 'active_xy': {self.__active_xy}"
-        assert (
-            len(self.__active_xy) == 2
-        ), f"invalid argument for 'active_xy': {self.__active_xy}"
+        assert isinstance(self.__active_xy, (tuple, list)), (
+            f"invalid argument for 'active_xy': {self.__active_xy}"
+        )
+        assert len(self.__active_xy) == 2, (
+            f"invalid argument for 'active_xy': {self.__active_xy}"
+        )
 
-        assert (
-            self.__active_xy != self.__passive_xy
-        ), "passive_xy and active_xy have to be different"
+        assert self.__active_xy != self.__passive_xy, (
+            "passive_xy and active_xy have to be different"
+        )
 
         super().__init__(surface, "", size, passive_xy, anchor, **kwargs)
 
@@ -71,12 +71,12 @@ class PopupMessage(Label):
         # passive_xy #
         self.__passive_xy = passive_xy
         # assertion #
-        assert isinstance(
-            self.__passive_xy, (tuple, list)
-        ), f"invalid argument for 'passive_xy': {self.__passive_xy}"
-        assert (
-            len(self.__passive_xy) == 2
-        ), f"invalid argument for 'passive_xy': {self.__passive_xy}"
+        assert isinstance(self.__passive_xy, (tuple, list)), (
+            f"invalid argument for 'passive_xy': {self.__passive_xy}"
+        )
+        assert len(self.__passive_xy) == 2, (
+            f"invalid argument for 'passive_xy': {self.__passive_xy}"
+        )
         self.__dx, self.__dy = (
             self.__active_xy[0] - self.__passive_xy[0],
             self.__active_xy[1] - self.__passive_xy[1],
@@ -86,12 +86,12 @@ class PopupMessage(Label):
         # active_xy #
         self.__active_xy = active_xy
         # assertion #
-        assert isinstance(
-            self.__active_xy, (tuple, list)
-        ), f"invalid argument for 'active_xy': {self.__active_xy}"
-        assert (
-            len(self.__active_xy) == 2
-        ), f"invalid argument for 'active_xy': {self.__active_xy}"
+        assert isinstance(self.__active_xy, (tuple, list)), (
+            f"invalid argument for 'active_xy': {self.__active_xy}"
+        )
+        assert len(self.__active_xy) == 2, (
+            f"invalid argument for 'active_xy': {self.__active_xy}"
+        )
         self.__dx, self.__dy = (
             self.__active_xy[0] - self.__passive_xy[0],
             self.__active_xy[1] - self.__passive_xy[1],

@@ -159,12 +159,12 @@ class Bar:
                 "left",
             ), f"invalid argument for 'fill_start': {self.__fill_start}"
 
-        assert (
-            self.__width_height[0] - 2 * self.__borderwidth >= 2
-        ), "widget width is too small"
-        assert (
-            self.__width_height[1] - 2 * self.__borderwidth >= 2
-        ), "widget height is too small"
+        assert self.__width_height[0] - 2 * self.__borderwidth >= 2, (
+            "widget width is too small"
+        )
+        assert self.__width_height[1] - 2 * self.__borderwidth >= 2, (
+            "widget height is too small"
+        )
 
         self.__create()
 
@@ -269,26 +269,26 @@ class Bar:
 
     def update_colors(self, backgroundcolor=None, fillcolor=None, bordercolor=None):
         if backgroundcolor is not None:
-            assert isinstance(
-                self.__backgroundcolor, (tuple, list)
-            ), f"invalid argument for 'backgroundcolor': {self.__backgroundcolor}"
-            assert (
-                len(self.__backgroundcolor) == 3
-            ), f"invalid argument for 'backgroundcolor': {self.__backgroundcolor}"
+            assert isinstance(self.__backgroundcolor, (tuple, list)), (
+                f"invalid argument for 'backgroundcolor': {self.__backgroundcolor}"
+            )
+            assert len(self.__backgroundcolor) == 3, (
+                f"invalid argument for 'backgroundcolor': {self.__backgroundcolor}"
+            )
             self.__backgroundcolor = backgroundcolor
         if fillcolor is not None:
-            assert isinstance(
-                self.__fillcolor, (tuple, list)
-            ), f"invalid argument for 'fillcolor': {self.__fillcolor}"
-            assert (
-                len(self.__fillcolor) == 3
-            ), f"invalid argument for 'fillcolor': {self.__fillcolor}"
+            assert isinstance(self.__fillcolor, (tuple, list)), (
+                f"invalid argument for 'fillcolor': {self.__fillcolor}"
+            )
+            assert len(self.__fillcolor) == 3, (
+                f"invalid argument for 'fillcolor': {self.__fillcolor}"
+            )
             self.__fillcolor = fillcolor
         if bordercolor is not None:
-            assert isinstance(
-                self.__bordercolor, (tuple, list)
-            ), f"invalid argument for 'bordercolor': {self.__bordercolor}"
-            assert (
-                len(self.__bordercolor) == 3
-            ), f"invalid argument for 'bordercolor': {self.__bordercolor}"
+            assert isinstance(self.__bordercolor, (tuple, list)), (
+                f"invalid argument for 'bordercolor': {self.__bordercolor}"
+            )
+            assert len(self.__bordercolor) == 3, (
+                f"invalid argument for 'bordercolor': {self.__bordercolor}"
+            )
             self.__bordercolor = bordercolor

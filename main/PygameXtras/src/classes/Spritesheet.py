@@ -57,9 +57,9 @@ class Spritesheet:
     ) -> dict:
         """returns a dict with images (left, right, flipped_left, flipped_right)"""
 
-        assert self.metadata["frames"][
-            str(frame_number)
-        ], f"no frame with number '{frame_number}' found"
+        assert self.metadata["frames"][str(frame_number)], (
+            f"no frame with number '{frame_number}' found"
+        )
         assert resize_factor > 0, "resize factor must be above 0"
 
         x = self.metadata["frames"][str(frame_number)]["frame"]["x"]
@@ -110,7 +110,7 @@ class Spritesheet:
             ]
         except KeyError:
             raise KeyError(
-                f"key not found. you probably requested more frames than there are pictures in this spritesheet"
+                "key not found. you probably requested more frames than there are pictures in this spritesheet"
             )
 
     def get_size(self, frame_number=0):

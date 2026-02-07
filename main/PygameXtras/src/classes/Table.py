@@ -63,5 +63,5 @@ class Table:
             return self.dict[x][y]
         except KeyError:
             raise Exception(
-                f"x or y out of range (x: {x}, y: {y}, min_x: 0, min_y: 0, max_x: {self.columns-1}, max_y: {self.rows-1}"
+                f"x or y out of range (x: {x}, y: {y}, min_x: 0, min_y: 0, max_x: {self.columns - 1}, max_y: {self.rows - 1}"
             )

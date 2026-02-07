@@ -44,12 +44,12 @@ class Entry(Button):
             self.max_chars = kwargs.get("max", None)
         # assertion
         if self.max_chars != None:
-            assert (
-                type(self.max_chars) == int
-            ), f"invalid argument for 'max_chars': {self.max_chars}"
-            assert (
-                self.max_chars >= 0
-            ), f"invalid argument for 'max_chars': {self.max_chars}"
+            assert type(self.max_chars) == int, (
+                f"invalid argument for 'max_chars': {self.max_chars}"
+            )
+            assert self.max_chars >= 0, (
+                f"invalid argument for 'max_chars': {self.max_chars}"
+            )
 
         # min_chars
         self.min_chars = kwargs.get("min_chars", None)
@@ -57,12 +57,12 @@ class Entry(Button):
             self.min_chars = kwargs.get("min", None)
         # assertion
         if self.min_chars != None:
-            assert (
-                type(self.min_chars) == int
-            ), f"invalid argument for 'min_chars': {self.min_chars}"
-            assert (
-                self.min_chars >= 0
-            ), f"invalid argument for 'min_chars': {self.min_chars}"
+            assert type(self.min_chars) == int, (
+                f"invalid argument for 'min_chars': {self.min_chars}"
+            )
+            assert self.min_chars >= 0, (
+                f"invalid argument for 'min_chars': {self.min_chars}"
+            )
 
         # text_when_empty
         self.text_when_empty = kwargs.get("text_when_empty", None)

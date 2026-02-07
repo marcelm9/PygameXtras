@@ -4,7 +4,6 @@ import os
 
 import pygame
 
-from ..parsers.color import Color
 
 
 def higher_resolution(boolean: bool = True):
@@ -34,9 +33,9 @@ def create_animation(image_ids: list, frames_per_image: list):
     If usage unclear, refer to:
     marcel-python-programs\PYGAME_GAMES\pve\mini_warfare\data\player.py
     """
-    assert len(image_ids) == len(
-        frames_per_image
-    ), "received lists of different lengths"
+    assert len(image_ids) == len(frames_per_image), (
+        "received lists of different lengths"
+    )
     seq = []
     for image_id, count in zip(image_ids, frames_per_image):
         for i in range(count):

@@ -35,33 +35,33 @@ class ScrollableButtonList:
 
         # only vertical scroll
         # TODO: assertions
-        assert (
-            type(surface) == pygame.Surface
-        ), f"invalid argument for 'surface': {surface}"
+        assert type(surface) == pygame.Surface, (
+            f"invalid argument for 'surface': {surface}"
+        )
         self.__main_surface__ = surface
         assert type(target_rect) in [tuple, list, pygame.Rect]
         if type(target_rect) in [tuple, list]:
-            assert (
-                len(target_rect) == 4
-            ), f"invalid argument for 'target_rect': {target_rect}"
+            assert len(target_rect) == 4, (
+                f"invalid argument for 'target_rect': {target_rect}"
+            )
         self.__target_rect__ = pygame.Rect(target_rect)
         self.__surface__ = pygame.Surface((self.__target_rect__.width, 0))
 
-        assert (
-            type(scrolling_speed) == int
-        ), f"invalid argument for 'scrolling_speed': {scrolling_speed}"
-        assert (
-            scrolling_speed > 0
-        ), f"invalid argument for 'scrolling_speed': {scrolling_speed}"
+        assert type(scrolling_speed) == int, (
+            f"invalid argument for 'scrolling_speed': {scrolling_speed}"
+        )
+        assert scrolling_speed > 0, (
+            f"invalid argument for 'scrolling_speed': {scrolling_speed}"
+        )
         self.__scrolling_speed__ = scrolling_speed
 
         assert type(backgroundcolor) in [
             tuple,
             list,
         ], f"invalid argument for 'backgroundcolor': {backgroundcolor}"
-        assert (
-            len(backgroundcolor) == 3
-        ), f"invalid argument for 'backgroundcolor': {backgroundcolor}"
+        assert len(backgroundcolor) == 3, (
+            f"invalid argument for 'backgroundcolor': {backgroundcolor}"
+        )
         self.__backgroundcolor__ = backgroundcolor
 
         self.__scroll__ = 0

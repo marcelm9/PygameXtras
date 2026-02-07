@@ -185,11 +185,11 @@ class Label:
         if template is None:
             template = kwargs.get(self.ABBREVIATIONS["template"], None)
         if template is not None:
-            assert isinstance(
-                template, dict
-            ), f"invalid argument for 'template': {template}"
+            assert isinstance(template, dict), (
+                f"invalid argument for 'template': {template}"
+            )
             for k in template.keys():
-                if not k in kwargs.keys():
+                if k not in kwargs.keys():
                     kwargs[k] = template[k]
 
         self.__is_touching__ = False  # if cursor is touching the rect, only for buttons
@@ -197,9 +197,9 @@ class Label:
 
         self.surface = surface
         if self.surface != None:
-            assert isinstance(
-                self.surface, pygame.Surface
-            ), f"invalid argument for 'surface': {self.surface}"
+            assert isinstance(self.surface, pygame.Surface), (
+                f"invalid argument for 'surface': {self.surface}"
+            )
 
         self.text = str(text)
 
@@ -265,9 +265,9 @@ class Label:
             self.font = "verdana"
         # assertion
         if self.font != None:
-            assert isinstance(
-                self.font, str
-            ), f"invalid argument for 'font': {self.font}"
+            assert isinstance(self.font, str), (
+                f"invalid argument for 'font': {self.font}"
+            )
 
         # font_file
         self.font_file = kw.get("font_file", None)
@@ -275,9 +275,9 @@ class Label:
             self.font_file = kw.get(self.ABBREVIATIONS["font_file"], None)
         # assertion
         if self.font_file != None:
-            assert isinstance(
-                self.font_file, str
-            ), f"invalid argument for 'font_file': {self.font_file}"
+            assert isinstance(self.font_file, str), (
+                f"invalid argument for 'font_file': {self.font_file}"
+            )
 
         # x_axis_addition
         self.x_axis_addition = kw.get("x_axis_addition", None)
@@ -383,9 +383,9 @@ class Label:
             self.image = kw.get(self.ABBREVIATIONS["image"], None)
         # assertion
         if self.image != None:
-            assert isinstance(
-                self.image, pygame.Surface
-            ), f"invalid argument for 'image': {self.image}"
+            assert isinstance(self.image, pygame.Surface), (
+                f"invalid argument for 'image': {self.image}"
+            )
             if self.force_width == None:
                 self.force_width = self.image.get_width()
             if self.force_height == None:
@@ -432,9 +432,9 @@ class Label:
                 self.highlight = None  # ok
             elif self.highlight == True:
                 if self.image == None:
-                    assert (
-                        self.backgroundcolor != None
-                    ), f"'backgroundcolor' (currently: {self.backgroundcolor}) must be defined when using 'highlight' (currently: {self.highlight})"
+                    assert self.backgroundcolor != None, (
+                        f"'backgroundcolor' (currently: {self.backgroundcolor}) must be defined when using 'highlight' (currently: {self.highlight})"
+                    )
             else:
                 raise AssertionError(
                     f"invalid argument for 'highlight': {self.highlight}"
@@ -520,9 +520,9 @@ class Label:
             )
         # assertion
         if self.one_click_manager != None:
-            assert isinstance(
-                self.one_click_manager, OneClickManager
-            ), f"invalid argument for 'one_click_manager': {self.one_click_manager}"
+            assert isinstance(self.one_click_manager, OneClickManager), (
+                f"invalid argument for 'one_click_manager': {self.one_click_manager}"
+            )
 
         # margin
         self.margin = kw.get("margin", None)
@@ -573,9 +573,13 @@ class Label:
         elif self.text_align == "right":
             font.align = pygame.FONT_RIGHT
         if self.force_width:
-            self.text_surface = font.render(str(self.text), self.antialias, self.textcolor, wraplength=w)
+            self.text_surface = font.render(
+                str(self.text), self.antialias, self.textcolor, wraplength=w
+            )
         else:
-            self.text_surface = font.render(str(self.text), self.antialias, self.textcolor)
+            self.text_surface = font.render(
+                str(self.text), self.antialias, self.textcolor
+            )
         self.text_rect = self.text_surface.get_rect()
 
         # x y w h
@@ -632,7 +636,7 @@ class Label:
         Draws the widget to the screen.
         """
         if self.surface is None:
-            raise Exception(f"no surface given to draw to")
+            raise Exception("no surface given to draw to")
 
         if self.backgroundcolor != None:
             if self.__is_touching__ and self.image == None:
@@ -680,9 +684,9 @@ class Label:
         """
         Draws the widget to a different surface than initially specified.
         """
-        assert (
-            type(surface) == pygame.Surface
-        ), f"invalid argument for 'surface': {surface}"
+        assert type(surface) == pygame.Surface, (
+            f"invalid argument for 'surface': {surface}"
+        )
 
         if self.backgroundcolor != None:
             if self.__is_touching__ and self.image == None:
@@ -772,7 +776,7 @@ class Label:
         method before drawing to the screen.
         """
         self.xy = Coordinate.parse(xy)
-        if not anchor in [
+        if anchor not in [
             "topleft",
             "topright",
             "bottomleft",

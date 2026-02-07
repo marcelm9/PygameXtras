@@ -332,7 +332,7 @@ class Entity(pygame.sprite.Sprite):
         if not static_image:
             try:
                 next_image = self.__animation_sequence__[0][self.__data__["direction"]]
-            except TypeError as e:
+            except TypeError:
                 raise Exception(
                     "At least some elements of the action '"
                     + self.__current_action__
@@ -459,9 +459,9 @@ class Entity(pygame.sprite.Sprite):
         }
         """
         if type(frames_per_image) == list:
-            assert len(image_dicts) == len(
-                frames_per_image
-            ), "received lists of different lengths"
+            assert len(image_dicts) == len(frames_per_image), (
+                "received lists of different lengths"
+            )
 
         # creating list
         frame_sequence = []
@@ -694,9 +694,9 @@ class Entity(pygame.sprite.Sprite):
             "bottomleft",
             "bottomright",
         ]:
-            assert (
-                type(xy) in [tuple, list, int, pygame.Vector2]
-            ), f"invalid combination of <xy> ({xy}) and <reference_point> ({reference_point})"
+            assert type(xy) in [tuple, list, int, pygame.Vector2], (
+                f"invalid combination of <xy> ({xy}) and <reference_point> ({reference_point})"
+            )
             assert len(xy) == 2, f"invalid length of tuple <xy> ({xy})"
         elif reference_point in [
             "top",
@@ -706,9 +706,9 @@ class Entity(pygame.sprite.Sprite):
             "right",
             "bottom",
         ]:
-            assert (
-                type(xy) == int
-            ), f"invalid combination of <xy> ({xy}) and <reference_point> ({reference_point})"
+            assert type(xy) == int, (
+                f"invalid combination of <xy> ({xy}) and <reference_point> ({reference_point})"
+            )
 
         if reference_point == "topleft":
             self.rect.topleft = xy
@@ -747,9 +747,9 @@ class Entity(pygame.sprite.Sprite):
             "bottomleft",
             "bottomright",
         ]:
-            assert (
-                type(xy) in [list, tuple]
-            ), f"invalid combination of <xy> ({xy}) and <reference_point> ({reference_point})"
+            assert type(xy) in [list, tuple], (
+                f"invalid combination of <xy> ({xy}) and <reference_point> ({reference_point})"
+            )
             assert len(xy) == 2, f"invalid length of tuple <xy> ({xy})"
         elif reference_point in [
             "top",
@@ -759,13 +759,13 @@ class Entity(pygame.sprite.Sprite):
             "right",
             "bottom",
         ]:
-            assert (
-                type(xy) == int
-            ), f"invalid combination of <xy> ({xy}) and <reference_point> ({reference_point})"
+            assert type(xy) == int, (
+                f"invalid combination of <xy> ({xy}) and <reference_point> ({reference_point})"
+            )
 
-        assert (
-            type(factor) == int
-        ), f"invalid argument for <factor> ({factor}), integer required"
+        assert type(factor) == int, (
+            f"invalid argument for <factor> ({factor}), integer required"
+        )
 
         if reference_point == "topleft":
             self.rect.topleft = (xy[0] * factor, xy[1] * factor)
@@ -808,9 +808,9 @@ class Entity(pygame.sprite.Sprite):
         assert type(boolean) == bool
         self.__do_tile_collision__ = boolean
         if boolean == True:
-            assert (
-                tile_sidelength != None
-            ), "if tile_collision should be done, tile_sidelength needs to be set"
+            assert tile_sidelength != None, (
+                "if tile_collision should be done, tile_sidelength needs to be set"
+            )
             assert type(tile_sidelength) == int
             assert tile_sidelength >= 8, "tile_sidelength must be greater or equal to 8"
             self.set_tile_sidelength(tile_sidelength)
@@ -874,9 +874,9 @@ class Entity(pygame.sprite.Sprite):
 
     def set_knockback_resistance(self, knockback_resistance: float):
         """sets the number the knockback vector will be divided by each frame, must be between 1 and 1.2"""
-        assert (
-            1 < knockback_resistance <= 1.2
-        ), "knockback_resistance must be between 1 and 1.2"
+        assert 1 < knockback_resistance <= 1.2, (
+            "knockback_resistance must be between 1 and 1.2"
+        )
         self.__knockback_resistance__ = knockback_resistance
 
     def get_knockback_resistance(self):
@@ -891,9 +891,9 @@ class Entity(pygame.sprite.Sprite):
             pygame.Vector2,
         ], f"invalid vector ({vector2})"
         assert len(vector2) == 2, f"invalid vector ({vector2})"
-        assert (
-            self.__knockback_resistance__ != 1
-        ), "knockback_resistance must be between 1 and 1.2"
+        assert self.__knockback_resistance__ != 1, (
+            "knockback_resistance must be between 1 and 1.2"
+        )
 
         self.__knockback_vector__ = list(vector2)
         if reset_constant_movement:
@@ -907,9 +907,9 @@ class Entity(pygame.sprite.Sprite):
             pygame.Vector2,
         ], f"invalid vector ({vector2})"
         assert len(vector2) == 2, f"invalid vector ({vector2})"
-        assert (
-            self.__knockback_resistance__ != 1
-        ), "knockback_resistance must be between 1 and 1.2 "
+        assert self.__knockback_resistance__ != 1, (
+            "knockback_resistance must be between 1 and 1.2 "
+        )
 
         self.__knockback_vector__ = [
             self.__knockback_vector__[0] + vector2[0],
