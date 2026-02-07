@@ -22,3 +22,28 @@ from .RetroController import RetroController
 from .ScrollableButtonList import ScrollableButtonList
 from .Spritesheet import Spritesheet
 from .Table import Table
+
+__all__ = [
+    "Bar",
+    "Button",
+    "C",
+    "Collisions",
+    "Colors",
+    "CustomTemplate",
+    "Entity",
+    "Entry",
+    "Function",
+    "Keyboard",
+    "Label",
+    "Messagebox",
+    "OneClickManager",
+    "Paragraph",
+    "PerformanceGraph",
+    "PSVG",
+    "PopupMessage",
+    "PSController",
+    "RetroController",
+    "ScrollableButtonList",
+    "Spritesheet",
+    "Table",
+]

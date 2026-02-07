@@ -5,7 +5,6 @@ import os
 import pygame
 
 
-
 def higher_resolution(boolean: bool = True):
     """
     Most Windows PCs (automatically) use scaling to 150% which makes many applications appear
