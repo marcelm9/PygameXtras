@@ -136,6 +136,9 @@ class Label:
             font_file
                 use font from a file (path expected)
                 Type: str
+            text_align
+                if force_width is used, aligns the text to the left, center or right
+                Type: str
 
         All custom arguments can also be used in their short form (eg. "aa" instead of "antialias").
         To see what all the short forms look like, inspect the self.ABBREVIATIONS attribute.
@@ -167,6 +170,7 @@ class Label:
             "template": "t",
             "margin": "m",
             "font_file": "ff",
+            "text_align": "ta",
         }
 
         for k in kwargs.keys():
@@ -530,15 +534,48 @@ class Label:
         if self.margin != None:
             self.margin = PositiveInt.parse(self.margin)
 
+        # text_align
+        self.text_align = kw.get("text_align", None)
+        if self.text_align == None:
+            self.text_align = kw.get(self.ABBREVIATIONS["text_align"], None)
+        if self.text_align == None:
+            self.text_align = "left"
+        # assertion
+        if self.text_align != None:
+            assert self.text_align in [
+                "left",
+                "center",
+                "right",
+            ], f"invalid argument for 'text_align': {self.text_align}"
+
         self.__load_font_path()
         self.__create__()
 
     def __create__(self):
+        if self.force_width == None:
+            pass
+        else:
+            w = self.force_width
+
+        if self.force_height == None:
+            pass
+        else:
+            h = self.force_height
+
         font = pygame.font.Font(self.font_path, self.size)
         font.set_bold(self.bold)
         font.set_italic(self.italic)
         font.set_underline(self.underline)
-        self.text_surface = font.render(str(self.text), self.antialias, self.textcolor)
+        if self.text_align == "center":
+            font.align = pygame.FONT_CENTER
+        elif self.text_align == "left":
+            font.align = pygame.FONT_LEFT
+        elif self.text_align == "right":
+            font.align = pygame.FONT_RIGHT
+        if self.force_width:
+            self.text_surface = font.render(str(self.text), self.antialias, self.textcolor, wraplength=w)
+        else:
+            self.text_surface = font.render(str(self.text), self.antialias, self.textcolor)
         self.text_rect = self.text_surface.get_rect()
 
         # x y w h
@@ -558,16 +595,6 @@ class Label:
         elif self.y_axis_addition > 0:
             y = self.text_rect.y - self.y_axis_addition
             h = self.text_rect.height + self.y_axis_addition * 2
-
-        if self.force_width == None:
-            pass
-        else:
-            w = self.force_width
-
-        if self.force_height == None:
-            pass
-        else:
-            h = self.force_height
 
         # creating the background rect
         self.background_rect = pygame.Rect(
