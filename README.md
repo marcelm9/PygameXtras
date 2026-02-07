@@ -146,3 +146,4 @@ one_click_manager|ocm|OneClickManager|suppresses clicks if a different Button ha
 template|t|dict|injects style keywords from the given template|`None`|LBE
 margin|m|PositiveInt, Size4|adds a margin that decreases the size of the Label without affecting its position |`None`|LBE
 font_file|ff|str|sets the font of the Label to the given font|`None`|LBE
+text_align|ta|str|sets the text alignment when text is wrapped (for example using `\n` or `force_width`)|`center`|LB
