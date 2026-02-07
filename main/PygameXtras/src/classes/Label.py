@@ -552,36 +552,42 @@ class Label:
         self.__create__()
 
     def __create__(self):
-        if self.force_width == None:
-            pass
-        else:
-            w = self.force_width
-
-        if self.force_height == None:
-            pass
-        else:
-            h = self.force_height
+        # setup temporary variables for forced sizes
+        forced_w = self.force_width
+        forced_h = self.force_height
 
         font = pygame.font.Font(self.font_path, self.size)
         font.set_bold(self.bold)
         font.set_italic(self.italic)
         font.set_underline(self.underline)
+
+        # Handle Alignment
         if self.text_align == "center":
             font.align = pygame.FONT_CENTER
         elif self.text_align == "left":
             font.align = pygame.FONT_LEFT
         elif self.text_align == "right":
             font.align = pygame.FONT_RIGHT
-        if self.force_width:
+
+        # Render Text
+        # We calculate wrap limit: Force Width - (Padding * 2)
+        # This ensures text doesn't touch the edges if padding is used.
+        if forced_w:
+            wrap_limit = forced_w
+            if self.x_axis_addition > 0:
+                wrap_limit -= self.x_axis_addition * 2
+
             self.text_surface = font.render(
-                str(self.text), self.antialias, self.textcolor, wraplength=w
+                str(self.text), self.antialias, self.textcolor, wraplength=wrap_limit
             )
         else:
             self.text_surface = font.render(
                 str(self.text), self.antialias, self.textcolor
             )
+
         self.text_rect = self.text_surface.get_rect()
 
+        # --- Calculate Natural Dimensions (Text + Padding) ---
         # x y w h
         # x_axis: x, w
         # y_axis: y, h
@@ -599,6 +605,14 @@ class Label:
         elif self.y_axis_addition > 0:
             y = self.text_rect.y - self.y_axis_addition
             h = self.text_rect.height + self.y_axis_addition * 2
+
+        # --- Re-apply Forced Dimensions ---
+        # We do this here to overwrite the "Natural" dimensions calculated above
+        if forced_w is not None:
+            w = forced_w
+
+        if forced_h is not None:
+            h = forced_h
 
         # creating the background rect
         self.background_rect = pygame.Rect(

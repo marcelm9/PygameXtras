@@ -1,3 +1,9 @@
+## 1.3.8 (7.2.2026)
+- fixed `force_width` for labels
+
+## 1.3.7 (7.2.2026)
+- added linewrap for labels
+
 ## 1.3.6 (21.7.2025)
 - small fix for Messagebox
 
