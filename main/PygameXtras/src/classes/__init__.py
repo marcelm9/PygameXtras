@@ -4,6 +4,7 @@ from .C import C
 from .Collisions import Collisions
 from .Colors import Colors
 from .CustomTemplate import CustomTemplate
+from .Debug import Debug
 from .Entity import Entity
 from .Entry import Entry
 from .Function import Function
@@ -30,6 +31,7 @@ __all__ = [
     "Collisions",
     "Colors",
     "CustomTemplate",
+    "Debug",
     "Entity",
     "Entry",
     "Function",

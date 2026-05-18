@@ -1,3 +1,6 @@
+## 1.3.9 (18.5.2026)
+- added `Debug`
+
 ## 1.3.8 (7.2.2026)
 - fixed `force_width` for labels
 
