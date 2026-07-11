@@ -1,3 +1,6 @@
+## 1.3.12 (11.7.2026)
+- fixed issue with `Debug`
+
 ## 1.3.11 (11.7.2026)
 - added toplevel `pygame.init()`
 

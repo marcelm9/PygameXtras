@@ -26,8 +26,6 @@ class Debug:
 
     @staticmethod
     def render(screen: pygame.Surface) -> None:
-        Debug.label.update_pos((5, 5))
-        Debug.label.draw_to(screen)
         for i, message in enumerate(Debug.messages, 1):
             Debug.label.update_pos((5, 5 + i * Debug.y_distance))
             Debug.label.update_text(f"{message}")
