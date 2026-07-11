@@ -1,3 +1,6 @@
+## 1.3.11 (11.7.2026)
+- added toplevel `pygame.init()`
+
 ## 1.3.10 (11.7.2026)
 - added `py.typed`
 
