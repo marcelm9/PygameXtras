@@ -1,7 +1,6 @@
 import pygame
 import os
 import sys
-from .Functions import vect_sum
 from .Label import Label
 from .Button import Button
 from .Messagebox import Messagebox
@@ -525,7 +524,7 @@ class FileDialog:
             self.surface,
             "Selected:",
             textsize,
-            vect_sum(self.b_cancel.midright, (10, 0)),
+            (self.b_cancel.midright, (10, 0)),
             "midleft",
             bR=1,
             tc=self.textcolor,
@@ -535,7 +534,7 @@ class FileDialog:
             self.surface,
             "",
             textsize,
-            vect_sum(self.l_selected.midright, (10, 0)),
+            (self.l_selected.midright, (10, 0)),
             "midleft",
             bR=1,
             tc=self.textcolor,
@@ -561,7 +560,7 @@ class FileDialog:
             self.surface,
             "!",
             textsize,
-            vect_sum(self.b_open.midleft, (-5, 0)),
+            (self.b_open.midleft, (-5, 0)),
             "midright",
             tc=(0, 0, 0),
             bR=1,

@@ -2,7 +2,6 @@ import pygame
 import sys
 from .Label import Label
 from .Button import Button
-from .Functions import vect_sum
 from .Colors import Colors
 from .Paragraph import Paragraph
 
@@ -83,7 +82,12 @@ class Messagebox:
             bw=4,
             br=1,
             bc=(0, 0, 0),
-            aA=vect_sum(b_cancel_premade.rect, (3, 3, -6, -6)),
+            aA=(
+                b_cancel_premade.rect[0] + 3,
+                b_cancel_premade.rect[1] + 3,
+                b_cancel_premade.rect[2] - 6,
+                b_cancel_premade.rect[3] - 6,
+            ),
         )
 
         b_ok_premade = Button(
@@ -113,7 +117,12 @@ class Messagebox:
             bw=4,
             br=1,
             bc=(0, 0, 0),
-            aA=vect_sum(b_ok_premade.rect, (3, 3, -6, -6)),
+            aA=(
+                b_ok_premade.rect[0] + 3,
+                b_ok_premade.rect[1] + 3,
+                b_ok_premade.rect[2] - 6,
+                b_ok_premade.rect[3] - 6,
+            ),
         )
 
         run = True
