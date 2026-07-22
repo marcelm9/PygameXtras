@@ -1,3 +1,6 @@
+## 1.3.13 (22.7.2026)
+- fixed leftover `vect_sum` imports
+
 ## 1.3.12 (11.7.2026)
 - fixed issue with `Debug`
 
